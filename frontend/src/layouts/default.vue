@@ -6,8 +6,8 @@
 
         <q-toolbar-title class="flex items-baseline">
           <q-btn flat to="/" unelevated>
-            <div>{{ appStore?.informations?.title?.toUpperCase() }}</div>
-            <div class="q-ml-sm text-subtitle2 text-grey-4">v{{ appStore?.informations?.version }}</div>
+            <div>{{ appStore?.informations?.app?.title?.toUpperCase() }}</div>
+            <div class="q-ml-sm text-subtitle2 text-grey-4">v{{ appStore?.informations?.app?.version }}</div>
           </q-btn>
         </q-toolbar-title>
 
@@ -93,10 +93,11 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { Notify } from "quasar";
+import { Notify, useQuasar } from "quasar";
 import { useAuthStore } from "stores/auth";
 import { useAppStore } from "stores/app";
 
+const $q = useQuasar();
 const authStore = useAuthStore();
 const appStore = useAppStore();
 
