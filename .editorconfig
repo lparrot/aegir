@@ -1,0 +1,46 @@
+root = true
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 2
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+max_line_length = 500
+
+[*.md]
+trim_trailing_whitespace = false
+
+[*.properties]
+ij_any_keep_indents_on_empty_lines = true
+ij_properties_keep_blank_lines = true
+
+[*.{js,ts,vue,html}]
+ij_typescript_force_quote_style = true
+ij_typescript_force_semicolon_style = true
+ij_typescript_use_double_quotes = true
+ij_typescript_use_semicolon_after_statement = true
+ij_typescript_spaces_within_imports = true
+ij_typescript_spaces_within_type_assertion = true
+ij_typescript_spaces_within_object_literal_braces = true
+ij_typescript_keep_simple_methods_in_one_line = true
+ij_typescript_space_before_method_call_parentheses = false
+ij_typescript_space_before_function_left_parenth = false
+ij_typescript_space_before_method_parentheses = false
+ij_typescript_spaces_within_array_initializer_brackets = true
+ij_typescript_enforce_trailing_comma = whenmultiline
+
+ij_javascript_force_quote_style = true
+ij_javascript_force_semicolon_style = true
+ij_javascript_use_double_quotes = true
+ij_javascript_use_semicolon_after_statement = true
+ij_javascript_spaces_within_imports = true
+ij_javascript_spaces_within_type_assertion = true
+ij_javascript_spaces_within_object_literal_braces = true
+ij_javascript_keep_simple_methods_in_one_line = true
+ij_javascript_space_before_method_call_parentheses = false
+ij_javascript_space_before_function_left_parenth = false
+ij_javascript_space_before_method_parentheses = false
+ij_javascript_spaces_within_array_initializer_brackets = true
+ij_javascript_enforce_trailing_comma = whenmultiline
