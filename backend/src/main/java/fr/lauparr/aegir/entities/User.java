@@ -44,6 +44,7 @@ public class User implements UserDetails {
   public Claims getClaims() {
     final Claims claims = Jwts.claims();
     claims.put("id", this.getId());
+    claims.put("username", this.getUsername());
     return claims;
   }
 
