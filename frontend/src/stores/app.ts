@@ -14,7 +14,7 @@ export const useAppStore = defineStore("app", {
 
   actions: {
     async getInformations() {
-      this.informations = await api.get("/api/app/informations");
+      this.informations = await api.$get("/api/app/informations");
     },
   },
 });

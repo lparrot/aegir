@@ -2,6 +2,7 @@ import { boot } from "quasar/wrappers";
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 import { LocalStorage, Notify } from "quasar";
 import { useAuthStore } from "stores/auth";
+import { CustomAxiosInstance } from "src/types";
 
 declare module "@vue/runtime-core" {
   interface ComponentCustomProperties {
@@ -9,7 +10,13 @@ declare module "@vue/runtime-core" {
   }
 }
 
-const api: AxiosInstance = axios.create();
+const api: Partial<CustomAxiosInstance> = axios.create();
+
+for (const method of [ "request", "delete", "get", "head", "options", "post", "put", "patch" ]) {
+  api["$" + method] = function() {
+    return this[method].apply(this, arguments).then(res => res && res.data);
+  };
+}
 
 export default boot(({ app, router, urlPath, redirect }) => {
 
@@ -42,7 +49,7 @@ export default boot(({ app, router, urlPath, redirect }) => {
       });
     }
 
-    return response.data;
+    return response;
   }, async function(error) {
 
     if (error.code === "ECONNABORTED") {

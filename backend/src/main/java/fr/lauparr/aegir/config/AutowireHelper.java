@@ -16,6 +16,14 @@ public class AutowireHelper implements ApplicationContextAware {
     AutowireHelper.applicationContext.getAutowireCapableBeanFactory().autowireBean(classToAutowire);
   }
 
+  public static <T> T getBean(Class<T> classToAutowire) {
+    return AutowireHelper.applicationContext.getBean(classToAutowire);
+  }
+
+  public static ApplicationContext getApplicationContext() {
+    return applicationContext;
+  }
+
   @Override
   public void setApplicationContext(final ApplicationContext applicationContext) {
     AutowireHelper.applicationContext = applicationContext;

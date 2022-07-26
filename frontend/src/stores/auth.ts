@@ -23,10 +23,10 @@ export const useAuthStore = defineStore("auth", {
 
   actions: {
     async login(formData: LoginParams) {
-      const { server_error, access_token } = await api.$post("/api/auth/login", formData);
+      const { claims, token } = await api.$post("/api/auth/login", formData);
 
-      if (!server_error && access_token != null) {
-        LocalStorage.set("token", access_token);
+      if (token != null) {
+        LocalStorage.set("aegir.token", token);
         await this.refreshUser();
 
         Notify.create({
@@ -40,12 +40,12 @@ export const useAuthStore = defineStore("auth", {
 
     async disconnect() {
       await this.$router.push("/login");
-      LocalStorage.remove("token");
+      LocalStorage.remove("aegir.token");
       this.user = null;
     },
 
     async refreshUser() {
-      const data = await api.get("/api/auth/user");
+      const data = await api.$get("/api/auth/user");
 
       if (data != null) {
         this.user = data;
