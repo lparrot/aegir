@@ -26,6 +26,8 @@ import javax.servlet.http.HttpServletResponse;
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+  public static final String ROLE_ANONYMOUS = "ROLE_ANONYMOUS";
+
   @Autowired
   private TokenAuthenticationFilterSrv tokenAuthenticationFilterSrv;
 
@@ -59,7 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
       .antMatchers(HttpMethod.GET, "/api/auth/user**").permitAll()
       .antMatchers(HttpMethod.POST, "/api/auth/login**").permitAll()
       .antMatchers(HttpMethod.POST, "/api/auth").permitAll()
-      .anyRequest().not().hasAuthority("ROLE_ANONYMOUS");
+      .anyRequest().not().hasAuthority(ROLE_ANONYMOUS);
   }
 
   @Override

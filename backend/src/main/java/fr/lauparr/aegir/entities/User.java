@@ -13,7 +13,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Getter
 @Setter
@@ -32,13 +34,24 @@ public class User implements UserDetails {
   private String password;
 
   @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(foreignKey = @ForeignKey(name = "FK_user_profile"))
   private Profile profile;
+
+  @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+  private List<Project> projects = new ArrayList<>();
 
   @Builder
   public User(String username, String password, Profile profile) {
     this.username = username;
     this.password = password;
     this.profile = profile;
+  }
+
+  public User addProject(Project project) {
+    project.setUser(this);
+    this.setProjects(new ArrayList<>(this.getProjects()));
+    this.getProjects().add(project);
+    return this;
   }
 
   public Claims getClaims() {
