@@ -5,7 +5,7 @@
         <q-btn aria-label="Menu" dense flat icon="menu" round @click="toggleLeftDrawer"/>
 
         <q-toolbar-title class="flex items-baseline">
-          <q-btn flat to="/" unelevated>
+          <q-btn :to="{name: 'index'}" flat unelevated>
             <div>{{ appStore?.informations?.app?.title?.toUpperCase() }}</div>
             <div class="q-ml-sm text-subtitle2 text-grey-4">v{{ appStore?.informations?.app?.version }}</div>
           </q-btn>
@@ -35,7 +35,7 @@
           </template>
 
           <template v-else>
-            <q-btn dense flat icon="face" round title="Login" to="/login"/>
+            <q-btn :to="{name: 'login'}" dense flat icon="face" round title="Login"/>
           </template>
         </div>
       </q-toolbar>
@@ -45,24 +45,22 @@
       <q-scroll-area class="fit" visible>
         <q-list>
 
-          <template v-for="(menuItem, menuItemIndex) in menuList" :key="'item' + menuItemIndex">
-            <template v-if="showItem(menuItem)">
-              <template v-if="menuItem.type === 'header'">
-                <q-separator v-if="menuItem.separator" inset/>
+          <template v-for="(menuItem, menuItemIndex) in menu" :key="'item' + menuItemIndex">
+            <template v-if="menuItem.type === 'header'">
+              <q-separator v-if="menuItem.separator" inset/>
 
-                <q-item-label header>{{ menuItem.label }}</q-item-label>
+              <q-item-label header>{{ menuItem.label }}</q-item-label>
 
-                <template v-if="menuItem.children">
-                  <template v-for="(subMenuItem, subMenuItemIndex) in menuItem.children" :key="`subitem${menuItemIndex}-${subMenuItemIndex}`">
-                    <q-item v-if="showItem(subMenuItem)" v-ripple :to="subMenuItem.to ?? null" clickable @click="subMenuItem.action ? subMenuItem.action() : null">
-                      <q-item-section avatar>
-                        <q-icon :name="subMenuItem.icon"/>
-                      </q-item-section>
-                      <q-item-section>
-                        {{ subMenuItem.label }}
-                      </q-item-section>
-                    </q-item>
-                  </template>
+              <template v-if="menuItem.children">
+                <template v-for="(subMenuItem, subMenuItemIndex) in menuItem.children" :key="`subitem${menuItemIndex}-${subMenuItemIndex}`">
+                  <q-item v-ripple :to="subMenuItem.to ?? null" clickable @click="subMenuItem.action ? subMenuItem.action() : null">
+                    <q-item-section avatar>
+                      <q-icon :name="subMenuItem.icon"/>
+                    </q-item-section>
+                    <q-item-section>
+                      {{ subMenuItem.label }}
+                    </q-item-section>
+                  </q-item>
                 </template>
               </template>
 
@@ -92,47 +90,34 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { Notify, useQuasar } from "quasar";
+import { ref, watch } from "vue";
+import { Dialog, Notify } from "quasar";
 import { useAuthStore } from "stores/auth";
 import { useAppStore } from "stores/app";
+import { useRouter } from "vue-router";
+import { useMenu } from "src/composables/useMenu";
 
-const $q = useQuasar();
 const authStore = useAuthStore();
 const appStore = useAppStore();
+const router = useRouter();
 
 const leftDrawer = ref();
 
-const showItem = (item) => {
-  return item.showIf == null ? true : typeof item.showIf === "function" ? item.showIf() : item.showIf;
-};
-
-const menuList = [
+const { menu, refreshMenu } = useMenu([
   {
     label: "Menu", type: "header", children: [
-      { icon: "dashboard", label: "Dashboard", to: "/dashboard", showIf: () => authStore.isLoggedIn },
+      { icon: "dashboard", label: "Dashboard", to: "/dashboard" },
       { icon: "face", label: "Login", to: "/login", showIf: () => !authStore.isLoggedIn },
     ],
   },
-  {
-    label: "API", type: "header", showIf: () => authStore.isLoggedIn, separator: true, children: [
-      { icon: "table_chart", label: "Contenu", to: "/admin/contents" },
-    ],
-  },
-  {
-    label: "Administration", type: "header", showIf: () => authStore.isLoggedIn, separator: true, children: [
-      { icon: "dns", label: "Serveur", to: "/admin/server" },
-      { icon: "people", label: "Utilisateurs", to: "/admin/users" },
-    ],
-  },
-];
+]);
 
 const toggleLeftDrawer = () => {
   leftDrawer.value = !leftDrawer.value;
 };
 
 const onDisconnect = () => {
-  $q.dialog({
+  Dialog.create({
     title: "Confirmation",
     message: "Etes vous sûr de vouloir vous deconnecter ?",
     cancel: true,
@@ -146,4 +131,11 @@ const onDisconnect = () => {
       });
     });
 };
+
+watch(
+  () => authStore.isLoggedIn,
+  (value) => {
+    refreshMenu();
+  },
+  { deep: true, immediate: true });
 </script>

@@ -34,12 +34,12 @@ export const useAuthStore = defineStore("auth", {
           color: "positive",
         });
 
-        this.$router.push("/dashboard");
+        this.$router.push({ name: "dashboard" });
       }
     },
 
     async disconnect() {
-      await this.$router.push("/login");
+      await this.$router.push({ name: "login" });
       LocalStorage.remove("aegir.token");
       this.user = null;
     },

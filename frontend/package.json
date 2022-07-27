@@ -2,7 +2,7 @@
   "name": "aegir-web",
   "version": "0.0.1",
   "description": "Aegir Web",
-  "productName": "Aegir Web",
+  "productName": "Aegir",
   "author": "laurent.parrot <laurent.parrot78@gmail.com>",
   "private": true,
   "scripts": {
@@ -16,6 +16,7 @@
     "@vee-validate/rules": "^4.6.2",
     "@vueuse/core": "^8.9.4",
     "axios": "^0.21.1",
+    "lodash.clonedeep": "^4.5.0",
     "pinia": "^2.0.11",
     "qs": "^6.11.0",
     "quasar": "^2.6.0",

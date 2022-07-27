@@ -38,7 +38,7 @@ export default boot(({ app, router, urlPath, redirect }) => {
     const data = response.data;
 
     if (urlPath.includes("errors/no-server")) {
-      redirect("/");
+      redirect({ name: "index" });
     }
 
     if (data?.type === "error_with_message") {
@@ -53,7 +53,7 @@ export default boot(({ app, router, urlPath, redirect }) => {
   }, async function(error) {
 
     if (error.code === "ECONNABORTED") {
-      await router.push("/errors/no-server");
+      await router.push({ name: "errors-no-server" });
       return;
     }
 
