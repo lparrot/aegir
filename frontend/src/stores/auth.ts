@@ -1,7 +1,7 @@
 import { api } from "boot/axios";
 import { LocalStorage, Notify } from "quasar";
 import { defineStore } from "pinia";
-import { LoginParams } from "src/models/auth";
+import { LoginParams } from "src/models/auth.model";
 import { getInitials } from "src/utils/string.utils";
 
 export const useAuthStore = defineStore("auth", {
@@ -27,14 +27,15 @@ export const useAuthStore = defineStore("auth", {
 
       if (token != null) {
         LocalStorage.set("aegir.token", token);
-        await this.refreshUser();
+        this.user = claims;
+
+        await this.$router.push({ name: "dashboard" });
 
         Notify.create({
           message: `Vous êtes connecté sous ${this.user.username}`,
           color: "positive",
         });
 
-        this.$router.push({ name: "dashboard" });
       }
     },
 

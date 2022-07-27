@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import { MenuItem } from "src/models/ui";
+import { MenuItem } from "src/models/ui.model";
 import { checkAccess } from "src/router";
 import { useRouter } from "vue-router";
 import cloneDeep from "lodash.clonedeep";
