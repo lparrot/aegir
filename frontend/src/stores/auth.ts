@@ -4,8 +4,12 @@ import { defineStore } from "pinia";
 import { LoginParams } from "src/models/auth.model";
 import { getInitials } from "src/utils/string.utils";
 
+interface StateInformations {
+  user?: any;
+}
+
 export const useAuthStore = defineStore("auth", {
-  state: () => ({
+  state: (): StateInformations => ({
     user: null,
   }),
 
@@ -32,7 +36,7 @@ export const useAuthStore = defineStore("auth", {
         await this.$router.push({ name: "dashboard" });
 
         Notify.create({
-          message: `Vous êtes connecté sous ${this.user.username}`,
+          message: `Vous êtes connecté sous ${ this.user.username }`,
           color: "positive",
         });
 

@@ -1,6 +1,7 @@
 package fr.lauparr.aegir.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.Builder;
@@ -37,6 +38,7 @@ public class User implements UserDetails {
   @JoinColumn(foreignKey = @ForeignKey(name = "FK_user_profile"))
   private Profile profile;
 
+  @JsonManagedReference("user_project")
   @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
   private List<Project> projects = new ArrayList<>();
 

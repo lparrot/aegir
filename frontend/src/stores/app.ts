@@ -1,13 +1,13 @@
 import { defineStore } from "pinia";
 import { api } from "boot/axios";
 
-export interface StateInformations {
-  version?: string;
+interface StateInformations {
+  informations?: any;
 }
 
 export const useAppStore = defineStore("app", {
-  state: () => ({
-    informations: {} as StateInformations,
+  state: (): StateInformations => ({
+    informations: {},
   }),
 
   getters: {},

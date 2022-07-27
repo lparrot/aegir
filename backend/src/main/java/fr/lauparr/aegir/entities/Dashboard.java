@@ -1,5 +1,6 @@
 package fr.lauparr.aegir.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,7 @@ public class Dashboard {
   private Project project;
 
   @CreatedBy
+  @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(foreignKey = @ForeignKey(name = "FK_dashboard_user"))
   private User user;

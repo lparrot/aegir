@@ -50,9 +50,7 @@
         <q-expansion-item group="modules" header-class="text-primary" label="FAVORIS">
           <q-card>
             <q-card-section>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti
-              commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste
-              eveniet doloribus ullam aliquid.
+
             </q-card-section>
           </q-card>
         </q-expansion-item>
@@ -62,9 +60,14 @@
         <q-expansion-item group="modules" header-class="text-primary" label="ESPACES">
           <q-card>
             <q-card-section>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti
-              commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste
-              eveniet doloribus ullam aliquid.
+              <q-tree v-model:selected="projectStore.selectedItemId" :nodes="items" accordion dense label-key="name" no-connectors node-key="id">
+                <template v-slot:default-header="prop">
+                  <div :class="{'bg-grey-2': prop.key === projectStore.selectedItemId}" class="row items-center full-width q-py-xs q-px-xs rounded-borders">
+                    <q-icon class="q-mr-sm" size="16px" v-bind="getProjectItemIconProps(prop.node?.type)"/>
+                    <div class="text-primary">{{ prop.node.name }}</div>
+                  </div>
+                </template>
+              </q-tree>
             </q-card-section>
           </q-card>
         </q-expansion-item>
@@ -74,9 +77,7 @@
         <q-expansion-item group="modules" header-class="text-primary" label="TABLEAUX DE BORD">
           <q-card>
             <q-card-section>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti
-              commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste
-              eveniet doloribus ullam aliquid.
+
             </q-card-section>
           </q-card>
         </q-expansion-item>
@@ -86,9 +87,7 @@
         <q-expansion-item group="modules" header-class="text-primary" label="DOCUMENTS">
           <q-card>
             <q-card-section>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti
-              commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste
-              eveniet doloribus ullam aliquid.
+
             </q-card-section>
           </q-card>
         </q-expansion-item>
@@ -112,12 +111,18 @@ import { useAppStore } from "stores/app";
 import { useRouter } from "vue-router";
 import { useMenu } from "src/composables/useMenu";
 import ApplicationMenu from "components/ApplicationMenu.vue";
+import { api } from "boot/axios";
+import { useProjectStore } from "stores/project";
 
 const authStore = useAuthStore();
 const appStore = useAppStore();
+const projectStore = useProjectStore();
 const router = useRouter();
 
 const leftDrawer = ref();
+const items = ref();
+
+items.value = await api.$get(`/api/projects/${ 1 }/items`);
 
 const { refreshMenu, setMenuDefault } = useMenu();
 
@@ -126,6 +131,19 @@ setMenuDefault([
   { icon: "home", label: "Accueil", to: { name: "index" } },
   { icon: "view_module", label: "Dashboard", to: { name: "dashboard" } },
 ]);
+
+const getProjectItemIconProps = (type) => {
+  switch (type) {
+    case "WORKSPACE":
+      return { name: "workspaces", color: "blue" };
+    case "FOLDER":
+      return { name: "folder", color: "orange" };
+    case "VIEW":
+      return { name: "view_sidebar", color: "green" };
+    default:
+      return {};
+  }
+};
 
 const toggleLeftDrawer = () => {
   leftDrawer.value = !leftDrawer.value;
@@ -151,4 +169,11 @@ watch(
   () => authStore.isLoggedIn,
   () => {refreshMenu();},
   { deep: true });
+
+watch(
+  () => projectStore.selectedItemId,
+  () => {projectStore.fetchSelectedItem();},
+  { immediate: true },
+);
+
 </script>
