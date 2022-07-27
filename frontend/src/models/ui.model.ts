@@ -1,11 +1,11 @@
 import { RouteRecord } from "vue-router";
 
-export class MenuItem {
+export interface MenuItem {
   label?: string;
   type?: "header" | "separator";
   defaultOpened?: boolean;
   children?: MenuItem[];
   icon?: string;
-  to?: string | RouteRecord;
+  to?: string | Partial<RouteRecord>;
   showIf?: Function | boolean;
 }

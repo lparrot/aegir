@@ -4,16 +4,14 @@ import { checkAccess } from "src/router";
 import { useRouter } from "vue-router";
 import cloneDeep from "lodash.clonedeep";
 
-export const useMenu = (menuItems: MenuItem[] = []) => {
-  const defaultMenu = menuItems;
+const defaultMenu = ref([]);
+const isMenuLoaded = ref<boolean>(false);
+const menu = ref<MenuItem[]>();
+
+export const useMenu = () => {
   const router = useRouter();
-  const menu = ref();
 
-  const refreshMenu = async () => {
-    menu.value = await checkMenuItem(cloneDeep(defaultMenu));
-  };
-
-  const checkMenuItem = async (menuItems: MenuItem[]) => {
+  const checkMenuItem = (menuItems: MenuItem[]) => {
     const indexesToRemove = [];
 
     // Parcours de tous les items de menu
@@ -23,10 +21,10 @@ export const useMenu = (menuItems: MenuItem[] = []) => {
       let isAccessOk = true;
 
       if (menuItem.showIf != null) {
-        isAccessOk = typeof menuItem.showIf === "function" ? await menuItem.showIf() : menuItem.showIf;
+        isAccessOk = typeof menuItem.showIf === "function" ? menuItem.showIf() : menuItem.showIf;
       } else if (menuItem.children != null) {
         // S'il y a des enfants, on appelle la fonction en récursif
-        menuItem.children = await checkMenuItem(menuItem.children);
+        menuItem.children = checkMenuItem(menuItem.children);
 
         // S'il n'y a plus d'enfant, on flag l'item a supprimer
         if (menuItem.children.length < 1) {
@@ -52,5 +50,15 @@ export const useMenu = (menuItems: MenuItem[] = []) => {
     return menuItems.filter((menuItem, menuItemIndex) => indexesToRemove.indexOf(menuItemIndex) < 0);
   };
 
-  return { menu, refreshMenu };
+  const refreshMenu = () => {
+    menu.value = checkMenuItem(cloneDeep(defaultMenu.value));
+  };
+
+  const setMenuDefault = (menuItems: MenuItem[]) => {
+    defaultMenu.value = menuItems;
+    refreshMenu();
+    isMenuLoaded.value = true;
+  };
+
+  return { isMenuLoaded, menu, refreshMenu, setMenuDefault };
 };
