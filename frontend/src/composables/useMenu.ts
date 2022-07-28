@@ -2,7 +2,7 @@ import { ref } from "vue";
 import { MenuItem } from "src/models/ui.model";
 import { checkAccess } from "src/router";
 import { useRouter } from "vue-router";
-import cloneDeep from "lodash.clonedeep";
+import cloneDeep from "lodash/cloneDeep";
 
 const defaultMenu = ref([]);
 const isMenuLoaded = ref<boolean>(false);

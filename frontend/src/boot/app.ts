@@ -24,5 +24,5 @@ export default boot(async ({ app }) => {
   setLocale("fr");
 
   const appStore = useAppStore();
-  await appStore.getInformations();
+  await appStore.fetchInformations();
 });

@@ -37,8 +37,12 @@ export default boot(({ app, router, urlPath, redirect }) => {
   api.interceptors.response.use(function(response) {
     const data = response.data;
 
-    if (urlPath.includes("errors/no-server")) {
-      redirect({ name: "index" });
+    if (urlPath.includes("errors/bad-gateway")) {
+      if (LocalStorage.has("aegir.current_route")) {
+        redirect(LocalStorage.getItem("aegir.current_route").toString());
+      } else {
+        redirect({ name: "index" });
+      }
     }
 
     if (data?.type === "error_with_message") {
@@ -53,7 +57,7 @@ export default boot(({ app, router, urlPath, redirect }) => {
   }, async function(error) {
 
     if (error.code === "ECONNABORTED") {
-      await router.push({ name: "errors-no-server" });
+      await router.push({ name: "errors-502" });
       return;
     }
 

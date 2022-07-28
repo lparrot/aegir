@@ -1,6 +1,7 @@
 package fr.lauparr.aegir.features.project_item;
 
 import fr.lauparr.aegir.enums.EnumProjectItemType;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 
@@ -10,6 +11,9 @@ public interface ProjectItemInfo {
   String getName();
 
   EnumProjectItemType getType();
+
+  @Value("#{target.parent?.id}")
+  Long getParentId();
 
   List<ProjectItemInfo> getChildren();
 }

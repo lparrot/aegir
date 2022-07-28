@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page v-if="projectStore.selectedItem" padding>
     {{ projectStore.selectedItem }}
   </q-page>
 </template>

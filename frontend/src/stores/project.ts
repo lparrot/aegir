@@ -17,7 +17,7 @@ export const useProjectStore = defineStore("project", {
   actions: {
     async fetchSelectedItem() {
       if (this.selectedItemId != null) {
-        this.selectedItem = await api.$get(`/api/project_items/${ this.selectedItemId }`);
+        this.selectedItem = await api.$get(`/api/project_items/${this.selectedItemId}`);
       }
     },
   },

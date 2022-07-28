@@ -3,6 +3,7 @@ import { createMemoryHistory, createRouter, createWebHashHistory, createWebHisto
 
 import routes from "./routes";
 import { useAuthStore } from "stores/auth";
+import { LocalStorage } from "quasar";
 
 const PAGE_ACCESS_DENIED = { name: "errors-401" };
 
@@ -21,6 +22,9 @@ export default route(function(/* { store, ssrContext } */) {
 
   router.beforeEach((to, from, next) => {
     if (checkAccess(to)) {
+      if (to.name != undefined && to.name !== "errors-502") {
+        LocalStorage.set("aegir.current_route", to.path);
+      }
       return next();
     }
     next(PAGE_ACCESS_DENIED);

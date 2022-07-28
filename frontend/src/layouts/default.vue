@@ -47,7 +47,7 @@
 
         <q-separator class="q-mt-lg"/>
 
-        <q-expansion-item group="modules" header-class="text-primary" label="FAVORIS">
+        <q-expansion-item :default-opened="storageModuleOpened === 'bookmarks'" group="modules" header-class="text-primary" label="FAVORIS" @after-show="onOpenModule('bookmarks')">
           <q-card>
             <q-card-section>
 
@@ -57,10 +57,10 @@
 
         <q-separator/>
 
-        <q-expansion-item group="modules" header-class="text-primary" label="ESPACES">
+        <q-expansion-item :default-opened="storageModuleOpened === 'workspaces'" group="modules" header-class="text-primary" label="ESPACES" @after-show="onOpenModule('workspaces')">
           <q-card>
             <q-card-section>
-              <q-tree v-model:selected="projectStore.selectedItemId" :nodes="items" accordion dense label-key="name" no-connectors node-key="id">
+              <q-tree ref="itemsTree" v-model:selected="projectStore.selectedItemId" :nodes="items" accordion dense label-key="name" no-connectors node-key="id" @update:selected="onItemSelected">
                 <template v-slot:default-header="prop">
                   <div :class="{'bg-grey-2': prop.key === projectStore.selectedItemId}" class="row items-center full-width q-py-xs q-px-xs rounded-borders">
                     <q-icon class="q-mr-sm" size="16px" v-bind="getProjectItemIconProps(prop.node?.type)"/>
@@ -74,7 +74,7 @@
 
         <q-separator/>
 
-        <q-expansion-item group="modules" header-class="text-primary" label="TABLEAUX DE BORD">
+        <q-expansion-item :default-opened="storageModuleOpened === 'dashboards'" group="modules" header-class="text-primary" label="TABLEAUX DE BORD" @after-show="onOpenModule('dashboards')">
           <q-card>
             <q-card-section>
 
@@ -84,7 +84,7 @@
 
         <q-separator/>
 
-        <q-expansion-item group="modules" header-class="text-primary" label="DOCUMENTS">
+        <q-expansion-item :default-opened="storageModuleOpened === 'documents'" group="modules" header-class="text-primary" label="DOCUMENTS" @after-show="onOpenModule('documents')">
           <q-card>
             <q-card-section>
 
@@ -104,8 +104,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from "vue";
-import { Dialog, Notify } from "quasar";
+import { onMounted, ref, watch } from "vue";
+import { Dialog, LocalStorage, Notify, QTree } from "quasar";
 import { useAuthStore } from "stores/auth";
 import { useAppStore } from "stores/app";
 import { useRouter } from "vue-router";
@@ -113,16 +113,65 @@ import { useMenu } from "src/composables/useMenu";
 import ApplicationMenu from "components/ApplicationMenu.vue";
 import { api } from "boot/axios";
 import { useProjectStore } from "stores/project";
+import { StorageSerializers, useLocalStorage } from "@vueuse/core";
 
+
+////////////////
+// Composables
+////////////////
 const authStore = useAuthStore();
 const appStore = useAppStore();
 const projectStore = useProjectStore();
 const router = useRouter();
+const storageModuleOpened = useLocalStorage("aegir.module_opened", null, { serializer: StorageSerializers.string });
 
+////////////////
+// References
+////////////////
 const leftDrawer = ref();
 const items = ref();
+const itemsTree = ref<QTree>(null);
 
-items.value = await api.$get(`/api/projects/${ 1 }/items`);
+onMounted(() => {
+  const expandNode = (node) => {
+    if (node.children != null) {
+      itemsTree.value.setExpanded(node.id, true);
+    }
+  };
+
+  if (projectStore.selectedItemId != null) {
+    let node = itemsTree.value.getNodeByKey(projectStore.selectedItemId);
+    while (node.parentId != null) {
+      node = itemsTree.value.getNodeByKey(node.parentId);
+      expandNode(node);
+    }
+  }
+});
+
+
+watch(
+  () => authStore.isLoggedIn,
+  () => {
+    refreshMenu();
+  },
+  { deep: true });
+
+watch(
+  () => projectStore.selectedItemId,
+  (value) => {
+    if (value != null) {
+      LocalStorage.set("aegir.selected_item", value);
+      projectStore.fetchSelectedItem();
+    }
+  },
+  { immediate: true },
+);
+
+items.value = await api.$get(`/api/projects/${1}/items`);
+
+if (LocalStorage.has("aegir.selected_item")) {
+  projectStore.selectedItemId = LocalStorage.getItem("aegir.selected_item");
+}
 
 const { refreshMenu, setMenuDefault } = useMenu();
 
@@ -131,6 +180,10 @@ setMenuDefault([
   { icon: "home", label: "Accueil", to: { name: "index" } },
   { icon: "view_module", label: "Dashboard", to: { name: "dashboard" } },
 ]);
+
+const onOpenModule = (id) => {
+  storageModuleOpened.value = id;
+};
 
 const getProjectItemIconProps = (type) => {
   switch (type) {
@@ -165,15 +218,10 @@ const onDisconnect = () => {
     });
 };
 
-watch(
-  () => authStore.isLoggedIn,
-  () => {refreshMenu();},
-  { deep: true });
-
-watch(
-  () => projectStore.selectedItemId,
-  () => {projectStore.fetchSelectedItem();},
-  { immediate: true },
-);
+const onItemSelected = () => {
+  if (!router.currentRoute.value.meta.project_view) {
+    router.push("/dashboard");
+  }
+};
 
 </script>
