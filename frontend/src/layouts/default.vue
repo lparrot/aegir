@@ -115,7 +115,6 @@ import ApplicationMenu from "components/ApplicationMenu.vue";
 import { useProjectStore } from "stores/project";
 import useAppLocalStorage from "src/composables/useAppLocalStorage";
 
-
 ////////////////
 // Composables
 ////////////////
@@ -132,7 +131,7 @@ const leftDrawer = ref();
 const itemsTree = ref<QTree>(null);
 
 watch(
-  () => storageSidebar.value.item_selected,
+  () => storageSidebar?.value?.item_selected,
   (itemSelected) => {
     if (itemSelected != null) {
       projectStore.fetchSelectedItem();

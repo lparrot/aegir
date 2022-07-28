@@ -14,9 +14,10 @@ export const useAppStore = defineStore("app", {
 
   actions: {
     async fetchInformations() {
-      const { success, data } = await api.$get("/api/app/informations");
-      if (success) {
-        this.informations = data;
+      const data = await api.$get("/api/app/informations");
+
+      if (data?.success) {
+        this.informations = data.data;
       }
     },
   },

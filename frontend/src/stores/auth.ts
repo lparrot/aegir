@@ -34,7 +34,7 @@ export const useAuthStore = defineStore("auth", {
 
       const { success, data } = await api.$post("/api/auth/login", formData);
 
-      if (success != null) {
+      if (success) {
         storageToken.value = data.token;
         this.user = data.claims;
 
@@ -50,10 +50,10 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async disconnect() {
-      const { storageToken } = useAppLocalStorage();
-      await this.$router.push({ name: "login" });
-      storageToken.value = null;
+      const { resetLocalStorage } = useAppLocalStorage();
+      resetLocalStorage();
       this.user = null;
+      await this.$router.push({ name: "login" });
     },
 
     async refreshUser() {

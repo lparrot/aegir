@@ -20,6 +20,10 @@ for (const method of [ "request", "delete", "get", "head", "options", "post", "p
 }
 
 export default boot(({ app, router, urlPath, redirect }) => {
+  app.config.errorHandler = (err, instance, info) => {
+    console.error(err);
+  };
+
   const { storageToken, storageCurrentRoute } = useAppLocalStorage();
 
   app.config.globalProperties.$axios = axios;
@@ -47,9 +51,9 @@ export default boot(({ app, router, urlPath, redirect }) => {
       }
     }
 
-    if (data?.type === "error_with_message") {
+    if (data?.type === "message") {
       Notify.create({
-        message: data.message,
+        message: data.error,
         color: data.color ?? "negative",
         textColor: data.textColor ?? "white",
       });
@@ -67,13 +71,10 @@ export default boot(({ app, router, urlPath, redirect }) => {
 
     let authStore = useAuthStore();
 
-    let error_processed = false;
-
     switch (response.status) {
       case 400:
         if (response.data?.tag === "jwt") {
           await authStore.disconnect();
-          error_processed = true;
         }
         break;
       case 401:
@@ -83,21 +84,15 @@ export default boot(({ app, router, urlPath, redirect }) => {
         });
 
         await authStore.disconnect();
-        error_processed = true;
         break;
       case 404:
         Notify.create({
           message: "Erreur: " + response.data.message,
           color: "negative",
         });
-        error_processed = true;
         break;
       default:
         break;
-    }
-
-    if (error_processed) {
-      return;
     }
 
     return Promise.reject(error);
