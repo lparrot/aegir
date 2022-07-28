@@ -4,8 +4,20 @@ import { configure, defineRule, ErrorMessage, Field, FieldArray, Form } from "ve
 import { localize, setLocale } from "@vee-validate/i18n";
 import AllRules from "@vee-validate/rules";
 import fr from "@vee-validate/i18n/dist/locale/fr.json";
+import { useMenu } from "src/composables/useMenu";
+import { useProjectStore } from "stores/project";
+import useAppEventBus from "src/composables/useAppEventBus";
 
-export default boot(async ({ app }) => {
+export default boot(async ({ app, router }) => {
+  ////////////////
+  // Composables
+  ////////////////
+  const appStore = useAppStore();
+  const projectStore = useProjectStore();
+  const bus = useAppEventBus();
+
+  const { refreshMenu, setMenuDefault } = useMenu(router);
+
   app.component("Form", Form);
   app.component("Field", Field);
   app.component("FieldArray", FieldArray);
@@ -23,6 +35,17 @@ export default boot(async ({ app }) => {
 
   setLocale("fr");
 
-  const appStore = useAppStore();
   await appStore.fetchInformations();
+
+  setMenuDefault([
+    { type: "header", label: "Menu" },
+    { icon: "home", label: "Accueil", to: { name: "index" } },
+    { icon: "view_module", label: "Dashboard", to: { name: "dashboard" } },
+  ]);
+
+  bus.$on("connected", async () => {
+    await projectStore.fetchItems();
+    await projectStore.fetchSelectedItem();
+    refreshMenu();
+  });
 });

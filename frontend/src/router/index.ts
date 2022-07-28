@@ -3,13 +3,15 @@ import { createMemoryHistory, createRouter, createWebHashHistory, createWebHisto
 
 import routes from "./routes";
 import { useAuthStore } from "stores/auth";
-import { LocalStorage } from "quasar";
+import useAppLocalStorage from "src/composables/useAppLocalStorage";
 
 const PAGE_ACCESS_DENIED = { name: "errors-401" };
 
 export let router: Router = null;
 
 export default route(function(/* { store, ssrContext } */) {
+  const { storageCurrentRoute } = useAppLocalStorage();
+
   const createHistory = process.env.SERVER
     ? createMemoryHistory
     : (process.env.VUE_ROUTER_MODE === "history" ? createWebHistory : createWebHashHistory);
@@ -23,7 +25,7 @@ export default route(function(/* { store, ssrContext } */) {
   router.beforeEach((to, from, next) => {
     if (checkAccess(to)) {
       if (to.name != undefined && to.name !== "errors-502") {
-        LocalStorage.set("aegir.current_route", to.path);
+        storageCurrentRoute.value = to.path;
       }
       return next();
     }

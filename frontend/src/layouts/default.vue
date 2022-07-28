@@ -45,54 +45,56 @@
       <q-scroll-area class="fit" visible>
         <application-menu></application-menu>
 
-        <q-separator class="q-mt-lg"/>
+        <template v-if="authStore.isLoggedIn">
+          <q-separator class="q-mt-lg"/>
 
-        <q-expansion-item :default-opened="storageModuleOpened === 'bookmarks'" group="modules" header-class="text-primary" label="FAVORIS" @after-show="onOpenModule('bookmarks')">
-          <q-card>
-            <q-card-section>
+          <q-expansion-item :default-opened="storageSidebar.module_selected === 'bookmarks'" group="modules" header-class="text-primary" label="FAVORIS" @after-show="onOpenModule('bookmarks')">
+            <q-card>
+              <q-card-section>
 
-            </q-card-section>
-          </q-card>
-        </q-expansion-item>
+              </q-card-section>
+            </q-card>
+          </q-expansion-item>
 
-        <q-separator/>
+          <q-separator/>
 
-        <q-expansion-item :default-opened="storageModuleOpened === 'workspaces'" group="modules" header-class="text-primary" label="ESPACES" @after-show="onOpenModule('workspaces')">
-          <q-card>
-            <q-card-section>
-              <q-tree ref="itemsTree" v-model:selected="projectStore.selectedItemId" :nodes="items" accordion dense label-key="name" no-connectors node-key="id" @update:selected="onItemSelected">
-                <template v-slot:default-header="prop">
-                  <div :class="{'bg-grey-2': prop.key === projectStore.selectedItemId}" class="row items-center full-width q-py-xs q-px-xs rounded-borders">
-                    <q-icon class="q-mr-sm" size="16px" v-bind="getProjectItemIconProps(prop.node?.type)"/>
-                    <div class="text-primary">{{ prop.node.name }}</div>
-                  </div>
-                </template>
-              </q-tree>
-            </q-card-section>
-          </q-card>
-        </q-expansion-item>
+          <q-expansion-item :default-opened="storageSidebar.module_selected === 'workspaces'" group="modules" header-class="text-primary" label="ESPACES" @after-show="onOpenModule('workspaces')">
+            <q-card>
+              <q-card-section>
+                <q-tree v-if="projectStore.projectItems != null" ref="itemsTree" v-model:expanded="storageSidebar.items_expanded" :nodes="projectStore.projectItems" :selected="storageSidebar.item_selected" accordion dense label-key="name" no-connectors node-key="id" @update:expanded="onTreeItemExpanded" @update:selected="onTreeItemSelected">
+                  <template v-slot:default-header="prop">
+                    <div :class="{'bg-grey-2': prop.key === storageSidebar.item_selected}" class="row items-center full-width q-py-xs q-px-xs rounded-borders">
+                      <q-icon class="q-mr-sm" size="16px" v-bind="getProjectItemIconProps(prop.node?.type)"/>
+                      <div class="text-primary">{{ prop.node.name }}</div>
+                    </div>
+                  </template>
+                </q-tree>
+              </q-card-section>
+            </q-card>
+          </q-expansion-item>
 
-        <q-separator/>
+          <q-separator/>
 
-        <q-expansion-item :default-opened="storageModuleOpened === 'dashboards'" group="modules" header-class="text-primary" label="TABLEAUX DE BORD" @after-show="onOpenModule('dashboards')">
-          <q-card>
-            <q-card-section>
+          <q-expansion-item :default-opened="storageSidebar.module_selected === 'dashboards'" group="modules" header-class="text-primary" label="TABLEAUX DE BORD" @after-show="onOpenModule('dashboards')">
+            <q-card>
+              <q-card-section>
 
-            </q-card-section>
-          </q-card>
-        </q-expansion-item>
+              </q-card-section>
+            </q-card>
+          </q-expansion-item>
 
-        <q-separator/>
+          <q-separator/>
 
-        <q-expansion-item :default-opened="storageModuleOpened === 'documents'" group="modules" header-class="text-primary" label="DOCUMENTS" @after-show="onOpenModule('documents')">
-          <q-card>
-            <q-card-section>
+          <q-expansion-item :default-opened="storageSidebar.module_selected === 'documents'" group="modules" header-class="text-primary" label="DOCUMENTS" @after-show="onOpenModule('documents')">
+            <q-card>
+              <q-card-section>
 
-            </q-card-section>
-          </q-card>
-        </q-expansion-item>
+              </q-card-section>
+            </q-card>
+          </q-expansion-item>
 
-        <q-separator/>
+          <q-separator/>
+        </template>
 
       </q-scroll-area>
     </q-drawer>
@@ -104,16 +106,14 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, watch } from "vue";
-import { Dialog, LocalStorage, Notify, QTree } from "quasar";
+import { ref, watch } from "vue";
+import { Dialog, Notify, QTree } from "quasar";
 import { useAuthStore } from "stores/auth";
 import { useAppStore } from "stores/app";
 import { useRouter } from "vue-router";
-import { useMenu } from "src/composables/useMenu";
 import ApplicationMenu from "components/ApplicationMenu.vue";
-import { api } from "boot/axios";
 import { useProjectStore } from "stores/project";
-import { StorageSerializers, useLocalStorage } from "@vueuse/core";
+import useAppLocalStorage from "src/composables/useAppLocalStorage";
 
 
 ////////////////
@@ -123,67 +123,23 @@ const authStore = useAuthStore();
 const appStore = useAppStore();
 const projectStore = useProjectStore();
 const router = useRouter();
-const storageModuleOpened = useLocalStorage("aegir.module_opened", null, { serializer: StorageSerializers.string });
+const { storageSidebar } = useAppLocalStorage();
 
 ////////////////
 // References
 ////////////////
 const leftDrawer = ref();
-const items = ref();
 const itemsTree = ref<QTree>(null);
 
-onMounted(() => {
-  const expandNode = (node) => {
-    if (node.children != null) {
-      itemsTree.value.setExpanded(node.id, true);
-    }
-  };
-
-  if (projectStore.selectedItemId != null) {
-    let node = itemsTree.value.getNodeByKey(projectStore.selectedItemId);
-    while (node.parentId != null) {
-      node = itemsTree.value.getNodeByKey(node.parentId);
-      expandNode(node);
-    }
-  }
-});
-
-
 watch(
-  () => authStore.isLoggedIn,
-  () => {
-    refreshMenu();
-  },
-  { deep: true });
-
-watch(
-  () => projectStore.selectedItemId,
-  (value) => {
-    if (value != null) {
-      LocalStorage.set("aegir.selected_item", value);
+  () => storageSidebar.value.item_selected,
+  (itemSelected) => {
+    if (itemSelected != null) {
       projectStore.fetchSelectedItem();
     }
   },
-  { immediate: true },
+  { deep: true, immediate: true },
 );
-
-items.value = await api.$get(`/api/projects/${1}/items`);
-
-if (LocalStorage.has("aegir.selected_item")) {
-  projectStore.selectedItemId = LocalStorage.getItem("aegir.selected_item");
-}
-
-const { refreshMenu, setMenuDefault } = useMenu();
-
-setMenuDefault([
-  { type: "header", label: "Menu" },
-  { icon: "home", label: "Accueil", to: { name: "index" } },
-  { icon: "view_module", label: "Dashboard", to: { name: "dashboard" } },
-]);
-
-const onOpenModule = (id) => {
-  storageModuleOpened.value = id;
-};
 
 const getProjectItemIconProps = (type) => {
   switch (type) {
@@ -218,10 +174,19 @@ const onDisconnect = () => {
     });
 };
 
-const onItemSelected = () => {
+const onTreeItemSelected = (value) => {
+  storageSidebar.value.item_selected = value;
+
   if (!router.currentRoute.value.meta.project_view) {
     router.push("/dashboard");
   }
 };
 
+const onOpenModule = (id) => {
+  storageSidebar.value.module_selected = id;
+};
+
+const onTreeItemExpanded = (value) => {
+  storageSidebar.value.items_expanded = value;
+};
 </script>

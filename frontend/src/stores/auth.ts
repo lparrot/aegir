@@ -1,8 +1,10 @@
 import { api } from "boot/axios";
-import { LocalStorage, Notify } from "quasar";
+import { Notify } from "quasar";
 import { defineStore } from "pinia";
 import { LoginParams } from "src/models/auth.model";
 import { getInitials } from "src/utils/string.utils";
+import useAppEventBus from "src/composables/useAppEventBus";
+import useAppLocalStorage from "src/composables/useAppLocalStorage";
 
 interface StateInformations {
   user?: any;
@@ -27,32 +29,37 @@ export const useAuthStore = defineStore("auth", {
 
   actions: {
     async login(formData: LoginParams) {
-      const { claims, token } = await api.$post("/api/auth/login", formData);
+      const bus = useAppEventBus();
+      const { storageToken } = useAppLocalStorage();
 
-      if (token != null) {
-        LocalStorage.set("aegir.token", token);
-        this.user = claims;
+      const { success, data } = await api.$post("/api/auth/login", formData);
+
+      if (success != null) {
+        storageToken.value = data.token;
+        this.user = data.claims;
+
+        bus.$emit("connected");
 
         await this.$router.push({ name: "dashboard" });
 
         Notify.create({
-          message: `Vous êtes connecté sous ${ this.user.username }`,
+          message: `Vous êtes connecté sous ${this.user.username}`,
           color: "positive",
         });
-
       }
     },
 
     async disconnect() {
+      const { storageToken } = useAppLocalStorage();
       await this.$router.push({ name: "login" });
-      LocalStorage.remove("aegir.token");
+      storageToken.value = null;
       this.user = null;
     },
 
     async refreshUser() {
-      const data = await api.$get("/api/auth/user");
+      const { success, data } = await api.$get("/api/auth/user");
 
-      if (data != null) {
+      if (success) {
         this.user = data;
       }
     },

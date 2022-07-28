@@ -1,8 +1,9 @@
 import { boot } from "quasar/wrappers";
 import axios, { AxiosInstance, AxiosResponse } from "axios";
-import { LocalStorage, Notify } from "quasar";
+import { Notify } from "quasar";
 import { useAuthStore } from "stores/auth";
 import { CustomAxiosInstance } from "src/types";
+import useAppLocalStorage from "src/composables/useAppLocalStorage";
 
 declare module "@vue/runtime-core" {
   interface ComponentCustomProperties {
@@ -19,6 +20,7 @@ for (const method of [ "request", "delete", "get", "head", "options", "post", "p
 }
 
 export default boot(({ app, router, urlPath, redirect }) => {
+  const { storageToken, storageCurrentRoute } = useAppLocalStorage();
 
   app.config.globalProperties.$axios = axios;
   app.config.globalProperties.$api = api;
@@ -26,20 +28,20 @@ export default boot(({ app, router, urlPath, redirect }) => {
   api.defaults.timeout = 2000;
   api.defaults.timeoutErrorMessage = "timeout";
 
-  api.interceptors.request.use(function(config) {
-    if (LocalStorage.has("aegir.token")) {
-      config.headers.common["Authorization"] = `Bearer ${LocalStorage.getItem("aegir.token")}`;
+  api.interceptors.request.use((config) => {
+    if (storageToken.value != null) {
+      config.headers.common["Authorization"] = `Bearer ${storageToken.value}`;
     }
 
     return config;
   });
 
-  api.interceptors.response.use(function(response) {
+  api.interceptors.response.use((response) => {
     const data = response.data;
 
     if (urlPath.includes("errors/bad-gateway")) {
-      if (LocalStorage.has("aegir.current_route")) {
-        redirect(LocalStorage.getItem("aegir.current_route").toString());
+      if (storageCurrentRoute.value != null) {
+        redirect(storageCurrentRoute.value);
       } else {
         redirect({ name: "index" });
       }
@@ -68,6 +70,12 @@ export default boot(({ app, router, urlPath, redirect }) => {
     let error_processed = false;
 
     switch (response.status) {
+      case 400:
+        if (response.data?.tag === "jwt") {
+          await authStore.disconnect();
+          error_processed = true;
+        }
+        break;
       case 401:
         Notify.create({
           message: `Vous n'etes pas connecté`,

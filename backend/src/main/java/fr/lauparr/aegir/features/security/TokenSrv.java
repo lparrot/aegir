@@ -1,7 +1,9 @@
 package fr.lauparr.aegir.features.security;
 
 import fr.lauparr.aegir.entities.User;
+import fr.lauparr.aegir.exceptions.TaggedApplicationException;
 import fr.lauparr.aegir.utils.DateTimeUtils;
+import fr.lauparr.aegir.utils.MessageUtils;
 import io.jsonwebtoken.*;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,7 +95,7 @@ public class TokenSrv {
       try {
         return Jwts.parser().setSigningKey(this.secretKey).parseClaimsJws(token).getBody();
       } catch (final JwtException e) {
-        throw new JwtException("Erreur lors de la conversion du token: " + e.getMessage());
+        throw new TaggedApplicationException("jwt", MessageUtils.getMessage("error.security.token_conversion", e.getMessage()));
       }
     }
     return Jwts.claims();

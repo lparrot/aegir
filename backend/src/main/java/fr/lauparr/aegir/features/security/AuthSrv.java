@@ -4,7 +4,7 @@ import fr.lauparr.aegir.entities.Profile;
 import fr.lauparr.aegir.entities.User;
 import fr.lauparr.aegir.entities.repositories.ProfileRepository;
 import fr.lauparr.aegir.entities.repositories.UserRepository;
-import fr.lauparr.aegir.exceptions.ErrorMessageException;
+import fr.lauparr.aegir.exceptions.MessageException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,12 +29,12 @@ public class AuthSrv {
 
     // Si aucun utilisateur n'a été trouvé à partir du login
     if (user == null) {
-      throw new ErrorMessageException("Mauvais login ou mot de passe");
+      throw new MessageException("Mauvais login ou mot de passe");
     }
 
     // Si le mot de passe entré ne correspond pas à celui en base de données
     if (!this.passwordEncoder.matches(password, user.getPassword())) {
-      throw new ErrorMessageException("Mauvais login ou mot de passe");
+      throw new MessageException("Mauvais login ou mot de passe");
     }
 
     final String token = this.tokenSrv.createToken(user);
@@ -53,7 +53,7 @@ public class AuthSrv {
     final Optional<User> user = this.userRepository.findFirstByUsername(params.getUsername());
 
     if (user.isPresent()) {
-      throw new ErrorMessageException("Un utilisateur ayant le même email éxiste déjà");
+      throw new MessageException("Un utilisateur ayant le même email éxiste déjà");
     }
 
     final Profile defaultProfile = this.profileRepository.findDefaultProfile();
