@@ -7,9 +7,9 @@ import cloneDeep from "lodash/cloneDeep";
 const defaultMenu = ref([]);
 const isMenuLoaded = ref<boolean>(false);
 const menu = ref<MenuItem[]>();
+const routerInstance = ref<Router>();
 
 export default function useMenu() {
-  let routerInstance = ref<Router>();
 
   const setRouter = (router) => {
     routerInstance.value = router;

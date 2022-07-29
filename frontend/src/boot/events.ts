@@ -8,6 +8,7 @@ const { bus, refreshMenu, storageSidebar } = useAegir();
 
 export default boot(async ({ app, router }) => {
   bus.$on("connected", async () => {
+    await projectStore.fetchUserProjects();
     await projectStore.fetchSelectedItem();
     refreshMenu();
   });
