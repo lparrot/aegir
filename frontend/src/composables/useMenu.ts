@@ -1,15 +1,19 @@
 import { ref } from "vue";
 import { MenuItem } from "src/models/ui.model";
 import { checkAccess } from "src/router";
-import { Router, useRouter } from "vue-router";
+import { Router } from "vue-router";
 import cloneDeep from "lodash/cloneDeep";
 
 const defaultMenu = ref([]);
 const isMenuLoaded = ref<boolean>(false);
 const menu = ref<MenuItem[]>();
 
-export default function useMenu(router?: Router) {
-  let routerInstance = router ?? useRouter();
+export default function useMenu() {
+  let routerInstance = ref<Router>();
+
+  const setRouter = (router) => {
+    routerInstance.value = router;
+  };
 
   const checkMenuItem = (menuItems: MenuItem[]) => {
     const indexesToRemove = [];
@@ -33,7 +37,7 @@ export default function useMenu(router?: Router) {
       } else {
         if (menuItem.to != null) {
           // S'il y a un lien dans l'item, on appelle la fonction de vérification des droits
-          isAccessOk = checkAccess(routerInstance.resolve(menuItem.to));
+          isAccessOk = checkAccess(routerInstance.value.resolve(menuItem.to));
         } else {
           // S'il n'y a pas de lien dans l'item, on l'affiche
           isAccessOk = true;
@@ -60,5 +64,5 @@ export default function useMenu(router?: Router) {
     isMenuLoaded.value = true;
   };
 
-  return { isMenuLoaded, menu, refreshMenu, setMenuDefault };
+  return { isMenuLoaded, menu, refreshMenu, setMenuDefault, setRouter };
 };

@@ -28,9 +28,9 @@
       <q-space/>
 
       <q-card-actions align="right">
-        <q-btn v-if="step > 1" class="q-ml-sm" color="primary" flat label="Retour" @click="$refs.stepper.previous()"/>
-        <q-btn v-if="step < 3" class="q-ml-sm" color="primary" label="Continuer" @click="$refs.stepper.next()"/>
-        <q-btn v-if="step === 3" color="primary" label="Terminer" @click="onSubmit"/>
+        <q-btn v-if="step > 1" class="q-ml-sm" color="primary" flat label="Retour" unelevated @click="stepper.previous()"/>
+        <q-btn v-if="step < 3" class="q-ml-sm" color="primary" label="Continuer" unelevated @click="stepper.next()"/>
+        <q-btn v-if="step === 3" color="primary" label="Terminer" unelevated @click="onSubmit"/>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -38,13 +38,14 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { useDialogPluginComponent } from "quasar";
+import { QStepper, useDialogPluginComponent } from "quasar";
 
 defineEmits([
   ...useDialogPluginComponent.emits,
 ]);
 
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent();
+const stepper = ref<QStepper>();
 const step = ref(1);
 
 const formData = ref({ name: null });

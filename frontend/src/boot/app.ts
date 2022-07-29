@@ -1,21 +1,24 @@
-import { useAppStore } from "stores/app";
 import { boot } from "quasar/wrappers";
 import { configure, defineRule, ErrorMessage, Field, FieldArray, Form } from "vee-validate";
 import { localize, setLocale } from "@vee-validate/i18n";
 import AllRules from "@vee-validate/rules";
 import fr from "@vee-validate/i18n/dist/locale/fr.json";
 import useMenu from "src/composables/useMenu";
+import useAegir from "src/composables/useAegir";
+import { useAppStore } from "stores/app";
 import { useProjectStore } from "stores/project";
-import useAppEventBus from "src/composables/useAppEventBus";
+
+const { bus, storageSidebar } = useAegir();
+const appStore = useAppStore();
+const projectStore = useProjectStore();
 
 export default boot(async ({ app, router }) => {
   ////////////////
   // Composables
   ////////////////
-  const appStore = useAppStore();
-  const projectStore = useProjectStore();
-  const bus = useAppEventBus();
-  const { refreshMenu, setMenuDefault } = useMenu(router);
+  const { refreshMenu, setMenuDefault, setRouter } = useMenu();
+
+  setRouter(router);
 
   app.component("Form", Form);
   app.component("Field", Field);
@@ -41,10 +44,4 @@ export default boot(async ({ app, router }) => {
     { icon: "home", label: "Accueil", to: { name: "index" } },
     { icon: "view_module", label: "Dashboard", to: { name: "dashboard" } },
   ]);
-
-  bus.$on("connected", async () => {
-    await projectStore.fetchItems();
-    await projectStore.fetchSelectedItem();
-    refreshMenu();
-  });
 });

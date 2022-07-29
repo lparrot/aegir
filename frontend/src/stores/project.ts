@@ -1,41 +1,58 @@
 import { defineStore } from "pinia";
-import { api } from "boot/axios";
+import useAegir from "src/composables/useAegir";
 import { useAuthStore } from "stores/auth";
-import useAppLocalStorage from "src/composables/useAppLocalStorage";
-import useProjectRepository from "src/composables/repositories/useProjectRepository";
 
 interface StateInformations {
-  projectItems: [];
+  userProjects: [];
+  // projectItems: [];
+  selectedProject: any;
   selectedItem: any;
 }
 
 const authStore = useAuthStore();
-const projectRepository = useProjectRepository();
-const { storageSidebar } = useAppLocalStorage();
+const { storageSidebar, projectRepository, projectItemsRepository } = useAegir();
 
 export const useProjectStore = defineStore("project", {
   state: (): StateInformations => ({
-    projectItems: null,
+    userProjects: [],
+    // projectItems: null,
+    selectedProject: null,
     selectedItem: null,
   }),
 
   getters: {},
 
   actions: {
-    async fetchItems() {
+    // async fetchItems() {
+    //   if (authStore.isLoggedIn && this.selectedProject != null) {
+    //     const { success, result } = await projectRepository.getItemsById(this.selectedProject);
+    //     if (success) {
+    //       this.projectItems = result;
+    //     }
+    //   }
+    // },
 
+    async fetchUserProjects() {
       if (authStore.isLoggedIn) {
-        const { success, result } = await projectRepository.getById(1);
+        const { success, result } = await projectRepository.getUserProjects();
         if (success) {
-          this.projectItems = result;
+          this.userProjects = result;
+        }
+      }
+    },
+
+    async fetchSelectedProject() {
+      if (authStore.isLoggedIn && storageSidebar.value.project_selected != null) {
+        const { success, result } = await projectRepository.getById(storageSidebar.value.project_selected);
+        if (success) {
+          this.selectedProject = result;
         }
       }
     },
 
     async fetchSelectedItem() {
-
       if (authStore.isLoggedIn && storageSidebar.value.item_selected != null) {
-        const { success, result } = await api.$get(`/api/project_items/${storageSidebar.value.item_selected}`);
+        const { success, result } = await projectItemsRepository.getById(storageSidebar.value.item_selected);
         if (success) {
           this.selectedItem = result;
         }
