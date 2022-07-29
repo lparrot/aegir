@@ -43,5 +43,6 @@ export default boot(async ({ app, router }) => {
     { type: "header", label: "Menu" },
     { icon: "home", label: "Accueil", to: { name: "index" } },
     { icon: "view_module", label: "Dashboard", to: { name: "dashboard" } },
+    { icon: "task_alt", label: "Tasks", to: { name: "tasks" } },
   ]);
 });

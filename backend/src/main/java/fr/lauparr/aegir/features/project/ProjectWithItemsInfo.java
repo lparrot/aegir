@@ -1,6 +1,6 @@
 package fr.lauparr.aegir.features.project;
 
-import fr.lauparr.aegir.features.project_item.ProjectItemInfo;
+import fr.lauparr.aegir.features.project_item.ProjectItemWithChildrenInfo;
 
 import java.util.List;
 
@@ -9,5 +9,5 @@ public interface ProjectWithItemsInfo {
 
   String getName();
 
-  List<ProjectItemInfo> getItems();
+  List<ProjectItemWithChildrenInfo> getItems();
 }

@@ -46,6 +46,9 @@ export const useProjectStore = defineStore("project", {
         const { success, result } = await projectRepository.getById(storageSidebar.value.project_selected);
         if (success) {
           this.selectedProject = result;
+          if (storageSidebar.value.item_selected == null) {
+            storageSidebar.value.item_selected = result.items[0]?.id;
+          }
         }
       }
     },

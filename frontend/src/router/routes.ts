@@ -10,6 +10,7 @@ const routes: RouteRecordRaw[] = [
       { name: "index", path: "", component: () => import("pages/index.vue"), meta: { access: true } },
       { name: "login", path: "login", component: () => import("pages/login.vue"), meta: { access: true } },
       { name: "dashboard", path: "dashboard", component: () => import("pages/dashboard.vue"), meta: { access: [ "USER" ], project_view: true } },
+      { name: "tasks", path: "tasks", component: () => import("pages/tasks.vue"), meta: { access: [ "USER" ], project_view: true } },
     ],
   },
   {

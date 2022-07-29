@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Getter
@@ -54,6 +55,20 @@ public class ProjectItem {
     this.type = type;
     this.parent = parent;
     this.children = children;
+  }
+
+  @JsonIgnore
+  public String[] getItemNameHierarchy() {
+    List<String> items = new ArrayList<>();
+    items.add(this.name);
+    ProjectItem current = this;
+
+    while (current.getParent() != null) {
+      items.add(current.getParent().getName());
+      current = current.getParent();
+    }
+
+    return items.stream().sorted(Comparator.reverseOrder()).toArray(String[]::new);
   }
 
   public ProjectItem addChild(ProjectItem projectItem) {

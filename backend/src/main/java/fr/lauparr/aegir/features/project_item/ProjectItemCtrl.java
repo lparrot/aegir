@@ -17,7 +17,7 @@ public class ProjectItemCtrl extends BaseController {
   private ProjectItemSrv service;
 
   @GetMapping("{projectItemId}")
-  public ResponseEntity<?> getItemsByProjectId(@PathVariable("projectItemId") Long projectItemId) {
+  public ResponseEntity<?> getById(@PathVariable("projectItemId") Long projectItemId) {
     return this.ok(DaoUtils.convertToDto(this.service.getItemById(projectItemId), ProjectItemInfo.class));
   }
 
