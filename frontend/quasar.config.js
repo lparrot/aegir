@@ -8,7 +8,6 @@
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
-
 const { configure } = require("quasar/wrappers");
 
 module.exports = configure(function(/* ctx */) {
@@ -20,9 +19,9 @@ module.exports = configure(function(/* ctx */) {
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
     boot: [
+      "events",
       "axios",
       "app",
-      "events",
       "auth",
     ],
 
@@ -70,7 +69,6 @@ module.exports = configure(function(/* ctx */) {
 
       // extendViteConf (viteConf) {},
       // viteVuePluginOptions: {},
-
 
       // vitePlugins: [
       //   [ 'package-name', { ..options.. } ]

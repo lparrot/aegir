@@ -9,6 +9,7 @@ const { bus, refreshMenu, storageSidebar } = useAegir();
 export default boot(async ({ app, router }) => {
   bus.$on("connected", async () => {
     await projectStore.fetchUserProjects();
+    await projectStore.fetchSelectedProject();
     await projectStore.fetchSelectedItem();
     refreshMenu();
   });
@@ -23,15 +24,6 @@ export default boot(async ({ app, router }) => {
         await projectStore.fetchSelectedProject();
       }
     },
-    { deep: true, immediate: true },
+    { deep: true },
   );
-
-  // watch(() => storageSidebar?.value?.item_selected,
-  //   async (itemSelected) => {
-  //     if (itemSelected != null) {
-  //       await projectStore.fetchSelectedItem();
-  //     }
-  //   },
-  //   { deep: true, immediate: true },
-  // );
 });

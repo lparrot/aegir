@@ -140,8 +140,6 @@ const appStore = useAppStore();
 const leftDrawer = ref();
 const itemsTree = ref<QTree>(null);
 
-bus.$emit("update:projects");
-
 const getProjectItemIconProps = (type) => {
   switch (type) {
     case "WORKSPACE":
