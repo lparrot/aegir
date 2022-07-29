@@ -48,7 +48,7 @@
         <template v-if="authStore.isLoggedIn">
           <q-separator class="q-mt-sm"/>
 
-          <q-select v-model="storageSidebar.project_selected" :options="projectStore.userProjects" dense emit-value filled label="Projet en cours" map-options option-label="name" option-value="id"></q-select>
+          <q-select v-model="storageSidebar.project_selected" :options="projectStore.userProjects" emit-value filled label="Projet en cours" map-options option-label="name" option-value="id" square @update:model-value="onProjectSelected"></q-select>
 
           <q-separator/>
 
@@ -140,6 +140,12 @@ const appStore = useAppStore();
 const leftDrawer = ref();
 const itemsTree = ref<QTree>(null);
 
+const closeDrawerIfSizeLtMedium = () => {
+  if ($q.screen.lt.md) {
+    leftDrawer.value = false;
+  }
+};
+
 const getProjectItemIconProps = (type) => {
   switch (type) {
     case "WORKSPACE":
@@ -179,6 +185,13 @@ const onTreeItemSelected = (value) => {
   if (!router.currentRoute.value.meta.project_view) {
     router.push("/dashboard");
   }
+
+  closeDrawerIfSizeLtMedium();
+};
+
+const onProjectSelected = () => {
+  storageSidebar.value.item_selected = null;
+  storageSidebar.value.items_expanded = [];
 };
 
 const onOpenModule = (id) => {
@@ -190,6 +203,8 @@ const onTreeItemExpanded = (value) => {
 };
 
 const showDialogCreateWorkspace = () => {
+  closeDrawerIfSizeLtMedium();
+
   $q.dialog({
     component: CreateWorkspace,
   })

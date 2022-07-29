@@ -58,13 +58,23 @@ public class DbInitializerSrv {
       final ProjectItem viewDev = ProjectItem.builder().type(EnumProjectItemType.VIEW).name("DEV").build();
       final ProjectItem workspaceBugs = ProjectItem.builder().type(EnumProjectItemType.WORKSPACE).name("Bugs").build();
 
-      Project project = Project.builder().name("Soleil").build().addProjectItem(workspaceTaches).addProjectItem(workspaceBugs);
-
+      Project projectSoleil = Project.builder().name("Soleil").build().addProjectItem(workspaceTaches).addProjectItem(workspaceBugs);
       workspaceTaches.addChild(folderVabf).addChild(viewDev);
-
       folderVabf.addChild(viewModuleSolde).addChild(viewModuleDossierFormation);
 
-      root.addProject(project);
+      root.addProject(projectSoleil);
+
+      ProjectItem workspaceProd = ProjectItem.builder().type(EnumProjectItemType.WORKSPACE).name("PROD").build();
+      ProjectItem workspaceDev = ProjectItem.builder().type(EnumProjectItemType.WORKSPACE).name("DEV").build();
+      ProjectItem viewProdBugs = ProjectItem.builder().type(EnumProjectItemType.VIEW).name("Bugs").build();
+      ProjectItem viewDevBugs = ProjectItem.builder().type(EnumProjectItemType.VIEW).name("Bugs").build();
+      ProjectItem viewDevEvol = ProjectItem.builder().type(EnumProjectItemType.VIEW).name("Evolutions").build();
+
+      Project projectCcs = Project.builder().name("CCS").build().addProjectItem(workspaceProd).addProjectItem(workspaceDev);
+      workspaceProd.addChild(viewProdBugs);
+      workspaceDev.addChild(viewDevBugs).addChild(viewDevEvol);
+
+      root.addProject(projectCcs);
 
       root = userRepository.save(root);
     }

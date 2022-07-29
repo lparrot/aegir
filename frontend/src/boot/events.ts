@@ -22,6 +22,8 @@ export default boot(async ({ app, router }) => {
     async (projectSelected) => {
       if (projectSelected != null) {
         await projectStore.fetchSelectedProject();
+      } else {
+        projectStore.selectedProject = null;
       }
     },
     { deep: true },
@@ -31,6 +33,8 @@ export default boot(async ({ app, router }) => {
     async (itemSelected) => {
       if (itemSelected != null) {
         await projectStore.fetchSelectedItem();
+      } else {
+        projectStore.selectedItem = null;
       }
     },
     { deep: true },
