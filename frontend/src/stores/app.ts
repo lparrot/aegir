@@ -1,9 +1,11 @@
 import { defineStore } from "pinia";
-import { api } from "boot/axios";
+import useAppRepository from "src/composables/repositories/useAppRepository";
 
 interface StateInformations {
   informations?: any;
 }
+
+const appRepository = useAppRepository();
 
 export const useAppStore = defineStore("app", {
   state: (): StateInformations => ({
@@ -14,10 +16,10 @@ export const useAppStore = defineStore("app", {
 
   actions: {
     async fetchInformations() {
-      const data = await api.$get("/api/app/informations");
+      const data = await appRepository.getInformations();
 
       if (data?.success) {
-        this.informations = data.data;
+        this.informations = data.result;
       }
     },
   },

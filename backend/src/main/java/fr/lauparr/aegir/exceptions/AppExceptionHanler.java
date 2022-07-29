@@ -1,6 +1,6 @@
 package fr.lauparr.aegir.exceptions;
 
-import fr.lauparr.aegir.dto.ResponseError;
+import fr.lauparr.aegir.dto.api.ApiError;
 import fr.lauparr.aegir.utils.ControllerUtils;
 import org.omg.CORBA.portable.ApplicationException;
 import org.springframework.http.HttpHeaders;
@@ -22,20 +22,20 @@ public class AppExceptionHanler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(ApplicationException.class)
   public final ResponseEntity<?> handleApplicationException(ApplicationException e, WebRequest request) {
-    ResponseError exceptionResponse = ControllerUtils.createExceptionResponse(e);
+    ApiError exceptionResponse = ControllerUtils.createExceptionResponse(e);
     return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   @ExceptionHandler(TaggedApplicationException.class)
   public final ResponseEntity<?> handleTaggedApplicationException(TaggedApplicationException e, WebRequest request) {
-    ResponseError exceptionResponse = ControllerUtils.createExceptionResponse(e);
+    ApiError exceptionResponse = ControllerUtils.createExceptionResponse(e);
     exceptionResponse.getDetail().put("tag", e.getTag());
     return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   @ExceptionHandler(MessageException.class)
   public final ResponseEntity<?> handleMessageException(MessageException e, WebRequest request) {
-    ResponseError exceptionResponse = ControllerUtils.createMessageResponse(e.getLevel(), e.getMessage(), e.getTitle());
+    ApiError exceptionResponse = ControllerUtils.createMessageResponse(e.getColor(), e.getMessage(), e.getTitle());
     return new ResponseEntity<>(exceptionResponse, HttpStatus.OK);
   }
 
@@ -46,7 +46,7 @@ public class AppExceptionHanler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(Exception.class)
   public final ResponseEntity<?> handleMessageException(Exception e, WebRequest request) throws Exception {
-    ResponseError exceptionResponse = ControllerUtils.createExceptionResponse(e);
+    ApiError exceptionResponse = ControllerUtils.createExceptionResponse(e);
 
     if (e instanceof ResponseStatusException) {
       return new ResponseEntity<>(exceptionResponse, ((ResponseStatusException) e).getResponseHeaders(), ((ResponseStatusException) e).getStatus());
@@ -78,7 +78,7 @@ public class AppExceptionHanler extends ResponseEntityExceptionHandler {
 
   @Override
   protected ResponseEntity<Object> handleHttpMessageNotWritable(HttpMessageNotWritableException e, HttpHeaders headers, HttpStatus status, WebRequest request) {
-    ResponseError exceptionResponse = ControllerUtils.createExceptionResponse(e);
+    ApiError exceptionResponse = ControllerUtils.createExceptionResponse(e);
     return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 

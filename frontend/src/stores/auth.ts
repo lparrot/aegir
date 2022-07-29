@@ -1,14 +1,18 @@
-import { api } from "boot/axios";
 import { Notify } from "quasar";
 import { defineStore } from "pinia";
 import { LoginParams } from "src/models/auth.model";
 import { getInitials } from "src/utils/string.utils";
 import useAppEventBus from "src/composables/useAppEventBus";
 import useAppLocalStorage from "src/composables/useAppLocalStorage";
+import useAuthRepository from "src/composables/repositories/useAuthRepository";
 
 interface StateInformations {
   user?: any;
 }
+
+const bus = useAppEventBus();
+const { storageToken, resetLocalStorage } = useAppLocalStorage();
+const authRepository = useAuthRepository();
 
 export const useAuthStore = defineStore("auth", {
   state: (): StateInformations => ({
@@ -29,14 +33,12 @@ export const useAuthStore = defineStore("auth", {
 
   actions: {
     async login(formData: LoginParams) {
-      const bus = useAppEventBus();
-      const { storageToken } = useAppLocalStorage();
 
-      const { success, data } = await api.$post("/api/auth/login", formData);
+      const { success, result } = await authRepository.login(formData.username, formData.password);
 
       if (success) {
-        storageToken.value = data.token;
-        this.user = data.claims;
+        storageToken.value = result.token;
+        this.user = result.claims;
 
         bus.$emit("connected");
 
@@ -50,17 +52,16 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async disconnect() {
-      const { resetLocalStorage } = useAppLocalStorage();
       resetLocalStorage();
       this.user = null;
       await this.$router.push({ name: "login" });
     },
 
     async refreshUser() {
-      const { success, data } = await api.$get("/api/auth/user");
+      const { success, result } = await authRepository.getUser();
 
       if (success) {
-        this.user = data;
+        this.user = result;
       }
     },
   },

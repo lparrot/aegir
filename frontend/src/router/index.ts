@@ -8,9 +8,9 @@ import useAppLocalStorage from "src/composables/useAppLocalStorage";
 const PAGE_ACCESS_DENIED = { name: "errors-401" };
 
 export let router: Router = null;
+const { storageCurrentRoute } = useAppLocalStorage();
 
 export default route(function(/* { store, ssrContext } */) {
-  const { storageCurrentRoute } = useAppLocalStorage();
 
   const createHistory = process.env.SERVER
     ? createMemoryHistory

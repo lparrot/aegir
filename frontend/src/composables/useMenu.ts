@@ -7,10 +7,9 @@ import cloneDeep from "lodash/cloneDeep";
 const defaultMenu = ref([]);
 const isMenuLoaded = ref<boolean>(false);
 const menu = ref<MenuItem[]>();
-let routerInstance = null;
 
-export const useMenu = (router?: Router) => {
-  routerInstance = router ?? useRouter();
+export default function useMenu(router?: Router) {
+  let routerInstance = router ?? useRouter();
 
   const checkMenuItem = (menuItems: MenuItem[]) => {
     const indexesToRemove = [];

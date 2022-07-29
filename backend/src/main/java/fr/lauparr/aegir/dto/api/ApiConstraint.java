@@ -1,4 +1,4 @@
-package fr.lauparr.aegir.dto;
+package fr.lauparr.aegir.dto.api;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;

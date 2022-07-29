@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useMenu } from "src/composables/useMenu";
+import useMenu from "src/composables/useMenu";
 
 const { menu, isMenuLoaded } = useMenu();
 </script>

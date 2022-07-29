@@ -2,11 +2,16 @@ import { defineStore } from "pinia";
 import { api } from "boot/axios";
 import { useAuthStore } from "stores/auth";
 import useAppLocalStorage from "src/composables/useAppLocalStorage";
+import useProjectRepository from "src/composables/repositories/useProjectRepository";
 
 interface StateInformations {
   projectItems: [];
   selectedItem: any;
 }
+
+const authStore = useAuthStore();
+const projectRepository = useProjectRepository();
+const { storageSidebar } = useAppLocalStorage();
 
 export const useProjectStore = defineStore("project", {
   state: (): StateInformations => ({
@@ -18,24 +23,21 @@ export const useProjectStore = defineStore("project", {
 
   actions: {
     async fetchItems() {
-      const authStore = useAuthStore();
 
       if (authStore.isLoggedIn) {
-        const { success, data } = await api.$get(`/api/projects/${1}/items`);
+        const { success, result } = await projectRepository.getById(1);
         if (success) {
-          this.projectItems = data;
+          this.projectItems = result;
         }
       }
     },
 
     async fetchSelectedItem() {
-      const authStore = useAuthStore();
-      const { storageSidebar } = useAppLocalStorage();
 
       if (authStore.isLoggedIn && storageSidebar.value.item_selected != null) {
-        const { success, data } = await api.$get(`/api/project_items/${storageSidebar.value.item_selected}`);
+        const { success, result } = await api.$get(`/api/project_items/${storageSidebar.value.item_selected}`);
         if (success) {
-          this.selectedItem = data;
+          this.selectedItem = result;
         }
       }
     },

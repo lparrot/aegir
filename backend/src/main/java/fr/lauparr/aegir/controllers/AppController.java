@@ -1,6 +1,6 @@
 package fr.lauparr.aegir.controllers;
 
-import fr.lauparr.aegir.controllers.abstracts.AbstractController;
+import fr.lauparr.aegir.controllers.base.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.info.InfoEndpoint;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/app")
-public class AppController extends AbstractController {
+public class AppController extends BaseController {
 
   @Autowired
   private InfoEndpoint infoEndpoint;

@@ -1,5 +1,5 @@
 import { boot } from "quasar/wrappers";
-import axios, { AxiosInstance, AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
 import { Notify } from "quasar";
 import { useAuthStore } from "stores/auth";
 import { CustomAxiosInstance } from "src/types";
@@ -20,10 +20,6 @@ for (const method of [ "request", "delete", "get", "head", "options", "post", "p
 }
 
 export default boot(({ app, router, urlPath, redirect }) => {
-  app.config.errorHandler = (err, instance, info) => {
-    console.error(err);
-  };
-
   const { storageToken, storageCurrentRoute } = useAppLocalStorage();
 
   app.config.globalProperties.$axios = axios;
@@ -60,7 +56,7 @@ export default boot(({ app, router, urlPath, redirect }) => {
     }
 
     return response;
-  }, async function(error) {
+  }, async function(error: AxiosError) {
 
     if (error.code === "ECONNABORTED") {
       await router.push({ name: "errors-502" });
@@ -74,7 +70,14 @@ export default boot(({ app, router, urlPath, redirect }) => {
     switch (response.status) {
       case 400:
         if (response.data?.tag === "jwt") {
+          Notify.create({
+            message: "Erreur lors de la récupération du token: " + error.response.data.message,
+            color: "negative",
+          });
           await authStore.disconnect();
+          delete error.config.headers["Authorization"];
+          const result = await api.request(error.config);
+          return Promise.resolve(result);
         }
         break;
       case 401:

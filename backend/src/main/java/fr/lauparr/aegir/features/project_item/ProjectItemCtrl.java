@@ -1,6 +1,6 @@
 package fr.lauparr.aegir.features.project_item;
 
-import fr.lauparr.aegir.controllers.abstracts.AbstractController;
+import fr.lauparr.aegir.controllers.base.BaseController;
 import fr.lauparr.aegir.utils.DaoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/project_items")
-public class ProjectItemCtrl extends AbstractController {
+public class ProjectItemCtrl extends BaseController {
 
   @Autowired
   private ProjectItemSrv service;

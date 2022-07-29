@@ -1,6 +1,6 @@
 package fr.lauparr.aegir.features.security;
 
-import fr.lauparr.aegir.controllers.abstracts.AbstractController;
+import fr.lauparr.aegir.controllers.base.BaseController;
 import fr.lauparr.aegir.entities.User;
 import fr.lauparr.aegir.utils.DaoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import java.security.Principal;
 
 @RestController
 @RequestMapping(value = "/api/auth")
-public class AuthCtrl extends AbstractController {
+public class AuthCtrl extends BaseController {
 
   @Autowired
   private AuthSrv authSrv;

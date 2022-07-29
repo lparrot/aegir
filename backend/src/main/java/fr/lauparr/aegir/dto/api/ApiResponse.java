@@ -1,4 +1,4 @@
-package fr.lauparr.aegir.dto;
+package fr.lauparr.aegir.dto.api;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -6,16 +6,16 @@ import lombok.Getter;
 import java.util.Map;
 
 @Getter
-public class ResponseData extends ResponseBase {
+public class ApiResponse extends BaseApi {
 
-  private final Object data;
+  private final Object result;
   private final Map<String, ?> params;
   private final String type;
 
   @Builder
-  public ResponseData(boolean success, Object data, String type, Map<String, ?> params) {
+  public ApiResponse(boolean success, Object result, String type, Map<String, ?> params) {
     super(success);
-    this.data = data;
+    this.result = result;
     this.type = type;
     this.params = params;
   }
