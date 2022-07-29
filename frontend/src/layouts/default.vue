@@ -61,6 +61,8 @@
           <q-expansion-item :default-opened="storageSidebar.module_selected === 'workspaces'" group="modules" header-class="text-primary" label="ESPACES" @after-show="onOpenModule('workspaces')">
             <q-card>
               <q-card-section>
+                <q-btn class="full-width q-mb-sm text-grey-8 text-weight-bolder" color="grey-4" dense icon="add" label="Nouvel espace" size="sm" unelevated @click="showDialogCreateWorkspace"></q-btn>
+
                 <q-tree v-if="projectStore.projectItems != null" ref="itemsTree" v-model:expanded="storageSidebar.items_expanded" :nodes="projectStore.projectItems" :selected="storageSidebar.item_selected" accordion dense label-key="name" no-connectors node-key="id" @update:expanded="onTreeItemExpanded" @update:selected="onTreeItemSelected">
                   <template v-slot:default-header="prop">
                     <div :class="{'bg-grey-2': prop.key === storageSidebar.item_selected}" class="row items-center full-width q-py-xs q-px-xs rounded-borders">
@@ -107,13 +109,14 @@
 
 <script lang="ts" setup>
 import { ref, watch } from "vue";
-import { Dialog, Notify, QTree } from "quasar";
+import { Dialog, Notify, QTree, useQuasar } from "quasar";
 import { useAuthStore } from "stores/auth";
 import { useAppStore } from "stores/app";
 import { useRouter } from "vue-router";
 import ApplicationMenu from "components/ApplicationMenu.vue";
 import { useProjectStore } from "stores/project";
 import useAppLocalStorage from "src/composables/useAppLocalStorage";
+import CreateWorkspace from "components/CreateWorkspace.vue";
 
 ////////////////
 // Composables
@@ -122,6 +125,7 @@ const authStore = useAuthStore();
 const appStore = useAppStore();
 const projectStore = useProjectStore();
 const router = useRouter();
+const $q = useQuasar();
 const { storageSidebar } = useAppLocalStorage();
 
 ////////////////
@@ -187,5 +191,14 @@ const onOpenModule = (id) => {
 
 const onTreeItemExpanded = (value) => {
   storageSidebar.value.items_expanded = value;
+};
+
+const showDialogCreateWorkspace = () => {
+  $q.dialog({
+    component: CreateWorkspace,
+  })
+    .onOk(() => {
+      console.log("ok");
+    });
 };
 </script>
