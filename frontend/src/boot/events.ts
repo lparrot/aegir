@@ -26,4 +26,13 @@ export default boot(async ({ app, router }) => {
     },
     { deep: true },
   );
+
+  watch(() => storageSidebar?.value?.item_selected,
+    async (itemSelected) => {
+      if (itemSelected != null) {
+        await projectStore.fetchSelectedItem();
+      }
+    },
+    { deep: true },
+  );
 });
