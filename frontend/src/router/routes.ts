@@ -2,7 +2,6 @@ import { RouteRecordRaw } from "vue-router";
 
 /**
  * Ajouter meta.access: boolean|Array pour définir la sécurité pour la page (true, false, [] pour dire que l'utilisateur doit être connecté ou ['ROLE1','ROLE2'] pour les rôles que l'utilisateur doit posséder au minimum
- * Ajouter meta.project_view: boolean à true pour signifier qu'il s'agit d'une page pour afficher des informations sur le projet
  */
 const routes: RouteRecordRaw[] = [
   {
@@ -10,8 +9,8 @@ const routes: RouteRecordRaw[] = [
       { name: "index", path: "", component: () => import("pages/index.vue"), meta: { access: true } },
       { name: "login", path: "login", component: () => import("pages/login.vue"), meta: { access: true } },
       { name: "profile", path: "profile", component: () => import("pages/profile.vue"), meta: { access: [] } },
-      { name: "dashboard", path: "dashboard", component: () => import("pages/dashboard.vue"), meta: { access: [ "USER" ], project_view: true } },
-      { name: "tasks", path: "tasks", component: () => import("pages/tasks.vue"), meta: { access: [ "USER" ], project_view: true } },
+      { name: "dashboard", path: "dashboard", component: () => import("pages/dashboard.vue"), meta: { access: [ "USER" ] } },
+      { name: "tasks", path: "tasks", component: () => import("pages/tasks.vue"), meta: { access: [ "USER" ] } },
     ],
   },
   {

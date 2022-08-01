@@ -1,10 +1,10 @@
 <template>
   <q-page v-if="projectStore.selectedItem" padding>
-    <div class="text-h5">
+    <div class="text-subtitle2">
       <div class="row items-center q-gutter-sm">
         <q-icon v-bind="itemIcon"></q-icon>
-        <q-breadcrumbs active-color="blue" class="text-blue-10">
-          <q-breadcrumbs-el v-for="hierarchy in projectStore.selectedItem.itemHierarchy" :key="hierarchy" :label="hierarchy"/>
+        <q-breadcrumbs active-color="blue" class="text-blue-10 ellipsis">
+          <q-breadcrumbs-el v-for="hierarchy in projectStore.selectedItem.itemHierarchy" :key="hierarchy" :label="hierarchy" tag="div"/>
         </q-breadcrumbs>
       </div>
     </div>

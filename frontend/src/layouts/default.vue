@@ -41,70 +41,70 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawer" bordered class="bg-grey-2" show-if-above>
-      <q-scroll-area class="fit" visible>
-        <application-menu></application-menu>
+    <q-drawer v-model="leftDrawer" bordered class="bg-grey-2 scroll-light" show-if-above width="300">
+      <application-menu></application-menu>
 
-        <template v-if="authStore.isLoggedIn">
-          <q-separator class="q-mt-sm"/>
+      <template v-if="authStore.isLoggedIn">
+        <q-separator class="q-mt-sm"/>
 
-          <q-select v-model="storageSidebar.project_selected" :options="projectStore.userProjects" emit-value filled label="Projet en cours" map-options option-label="name" option-value="id" square @update:model-value="onProjectSelected"></q-select>
+        <q-select v-model="storageSidebar.project_selected" :options="projectStore.userProjects" emit-value filled label="Projet en cours" map-options option-label="name" option-value="id" square @update:model-value="onProjectSelected"></q-select>
+
+        <q-separator/>
+
+        <template v-if="projectStore.selectedProject != null">
+          <q-expansion-item :default-opened="storageSidebar.module_selected === 'bookmarks'" group="modules" header-class="text-primary" label="FAVORIS" @after-show="onOpenModule('bookmarks')">
+            <q-card>
+              <q-card-section>
+
+              </q-card-section>
+            </q-card>
+          </q-expansion-item>
 
           <q-separator/>
 
-          <template v-if="projectStore.selectedProject != null">
-            <q-expansion-item :default-opened="storageSidebar.module_selected === 'bookmarks'" group="modules" header-class="text-primary" label="FAVORIS" @after-show="onOpenModule('bookmarks')">
-              <q-card>
-                <q-card-section>
+          <q-expansion-item :default-opened="storageSidebar.module_selected === 'workspaces'" group="modules" header-class="text-primary" label="ESPACES" @after-show="onOpenModule('workspaces')">
+            <q-card>
+              <q-card-section>
+                <q-btn class="full-width q-mb-sm text-grey-8 text-weight-bolder" color="grey-4" dense icon="add" label="Nouvel espace" size="sm" unelevated @click="showDialogCreateWorkspace"></q-btn>
 
-                </q-card-section>
-              </q-card>
-            </q-expansion-item>
-
-            <q-separator/>
-
-            <q-expansion-item :default-opened="storageSidebar.module_selected === 'workspaces'" group="modules" header-class="text-primary" label="ESPACES" @after-show="onOpenModule('workspaces')">
-              <q-card>
-                <q-card-section>
-                  <q-btn class="full-width q-mb-sm text-grey-8 text-weight-bolder" color="grey-4" dense icon="add" label="Nouvel espace" size="sm" unelevated @click="showDialogCreateWorkspace"></q-btn>
-
-                  <q-tree v-if="projectStore.selectedProject != null" ref="itemsTree" v-model:expanded="storageSidebar.items_expanded" :nodes="projectStore.selectedProject?.items" :selected="storageSidebar.item_selected" accordion dense label-key="name" no-connectors no-selection-unset node-key="id" @update:expanded="onTreeItemExpanded" @update:selected="onTreeItemSelected">
-                    <template v-slot:default-header="prop">
-                      <div :class="{'bg-grey-2': prop.key === storageSidebar.item_selected}" class="row items-center full-width q-py-xs q-px-xs rounded-borders">
-                        <q-icon class="q-mr-sm" size="16px" v-bind="getProjectItemIconProps(prop.node?.type)"/>
-                        <div class="text-primary">{{ prop.node.name }}</div>
+                <q-tree v-if="projectStore.selectedProject != null" ref="itemsTree" v-model:expanded="storageSidebar.items_expanded" :nodes="projectStore.selectedProject?.items" :selected="storageSidebar.item_selected" accordion dense label-key="name" no-connectors no-selection-unset node-key="id" selected-color="grey-2" @update:expanded="onTreeItemExpanded" @update:selected="onTreeItemSelected">
+                  <template v-slot:default-header="prop">
+                    <q-tooltip anchor="center right" self="center left">{{ prop.node.name }}</q-tooltip>
+                    <div :class="{['bg-' + prop.tree?.selectedColor]: prop.key === storageSidebar.item_selected}" class="row q-gutter-x-xs no-wrap items-center full-width q-py-xs q-px-xs rounded-borders">
+                      <q-icon class="block" size="16px" v-bind="getProjectItemIconProps(prop.node?.type)"/>
+                      <div class="text-primary ellipsis">
+                        <span>{{ prop.node.name }}</span>
                       </div>
-                    </template>
-                  </q-tree>
-                </q-card-section>
-              </q-card>
-            </q-expansion-item>
+                    </div>
+                  </template>
+                </q-tree>
+              </q-card-section>
+            </q-card>
+          </q-expansion-item>
 
-            <q-separator/>
+          <q-separator/>
 
-            <q-expansion-item :default-opened="storageSidebar.module_selected === 'dashboards'" group="modules" header-class="text-primary" label="TABLEAUX DE BORD" @after-show="onOpenModule('dashboards')">
-              <q-card>
-                <q-card-section>
+          <q-expansion-item :default-opened="storageSidebar.module_selected === 'dashboards'" group="modules" header-class="text-primary" label="TABLEAUX DE BORD" @after-show="onOpenModule('dashboards')">
+            <q-card>
+              <q-card-section>
 
-                </q-card-section>
-              </q-card>
-            </q-expansion-item>
+              </q-card-section>
+            </q-card>
+          </q-expansion-item>
 
-            <q-separator/>
+          <q-separator/>
 
-            <q-expansion-item :default-opened="storageSidebar.module_selected === 'documents'" group="modules" header-class="text-primary" label="DOCUMENTS" @after-show="onOpenModule('documents')">
-              <q-card>
-                <q-card-section>
+          <q-expansion-item :default-opened="storageSidebar.module_selected === 'documents'" group="modules" header-class="text-primary" label="DOCUMENTS" @after-show="onOpenModule('documents')">
+            <q-card>
+              <q-card-section>
 
-                </q-card-section>
-              </q-card>
-            </q-expansion-item>
+              </q-card-section>
+            </q-card>
+          </q-expansion-item>
 
-            <q-separator/>
-          </template>
+          <q-separator/>
         </template>
-
-      </q-scroll-area>
+      </template>
     </q-drawer>
 
     <q-page-container>
@@ -179,13 +179,9 @@ const onDisconnect = () => {
     });
 };
 
-const onTreeItemSelected = (value) => {
+const onTreeItemSelected = async (value) => {
   storageSidebar.value.item_selected = value;
-
-  if (!router.currentRoute.value.meta.project_view) {
-    router.push("/dashboard");
-  }
-
+  await router.push({ name: "tasks" });
   closeDrawerIfSizeLtMedium();
 };
 
