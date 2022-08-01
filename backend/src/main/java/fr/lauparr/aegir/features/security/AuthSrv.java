@@ -2,7 +2,9 @@ package fr.lauparr.aegir.features.security;
 
 import fr.lauparr.aegir.entities.Profile;
 import fr.lauparr.aegir.entities.User;
+import fr.lauparr.aegir.entities.UserData;
 import fr.lauparr.aegir.entities.repositories.ProfileRepository;
+import fr.lauparr.aegir.entities.repositories.UserDataRepository;
 import fr.lauparr.aegir.entities.repositories.UserRepository;
 import fr.lauparr.aegir.exceptions.MessageException;
 import fr.lauparr.aegir.utils.MessageUtils;
@@ -18,6 +20,8 @@ public class AuthSrv {
 
   @Autowired
   private UserRepository userRepository;
+  @Autowired
+  private UserDataRepository userDataRepository;
   @Autowired
   private PasswordEncoder passwordEncoder;
   @Autowired
@@ -50,7 +54,7 @@ public class AuthSrv {
     return this.userRepository.findFirstByUsername(name).orElseThrow(EntityNotFoundException::new);
   }
 
-  public User createAccount(final ParamsSecurityCreateAccount params) {
+  public User createAccount(UserData userData, final ParamsSecurityCreateAccount params) {
     final Optional<User> user = this.userRepository.findFirstByUsername(params.getUsername());
 
     if (user.isPresent()) {
@@ -65,6 +69,8 @@ public class AuthSrv {
       .build();
 
     userToCreate.setPassword(this.passwordEncoder.encode(params.getPassword()));
+
+    userToCreate.setUserData(userData);
 
     this.userRepository.save(userToCreate);
 

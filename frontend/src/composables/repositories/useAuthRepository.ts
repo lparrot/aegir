@@ -9,5 +9,9 @@ export default function useAuthRepository() {
     async getUser() {
       return api.$get("/api/auth/user");
     },
+
+    async getUserData() {
+      return api.$get("/api/auth/user_data");
+    },
   };
 }

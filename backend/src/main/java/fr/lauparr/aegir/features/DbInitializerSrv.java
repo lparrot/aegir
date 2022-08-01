@@ -1,8 +1,9 @@
 package fr.lauparr.aegir.features;
 
+import com.github.javafaker.Faker;
 import fr.lauparr.aegir.entities.*;
 import fr.lauparr.aegir.entities.repositories.ProfileRepository;
-import fr.lauparr.aegir.entities.repositories.ProjectRepository;
+import fr.lauparr.aegir.entities.repositories.UserDataRepository;
 import fr.lauparr.aegir.entities.repositories.UserRepository;
 import fr.lauparr.aegir.enums.EnumProjectItemType;
 import fr.lauparr.aegir.features.security.AuthSrv;
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,15 +22,15 @@ import java.util.Collection;
 public class DbInitializerSrv {
 
   @Autowired
-  private UserRepository userRepository;
-  @Autowired
-  private PasswordEncoder passwordEncoder;
+  private Faker faker;
   @Autowired
   private AuthSrv authSrv;
   @Autowired
-  private ProfileRepository profileRepository;
+  private UserRepository userRepository;
   @Autowired
-  private ProjectRepository projectRepository;
+  private UserDataRepository userDataRepository;
+  @Autowired
+  private ProfileRepository profileRepository;
 
   @Transactional
   public void initialize() {
@@ -41,8 +41,18 @@ public class DbInitializerSrv {
 
       profileRepository.saveAll(Arrays.asList(defaultProfile, adminProfile));
 
+      UserData userData = UserData.builder()
+        .email("laurent.parrot78@gmail.com")
+        .lastname("Parrot")
+        .firstname("Laurent")
+        .address(faker.address().streetAddress())
+        .city(faker.address().city())
+        .postalCode(faker.address().zipCode())
+        .about("Administrateur du système d'informations AEGIR")
+        .build();
+
       // Create users
-      User root = authSrv.createAccount(ParamsSecurityCreateAccount.builder()
+      User root = authSrv.createAccount(userData, ParamsSecurityCreateAccount.builder()
         .username("root")
         .password("123")
         .build());
@@ -76,7 +86,7 @@ public class DbInitializerSrv {
 
       root.addProject(projectCcs);
 
-      root = userRepository.save(root);
+      userDataRepository.save(userData);
     }
   }
 

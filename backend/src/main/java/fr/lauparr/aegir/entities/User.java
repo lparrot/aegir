@@ -25,7 +25,7 @@ import java.util.List;
 public class User implements UserDetails {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "user_data_id")
   private Long id;
 
   @NotEmpty
@@ -41,6 +41,11 @@ public class User implements UserDetails {
   @JsonManagedReference("user_project")
   @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
   private List<Project> projects = new ArrayList<>();
+
+  @OneToOne(fetch = FetchType.LAZY)
+  @MapsId
+  @JoinColumn(name = "user_data_id")
+  private UserData userData;
 
   @Builder
   public User(String username, String password, Profile profile) {

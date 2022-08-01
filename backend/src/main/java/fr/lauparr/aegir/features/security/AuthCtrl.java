@@ -36,7 +36,8 @@ public class AuthCtrl extends BaseController {
 
   @PostMapping
   public ResponseEntity<?> createAccount(@RequestBody final ParamsSecurityCreateAccount params) {
-    final User user = this.authSrv.createAccount(params);
+    // TODO ajouter le user data pour la création de compte
+    final User user = this.authSrv.createAccount(null, params);
     return this.ok(this.tokenSrv.createToken(user));
   }
 

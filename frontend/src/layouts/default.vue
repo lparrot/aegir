@@ -19,7 +19,7 @@
               <div class="text-subtitle2">{{ authStore.user.username }}</div>
             </template>
             <q-list>
-              <q-item v-close-popup clickable>
+              <q-item v-close-popup :to="{name: 'profile'}" clickable>
                 <q-item-section avatar>
                   <q-icon name="face"/>
                 </q-item-section>
