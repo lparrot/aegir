@@ -20,10 +20,13 @@ export default function useWebsocket() {
         }
 
         client.value = new Client({
-          brokerURL: url,
+          // brokerURL: url,
           connectHeaders: headers,
           debug: function(message) {
             console.log(message);
+          },
+          webSocketFactory: () => {
+            return new WebSocket(url);
           },
         });
 

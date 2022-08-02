@@ -31,7 +31,7 @@ export default boot(({ app, router, urlPath, redirect }) => {
 
   api.interceptors.request.use((config) => {
     if (storageToken.value != null) {
-      config.headers.common["Authorization"] = `Bearer ${storageToken.value}`;
+      config.headers.common["Authorization"] = `Bearer ${ storageToken.value }`;
     }
 
     return config;
@@ -50,8 +50,8 @@ export default boot(({ app, router, urlPath, redirect }) => {
 
     if (data?.type === "message") {
       Notify.create({
-        message: data.error,
-        color: data.color ?? "negative",
+        message: data.message,
+        color: data.detail?.color ?? "negative",
         textColor: data.textColor ?? "white",
       });
     }
