@@ -40,9 +40,7 @@ public class WebsocketConfig implements WebSocketMessageBrokerConfigurer {
   public void registerStompEndpoints(final StompEndpointRegistry registry) {
     registry.addEndpoint("/ws")
       .setAllowedOriginPatterns("*")
-      .addInterceptors(this.httpSessionHandshakeInterceptor())
-      .withSockJS()
-      .setSupressCors(true);
+      .addInterceptors(this.httpSessionHandshakeInterceptor());
   }
 
   @Override
@@ -92,12 +90,8 @@ public class WebsocketConfig implements WebSocketMessageBrokerConfigurer {
       }
 
       @Override
-      public void afterHandshake(
-        final ServerHttpRequest request,
-        final ServerHttpResponse response,
-        final WebSocketHandler wsHandler,
-        final Exception exception
-      ) {
+      public void afterHandshake(final ServerHttpRequest request, final ServerHttpResponse response, final WebSocketHandler wsHandler, final Exception exception) {
+        //
       }
     };
   }

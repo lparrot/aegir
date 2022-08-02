@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
+    "@stomp/stompjs": "^6.1.2",
     "@vee-validate/i18n": "^4.6.2",
     "@vee-validate/rules": "^4.6.2",
     "@vueuse/core": "^8.9.4",
@@ -20,8 +21,6 @@
     "pinia": "^2.0.11",
     "qs": "^6.11.0",
     "quasar": "^2.6.0",
-    "sockjs-client": "^1.6.1",
-    "stompjs": "^2.3.3",
     "tiny-emitter": "^2.1.0",
     "vee-validate": "^4.6.2",
     "vue": "^3.0.0",

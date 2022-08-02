@@ -17,7 +17,6 @@ export default boot(async ({ app, router }) => {
   ////////////////
 
   setRouter(router);
-  socket.initialize(process.env.SOCKET_URL ?? "/ws");
 
   app.component("Form", Form);
   app.component("Field", Field);

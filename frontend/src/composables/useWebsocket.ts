@@ -1,43 +1,45 @@
 import { ref } from "vue";
-// import { Client, over, Subscription } from "webstomp-client";
-import Stomp from "stompjs";
-import SockJS from "sockjs-client/dist/sockjs";
+import { Client } from "@stomp/stompjs";
 import useAppLocalStorage from "src/composables/useAppLocalStorage";
+import { useBrowserLocation } from "@vueuse/core";
 
-const client = ref<Stomp.Client>();
-const socket = ref<SockJS>();
+const client = ref<Client>();
 const isConnected = ref<boolean>(false);
 const { storageToken } = useAppLocalStorage();
 
 export default function useWebsocket() {
-
-  const initialize = (url: string) => {
-    socket.value = new SockJS(url, null, { timeout: 2000 });
-    client.value = Stomp.over(socket.value);
-  };
-
   const connect = () => {
-    const headers = {};
-    if (storageToken.value != null) {
-      headers["Authorization"] = storageToken.value;
-    }
-
     return new Promise((resolve, reject) => {
-      client.value.connect(
-        headers,
-        frame => {
+      if (client.value == null) {
+        const location = useBrowserLocation(window);
+        const url = `${ location.value.protocol === "https:" ? "wss" : "ws" }://${ location.value.host }/ws`;
+
+        const headers = {};
+        if (storageToken.value != null) {
+          headers["Authorization"] = storageToken.value;
+        }
+
+        client.value = new Client({
+          brokerURL: url,
+          connectHeaders: headers,
+          debug: function(message) {
+            console.log(message);
+          },
+        });
+
+        client.value.activate();
+
+        client.value.onConnect = receipt => {
           isConnected.value = true;
-          resolve(client);
-        },
-        error => {
-          reject(error);
-        },
-      );
+          resolve(receipt);
+        };
+      }
     });
   };
 
-  const disconnect = () => {
-    client.value.disconnect(() => { console.log("disconnected");});
+  const disconnect = async () => {
+    isConnected.value = false;
+    await client.value.deactivate();
   };
 
   const subscribe = async (topic: string, callback: (message: any) => void): Promise<any> => {
@@ -48,10 +50,8 @@ export default function useWebsocket() {
 
   return {
     client,
-    socket,
-    subscribe,
-    initialize,
     connect,
+    subscribe,
     disconnect,
   };
 }
