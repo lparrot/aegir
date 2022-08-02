@@ -1,9 +1,10 @@
 import { boot } from "quasar/wrappers";
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
-import { Notify } from "quasar";
+import { Dialog, Notify } from "quasar";
 import { useAuthStore } from "stores/auth";
 import { CustomAxiosInstance } from "src/types";
 import useAppLocalStorage from "src/composables/useAppLocalStorage";
+import ErrorDialog from "components/ErrorDialog.vue";
 
 declare module "@vue/runtime-core" {
   interface ComponentCustomProperties {
@@ -57,7 +58,6 @@ export default boot(({ app, router, urlPath, redirect }) => {
 
     return response;
   }, async function(error: AxiosError) {
-
     if (error.code === "ECONNABORTED") {
       await router.push({ name: "errors-502" });
       return;
@@ -92,6 +92,14 @@ export default boot(({ app, router, urlPath, redirect }) => {
         Notify.create({
           message: "Erreur: " + response.data.message,
           color: "negative",
+        });
+        break;
+      case 500:
+        Dialog.create({
+          component: ErrorDialog,
+          componentProps: {
+            error: error,
+          },
         });
         break;
       default:

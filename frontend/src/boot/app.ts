@@ -4,21 +4,20 @@ import { localize, setLocale } from "@vee-validate/i18n";
 import AllRules from "@vee-validate/rules";
 import fr from "@vee-validate/i18n/dist/locale/fr.json";
 import useMenu from "src/composables/useMenu";
-import useAegir from "src/composables/useAegir";
 import { useAppStore } from "stores/app";
-import { useProjectStore } from "stores/project";
+import useWebsocket from "src/composables/useWebsocket";
 
-const { bus, storageSidebar } = useAegir();
+const socket = useWebsocket();
 const appStore = useAppStore();
-const projectStore = useProjectStore();
+const { setMenuDefault, setRouter } = useMenu();
 
 export default boot(async ({ app, router }) => {
   ////////////////
   // Composables
   ////////////////
-  const { refreshMenu, setMenuDefault, setRouter } = useMenu();
 
   setRouter(router);
+  socket.initialize(process.env.SOCKET_URL ?? "/ws");
 
   app.component("Form", Form);
   app.component("Field", Field);

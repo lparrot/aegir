@@ -1,10 +1,17 @@
 import { boot } from "quasar/wrappers";
 import { watch } from "vue";
 import { useProjectStore } from "stores/project";
-import useAegir from "src/composables/useAegir";
+import useAppEventBus from "src/composables/useAppEventBus";
+import useMenu from "src/composables/useMenu";
+import useAppLocalStorage from "src/composables/useAppLocalStorage";
+import useWebsocket from "src/composables/useWebsocket";
+import { Notify } from "quasar";
 
+const socket = useWebsocket();
 const projectStore = useProjectStore();
-const { bus, refreshMenu, storageSidebar } = useAegir();
+const bus = useAppEventBus();
+const { refreshMenu } = useMenu();
+const { storageSidebar } = useAppLocalStorage();
 
 export default boot(async ({ app, router }) => {
   bus.$on("connected", async () => {
@@ -12,6 +19,19 @@ export default boot(async ({ app, router }) => {
     await projectStore.fetchSelectedProject();
     await projectStore.fetchSelectedItem();
     refreshMenu();
+
+    await socket.connect();
+
+    socket.onMessage("/topic/session", message => {
+      Notify.create({
+        message: `${message.type}: ${message.data?.user}`,
+        color: "info",
+      });
+    });
+  });
+
+  bus.$on("disconnected", () => {
+    socket.disconnect();
   });
 
   bus.$on("update:projects", async () => {

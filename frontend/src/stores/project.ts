@@ -1,21 +1,23 @@
 import { defineStore } from "pinia";
-import useAegir from "src/composables/useAegir";
 import { useAuthStore } from "stores/auth";
+import useAppLocalStorage from "src/composables/useAppLocalStorage";
+import useProjectRepository from "src/composables/repositories/useProjectRepository";
+import useProjectItemsRepository from "src/composables/repositories/useProjectItemsRepository";
 
 interface StateInformations {
   userProjects: [];
-  // projectItems: [];
   selectedProject: any;
   selectedItem: any;
 }
 
 const authStore = useAuthStore();
-const { storageSidebar, projectRepository, projectItemsRepository } = useAegir();
+const { storageSidebar } = useAppLocalStorage();
+const projectRepository = useProjectRepository();
+const projectItemsRepository = useProjectItemsRepository();
 
 export const useProjectStore = defineStore("project", {
   state: (): StateInformations => ({
     userProjects: [],
-    // projectItems: null,
     selectedProject: null,
     selectedItem: null,
   }),
@@ -23,15 +25,6 @@ export const useProjectStore = defineStore("project", {
   getters: {},
 
   actions: {
-    // async fetchItems() {
-    //   if (authStore.isLoggedIn && this.selectedProject != null) {
-    //     const { success, result } = await projectRepository.getItemsById(this.selectedProject);
-    //     if (success) {
-    //       this.projectItems = result;
-    //     }
-    //   }
-    // },
-
     async fetchUserProjects() {
       if (authStore.isLoggedIn) {
         const { success, result } = await projectRepository.getUserProjects();

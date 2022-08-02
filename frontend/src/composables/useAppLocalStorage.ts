@@ -9,7 +9,6 @@ const storageSidebar = useLocalStorage(STORAGE_SIDEBAR, { module_selected: null,
 const storageCurrentRoute = useLocalStorage(STORAGE_CURRENT_ROUTE, null);
 
 export default function useAppLocalStorage() {
-
   const resetLocalStorage = () => {
     storageToken.value = null;
     storageSidebar.value = { module_selected: null, item_selected: null, project_selected: null, items_expanded: [] };

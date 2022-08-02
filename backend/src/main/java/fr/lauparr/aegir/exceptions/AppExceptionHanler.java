@@ -44,8 +44,8 @@ public class AppExceptionHanler extends ResponseEntityExceptionHandler {
     return new ResponseEntity<>(ControllerUtils.createValidationResponse(ControllerUtils.createViolations(e)), new HttpHeaders(), HttpStatus.BAD_REQUEST);
   }
 
-  @ExceptionHandler(Exception.class)
-  public final ResponseEntity<?> handleMessageException(Exception e, WebRequest request) throws Exception {
+  @ExceptionHandler(Throwable.class)
+  public final ResponseEntity<?> handleAllException(Exception e, WebRequest request) throws Exception {
     ApiError exceptionResponse = ControllerUtils.createExceptionResponse(e);
 
     if (e instanceof ResponseStatusException) {

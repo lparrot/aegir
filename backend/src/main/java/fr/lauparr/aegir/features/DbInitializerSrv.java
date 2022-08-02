@@ -8,6 +8,7 @@ import fr.lauparr.aegir.entities.repositories.UserRepository;
 import fr.lauparr.aegir.enums.EnumProjectItemType;
 import fr.lauparr.aegir.features.security.AuthSrv;
 import fr.lauparr.aegir.features.security.ParamsSecurityCreateAccount;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -87,6 +88,35 @@ public class DbInitializerSrv {
       root.addProject(projectCcs);
 
       userDataRepository.save(userData);
+
+      UserData randomUserData = null;
+      User randomUser = null;
+
+      for (int i = 0; i < 20; i++) {
+        String firstname = faker.name().firstName();
+        String lastname = faker.name().lastName();
+        String username = StringUtils.stripAccents(firstname.toLowerCase() + "." + lastname.toLowerCase());
+
+        randomUserData = UserData.builder()
+          .email(faker.internet().emailAddress(username))
+          .lastname(lastname)
+          .firstname(firstname)
+          .address(faker.address().streetAddress())
+          .city(faker.address().city())
+          .postalCode(faker.address().zipCode())
+          .about(faker.superhero().descriptor())
+          .build();
+
+        // Create users
+        randomUser = authSrv.createAccount(randomUserData, ParamsSecurityCreateAccount.builder()
+          .username(username)
+          .password("123")
+          .build());
+
+        randomUser.setProfile(adminProfile);
+
+        userRepository.save(randomUser);
+      }
     }
   }
 

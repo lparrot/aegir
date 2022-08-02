@@ -8,8 +8,6 @@
       <div class="text-h2" style="opacity:.4">
         Serveur injoignable...
       </div>
-
-      <q-btn :to="{name: 'index'}" class="q-mt-xl" color="white" label="Accueil" no-caps text-color="blue" unelevated/>
     </div>
   </div>
 </template>

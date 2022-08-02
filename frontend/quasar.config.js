@@ -82,7 +82,12 @@ module.exports = configure(function(/* ctx */) {
       proxy: {
         "/api": {
           target: `http://localhost:${process.env.DEV_BACKEND_PORT || 8080}`,
-          changeOrigin: true,
+          changeOrigin: false,
+        },
+        "/ws": {
+          target: `http://localhost:${process.env.DEV_BACKEND_PORT || 8080}`,
+          changeOrigin: false,
+          ws: true,
         },
       },
     },

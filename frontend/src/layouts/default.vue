@@ -41,7 +41,7 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawer" bordered class="bg-grey-2 scroll-light" show-if-above width="300">
+    <q-drawer v-model="leftDrawer" :width="300" bordered class="bg-grey-2 scroll-light" show-if-above>
       <application-menu></application-menu>
 
       <template v-if="authStore.isLoggedIn">
@@ -122,17 +122,17 @@ import { useRouter } from "vue-router";
 import ApplicationMenu from "components/ApplicationMenu.vue";
 import { useProjectStore } from "stores/project";
 import CreateWorkspace from "components/CreateWorkspace.vue";
-import useAegir from "src/composables/useAegir";
+import useAppLocalStorage from "src/composables/useAppLocalStorage";
 
 ////////////////
 // Composables
 ////////////////
 const router = useRouter();
 const $q = useQuasar();
-const { bus, storageSidebar } = useAegir();
 const projectStore = useProjectStore();
 const authStore = useAuthStore();
 const appStore = useAppStore();
+const { storageSidebar } = useAppLocalStorage();
 
 ////////////////
 // References

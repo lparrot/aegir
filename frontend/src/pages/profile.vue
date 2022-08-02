@@ -43,11 +43,11 @@
 </template>
 
 <script lang="ts" setup>
-import useAegir from "src/composables/useAegir";
 import { onMounted, ref } from "vue";
 import { FormActions } from "vee-validate";
+import useAuthRepository from "src/composables/repositories/useAuthRepository";
 
-const { authRepository } = useAegir();
+const authRepository = useAuthRepository();
 const user = ref();
 
 onMounted(async () => {

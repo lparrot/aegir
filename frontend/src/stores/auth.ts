@@ -54,6 +54,7 @@ export const useAuthStore = defineStore("auth", {
     async disconnect() {
       resetLocalStorage();
       this.user = null;
+      bus.$emit("disconnected");
       await this.$router.push({ name: "login" });
     },
 
