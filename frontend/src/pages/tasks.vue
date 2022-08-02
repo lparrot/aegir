@@ -29,5 +29,4 @@ const itemIcon = computed(() => {
       return {};
   }
 });
-console.log(projectStore.selectedItem);
 </script>
