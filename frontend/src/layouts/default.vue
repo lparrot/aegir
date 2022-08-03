@@ -104,24 +104,25 @@
 
           <q-separator/>
 
-          <template v-if="$security.isInRoles(['ADMIN'])">
-            <q-expansion-item :default-opened="storageSidebar.module_selected === 'admin'" group="modules" header-class="text-primary" label="ADMIN" @after-show="onOpenModule('admin')">
-              <q-card>
-                <q-card-section>
-                  <q-list dense>
-                    <q-item :to="{name: 'admin-connections'}" class="q-btn--rounded" clickable>
-                      <q-item-section side>
-                        <q-icon name="lan"></q-icon>
-                      </q-item-section>
-                      <q-item-section>Sessions actives</q-item-section>
-                    </q-item>
-                  </q-list>
-                </q-card-section>
-              </q-card>
-            </q-expansion-item>
+        </template>
 
-            <q-separator/>
-          </template>
+        <template v-if="$security.isInRoles(['ADMIN'])">
+          <q-expansion-item :default-opened="storageSidebar.module_selected === 'admin'" group="modules" header-class="text-primary" label="ADMIN" @after-show="onOpenModule('admin')">
+            <q-card>
+              <q-card-section>
+                <q-list dense>
+                  <q-item :to="{name: 'admin-connections'}" class="q-btn--rounded" clickable>
+                    <q-item-section side>
+                      <q-icon name="lan"></q-icon>
+                    </q-item-section>
+                    <q-item-section>Sessions actives</q-item-section>
+                  </q-item>
+                </q-list>
+              </q-card-section>
+            </q-card>
+          </q-expansion-item>
+
+          <q-separator/>
         </template>
       </template>
     </q-drawer>

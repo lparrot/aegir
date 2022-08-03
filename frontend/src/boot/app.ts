@@ -7,8 +7,6 @@ import fr from "@vee-validate/i18n/dist/locale/fr.json";
 import useMenu from "src/composables/useMenu";
 import { useAppStore } from "stores/app";
 import useWebsocket from "src/composables/useWebsocket";
-import ApplicationCloseMessage from "components/ApplicationCloseMessage.vue";
-import { Dialog } from "quasar";
 import useDayjs from "src/composables/useDayjs";
 import dayjs from "dayjs";
 import RelativeTimePlugin from "dayjs/plugin/relativeTime";
@@ -43,12 +41,6 @@ export default boot(async ({ app, router }) => {
   setRouter(router);
   socket.initialize();
   await socket.connect();
-
-  socket.client.value.webSocket.onclose = event => {
-    Dialog.create({
-      component: ApplicationCloseMessage,
-    });
-  };
 
   app.component("Form", Form);
   app.component("Field", Field);

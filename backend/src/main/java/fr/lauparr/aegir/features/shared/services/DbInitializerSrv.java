@@ -8,6 +8,7 @@ import fr.lauparr.aegir.entities.repositories.UserRepository;
 import fr.lauparr.aegir.enums.EnumProjectItemType;
 import fr.lauparr.aegir.features.security.AuthSrv;
 import fr.lauparr.aegir.features.security.ParamsSecurityCreateAccount;
+import fr.lauparr.aegir.features.websockets.WebsocketSrv;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -32,6 +33,8 @@ public class DbInitializerSrv {
   private UserDataRepository userDataRepository;
   @Autowired
   private ProfileRepository profileRepository;
+  @Autowired
+  private WebsocketSrv websocketSrv;
 
   @Transactional
   public void initialize() {
