@@ -40,8 +40,6 @@ const fetchConnections = async () => {
   }
 };
 
-await fetchConnections();
-
 const subscription = await socket.subscribe("/topic/session", async message => {
   await fetchConnections();
 });
@@ -49,4 +47,6 @@ const subscription = await socket.subscribe("/topic/session", async message => {
 onBeforeUnmount(async () => {
   subscription.unsubscribe();
 });
+
+await fetchConnections();
 </script>

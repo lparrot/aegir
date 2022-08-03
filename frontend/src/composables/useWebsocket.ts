@@ -4,6 +4,7 @@ import useAppLocalStorage from "src/composables/useAppLocalStorage";
 import SockJS from "sockjs-client/dist/sockjs";
 import { Dialog, DialogChainObject } from "quasar";
 import ApplicationCloseMessage from "components/ApplicationCloseMessage.vue";
+import { until } from "@vueuse/core";
 
 const client = ref<Client>();
 const dialog = ref<DialogChainObject>();
@@ -11,15 +12,18 @@ const dialog = ref<DialogChainObject>();
 const isConnected = ref<boolean>(false);
 const { storageToken } = useAppLocalStorage();
 
+const getHeaders = () => {
+  const headers = {};
+  if (storageToken.value != null) {
+    headers["Authorization"] = storageToken.value;
+  }
+  return headers;
+};
+
 export default function useWebsocket() {
   const initialize = () => {
-    const headers = {};
-    if (storageToken.value != null) {
-      headers["Authorization"] = storageToken.value;
-    }
-
     client.value = new Client({
-      connectHeaders: headers,
+      connectHeaders: getHeaders(),
       debug: msg => {
         console.log(msg);
       },
@@ -43,15 +47,13 @@ export default function useWebsocket() {
       };
 
       client.value.onWebSocketClose = (event: CloseEvent) => {
-        if (event.code === 1000) {
-          /* Normal close */
-          return;
-        }
-
-        if (dialog.value == null) {
-          dialog.value = Dialog.create({
-            component: ApplicationCloseMessage,
-          });
+        if (event.code === 1001) {
+          /* CLOSE_GOING_AWAY	Reçu lorsque une erreur est apparue sur le serveur ou le navigateur quitte la page ayant ouvert la connexion. */
+          if (dialog.value == null) {
+            dialog.value = Dialog.create({
+              component: ApplicationCloseMessage,
+            });
+          }
         }
       };
     });
@@ -63,9 +65,19 @@ export default function useWebsocket() {
   };
 
   const subscribe = async (topic: string, callback: (message: any) => void): Promise<StompSubscription> => {
+    if (client.value == null) {
+      await initialize();
+    }
+
+    if (!client.value.active) {
+      await connect();
+    }
+
+    await until(isConnected).toBe(true);
+
     return client.value.subscribe(topic, async (message) => {
       await callback(JSON.parse(message.body));
-    });
+    }, getHeaders());
   };
 
   return {

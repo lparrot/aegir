@@ -6,7 +6,9 @@ import useMenu from "src/composables/useMenu";
 import useAppLocalStorage from "src/composables/useAppLocalStorage";
 import useWebsocket from "src/composables/useWebsocket";
 import { Notify } from "quasar";
+import { useAuthStore } from "stores/auth";
 
+const authStore = useAuthStore();
 const socket = useWebsocket();
 const projectStore = useProjectStore();
 const bus = useAppEventBus();
@@ -15,17 +17,20 @@ const { storageSidebar } = useAppLocalStorage();
 
 export default boot(async ({ app, router }) => {
   bus.$on("connected", async () => {
-    await projectStore.fetchUserProjects();
-    await projectStore.fetchSelectedProject();
-    await projectStore.fetchSelectedItem();
-    refreshMenu();
+    if (authStore.user != null) {
+      await projectStore.fetchUserProjects();
+      await projectStore.fetchSelectedProject();
+      await projectStore.fetchSelectedItem();
 
-    await socket.subscribe("/topic/session", message => {
-      Notify.create({
-        message: `${ message.type }: ${ message.data?.user }`,
-        color: "info",
+      refreshMenu();
+
+      await socket.subscribe("/topic/session", message => {
+        Notify.create({
+          message: `${ message.type }: ${ message.data?.user }`,
+          color: "info",
+        });
       });
-    });
+    }
   });
 
   bus.$on("disconnected", () => {
