@@ -11,6 +11,11 @@ const routes: RouteRecordRaw[] = [
       { name: "profile", path: "profile", component: () => import("pages/profile.vue"), meta: { access: [] } },
       { name: "dashboard", path: "dashboard", component: () => import("pages/dashboard.vue"), meta: { access: [ "USER" ] } },
       { name: "tasks", path: "tasks", component: () => import("pages/tasks.vue"), meta: { access: [ "USER" ] } },
+      {
+        name: "admin", path: "admin", component: () => import("components/BlankPage.vue"), children: [
+          { name: "admin-connections", path: "connections", component: () => import("pages/admin/connections.vue"), meta: { access: [ "ADMIN" ] } },
+        ],
+      },
     ],
   },
   {

@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import { Client } from "@stomp/stompjs";
+import { Client, StompSubscription } from "@stomp/stompjs";
 import useAppLocalStorage from "src/composables/useAppLocalStorage";
 import SockJS from "sockjs-client/dist/sockjs";
 
@@ -17,8 +17,7 @@ export default function useWebsocket() {
 
       client.value = new Client({
         connectHeaders: headers,
-        debug: function(message) {
-          console.log(message);
+        debug: msg => {
         },
         webSocketFactory: () => {
           return new SockJS("/ws");
@@ -43,7 +42,7 @@ export default function useWebsocket() {
     await client.value.deactivate();
   };
 
-  const subscribe = async (topic: string, callback: (message: any) => void): Promise<any> => {
+  const subscribe = async (topic: string, callback: (message: any) => void): Promise<StompSubscription> => {
     return client.value.subscribe(topic, async (message) => {
       await callback(JSON.parse(message.body));
     });

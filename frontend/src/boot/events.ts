@@ -20,8 +20,6 @@ export default boot(async ({ app, router }) => {
     await projectStore.fetchSelectedItem();
     refreshMenu();
 
-    await socket.connect();
-
     await socket.subscribe("/topic/session", message => {
       Notify.create({
         message: `${ message.type }: ${ message.data?.user }`,

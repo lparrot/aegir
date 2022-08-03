@@ -1,9 +1,11 @@
 package fr.lauparr.aegir.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import fr.lauparr.aegir.entities.User;
 import lombok.*;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -19,6 +21,8 @@ public class SocketUserSession implements Principal {
   private String email;
   private String profil;
   private String sessionId;
+  @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+  private LocalDateTime connectionDate;
 
   public SocketUserSession(final String sessionId, final User utilisateur) {
     this.sessionId = sessionId;
@@ -28,6 +32,7 @@ public class SocketUserSession implements Principal {
     this.lastname = utilisateur.getUserData().getLastname();
     this.email = utilisateur.getUserData().getEmail();
     this.profil = utilisateur.getProfile().getLabel();
+    this.connectionDate = LocalDateTime.now();
   }
 
   @Override

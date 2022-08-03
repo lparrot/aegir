@@ -23,6 +23,10 @@ export default route(function(/* { store, ssrContext } */) {
   });
 
   router.beforeEach((to, from, next) => {
+    if (to.meta.no_match) {
+      return next();
+    }
+
     if (checkAccess(to)) {
       if (to.name != undefined && to.name !== "errors-502") {
         storageCurrentRoute.value = to.path;

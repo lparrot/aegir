@@ -1,6 +1,6 @@
 package fr.lauparr.aegir;
 
-import fr.lauparr.aegir.features.DbInitializerSrv;
+import fr.lauparr.aegir.features.shared.services.DbInitializerSrv;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;

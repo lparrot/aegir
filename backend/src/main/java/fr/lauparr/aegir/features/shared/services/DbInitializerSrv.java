@@ -1,4 +1,4 @@
-package fr.lauparr.aegir.features;
+package fr.lauparr.aegir.features.shared.services;
 
 import com.github.javafaker.Faker;
 import fr.lauparr.aegir.entities.*;
