@@ -17,6 +17,7 @@ export default boot(async ({ app, router }) => {
   ////////////////
 
   setRouter(router);
+  socket.initialize();
 
   app.component("Form", Form);
   app.component("Field", Field);

@@ -8,35 +8,33 @@ const isConnected = ref<boolean>(false);
 const { storageToken } = useAppLocalStorage();
 
 export default function useWebsocket() {
-  const connect = () => {
-    return new Promise((resolve, reject) => {
-      if (client.value == null) {
-        // const location = useBrowserLocation(window);
-        // const url = `${ location.value.protocol === "https:" ? "wss" : "ws" }://${ location.value.host }/ws`;
-
-        const headers = {};
-        if (storageToken.value != null) {
-          headers["Authorization"] = storageToken.value;
-        }
-
-        client.value = new Client({
-          // brokerURL: url,
-          connectHeaders: headers,
-          debug: function(message) {
-            console.log(message);
-          },
-          webSocketFactory: () => {
-            return new SockJS("/ws");
-          },
-        });
-
-        client.value.activate();
-
-        client.value.onConnect = receipt => {
-          isConnected.value = true;
-          resolve(receipt);
-        };
+  const initialize = () => {
+    if (client.value == null || !client.value.connected) {
+      const headers = {};
+      if (storageToken.value != null) {
+        headers["Authorization"] = storageToken.value;
       }
+
+      client.value = new Client({
+        connectHeaders: headers,
+        debug: function(message) {
+          console.log(message);
+        },
+        webSocketFactory: () => {
+          return new SockJS("/ws");
+        },
+      });
+    }
+  };
+
+  const connect = () => {
+    return new Promise(resolve => {
+      client.value.activate();
+
+      client.value.onConnect = receipt => {
+        isConnected.value = true;
+        resolve(receipt);
+      };
     });
   };
 
@@ -53,6 +51,7 @@ export default function useWebsocket() {
 
   return {
     client,
+    initialize,
     connect,
     subscribe,
     disconnect,

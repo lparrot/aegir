@@ -5,6 +5,7 @@ import fr.lauparr.aegir.utils.ControllerUtils;
 import org.omg.CORBA.portable.ApplicationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -67,6 +68,8 @@ public class AppExceptionHanler extends ResponseEntityExceptionHandler {
 
     HttpHeaders headers = responseEntity == null ? new HttpHeaders() : responseEntity.getHeaders();
     HttpStatus httpStatus = responseEntity == null ? HttpStatus.INTERNAL_SERVER_ERROR : responseEntity.getStatusCode();
+
+    headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
 
     return new ResponseEntity<>(exceptionResponse, headers, httpStatus);
   }
