@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import { Client } from "@stomp/stompjs";
 import useAppLocalStorage from "src/composables/useAppLocalStorage";
-import { useBrowserLocation } from "@vueuse/core";
+import SockJS from "sockjs-client/dist/sockjs";
 
 const client = ref<Client>();
 const isConnected = ref<boolean>(false);
@@ -11,8 +11,8 @@ export default function useWebsocket() {
   const connect = () => {
     return new Promise((resolve, reject) => {
       if (client.value == null) {
-        const location = useBrowserLocation(window);
-        const url = `${ location.value.protocol === "https:" ? "wss" : "ws" }://${ location.value.host }/ws`;
+        // const location = useBrowserLocation(window);
+        // const url = `${ location.value.protocol === "https:" ? "wss" : "ws" }://${ location.value.host }/ws`;
 
         const headers = {};
         if (storageToken.value != null) {
@@ -26,7 +26,7 @@ export default function useWebsocket() {
             console.log(message);
           },
           webSocketFactory: () => {
-            return new WebSocket(url);
+            return new SockJS("/ws");
           },
         });
 

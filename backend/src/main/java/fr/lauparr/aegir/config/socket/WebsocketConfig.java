@@ -40,7 +40,8 @@ public class WebsocketConfig implements WebSocketMessageBrokerConfigurer {
   public void registerStompEndpoints(final StompEndpointRegistry registry) {
     registry.addEndpoint("/ws")
       .setAllowedOriginPatterns("*")
-      .addInterceptors(this.httpSessionHandshakeInterceptor());
+      .addInterceptors(this.httpSessionHandshakeInterceptor())
+      .withSockJS();
   }
 
   @Override
