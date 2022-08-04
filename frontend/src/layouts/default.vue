@@ -67,17 +67,7 @@
               <q-card-section>
                 <q-btn class="full-width q-mb-sm text-grey-8 text-weight-bolder" color="grey-4" dense icon="add" label="Nouvel espace" size="sm" unelevated @click="showDialogCreateWorkspace"></q-btn>
 
-                <q-tree v-if="projectStore.selectedProject != null" ref="itemsTree" v-model:expanded="storageSidebar.items_expanded" :nodes="projectStore.selectedProject?.items" :selected="storageSidebar.item_selected" accordion dense label-key="name" no-connectors no-selection-unset node-key="id" selected-color="grey-2" @update:expanded="onTreeItemExpanded" @update:selected="onTreeItemSelected">
-                  <template v-slot:default-header="prop">
-                    <q-tooltip anchor="center right" self="center left">{{ prop.node.name }}</q-tooltip>
-                    <div :class="{['bg-' + prop.tree?.selectedColor]: prop.key === storageSidebar.item_selected}" class="row q-gutter-x-xs no-wrap items-center full-width q-py-xs q-px-xs rounded-borders">
-                      <q-icon class="block" size="16px" v-bind="getProjectItemIconProps(prop.node?.type)"/>
-                      <div class="text-primary ellipsis">
-                        <span>{{ prop.node.name }}</span>
-                      </div>
-                    </div>
-                  </template>
-                </q-tree>
+                <tree-project-item @item-selected="closeDrawerIfSizeLtMedium()"></tree-project-item>
               </q-card-section>
             </q-card>
           </q-expansion-item>
@@ -143,6 +133,7 @@ import ApplicationMenu from "components/ApplicationMenu.vue";
 import { useProjectStore } from "stores/project";
 import CreateWorkspace from "components/CreateWorkspace.vue";
 import useAppLocalStorage from "src/composables/useAppLocalStorage";
+import TreeProjectItem from "components/TreeProjectItem.vue";
 
 ////////////////
 // Composables
@@ -166,19 +157,6 @@ const closeDrawerIfSizeLtMedium = () => {
   }
 };
 
-const getProjectItemIconProps = (type) => {
-  switch (type) {
-    case "WORKSPACE":
-      return { name: "workspaces", color: "blue" };
-    case "FOLDER":
-      return { name: "folder", color: "orange" };
-    case "VIEW":
-      return { name: "view_sidebar", color: "green" };
-    default:
-      return {};
-  }
-};
-
 const toggleLeftDrawer = () => {
   leftDrawer.value = !leftDrawer.value;
 };
@@ -199,12 +177,6 @@ const onDisconnect = () => {
     });
 };
 
-const onTreeItemSelected = async (value) => {
-  storageSidebar.value.item_selected = value;
-  await router.push({ name: "tasks" });
-  closeDrawerIfSizeLtMedium();
-};
-
 const onProjectSelected = () => {
   storageSidebar.value.item_selected = null;
   storageSidebar.value.items_expanded = [];
@@ -212,10 +184,6 @@ const onProjectSelected = () => {
 
 const onOpenModule = (id) => {
   storageSidebar.value.module_selected = id;
-};
-
-const onTreeItemExpanded = (value) => {
-  storageSidebar.value.items_expanded = value;
 };
 
 const showDialogCreateWorkspace = () => {
