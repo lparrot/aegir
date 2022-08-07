@@ -1,9 +1,10 @@
 package fr.lauparr.aegir.config;
 
 import fr.lauparr.aegir.controllers.base.BaseApiController;
+import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.PathItem;
-import io.swagger.v3.oas.models.parameters.Parameter;
+import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
 import lombok.SneakyThrows;
@@ -20,8 +21,8 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.util.pattern.PathPatternParser;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -51,7 +52,7 @@ public class RestConfig implements ApplicationContextAware {
 
         baseApiController,
 
-        BaseApiController.class.getDeclaredMethod("get", String.class));
+        BaseApiController.class.getDeclaredMethod("get"));
     }
   }
 
@@ -59,28 +60,69 @@ public class RestConfig implements ApplicationContextAware {
   public OpenApiCustomiser generatedApis() {
 
     return openApi -> {
+      openApi.info(new Info().title("PPlanner").description("OpenAPI Swagger pour projet PPlanner"));
+
       List<String> list = Arrays.asList("users", "profiles");
 
       for (String item : list) {
         String path = String.format("/api/%s", item);
 
-        Operation operation = new Operation();
-        operation.setParameters(new ArrayList<>());
-        ApiResponses responses = new ApiResponses();
-        ApiResponse apiResponse = new ApiResponse();
-        apiResponse.setDescription("OK");
-        responses.addApiResponse("200", apiResponse);
-        operation.setResponses(responses);
-        Parameter parameter = new Parameter();
-        parameter.setName("path");
-        parameter.setDescription("Path");
-        operation.setParameters(Arrays.asList(parameter));
+        // Path findAll
+        addPathItem(openApi, RequestMethod.GET, path, "Get all");
 
-        PathItem pathItem = new PathItem();
-        pathItem.setGet(operation);
-        openApi.getPaths().put(path, pathItem);
+        // Path findOne
+        addPathItem(openApi, RequestMethod.GET, path + "/{id}", "Get one");
+
+        // Path update
+        addPathItem(openApi, RequestMethod.PUT, path + "/{id}", "Update");
+
+        // Path create
+        addPathItem(openApi, RequestMethod.POST, path, "Create");
+
+        // Path delete
+        addPathItem(openApi, RequestMethod.DELETE, path, "Delete");
       }
     };
+  }
+
+  public void addPathItem(OpenAPI openApi, RequestMethod method, String path, String description) {
+    PathItem pathItem = new PathItem();
+
+    Operation operation = new Operation()
+      .operationId(method.name().toLowerCase())
+      .description(description)
+      .tags(Collections.singletonList("generated"))
+      .responses(new ApiResponses()
+        .addApiResponse("200", new ApiResponse().description("OK"))
+        .addApiResponse("401", new ApiResponse().description("Not found"))
+        .addApiResponse("404", new ApiResponse().description("Access denied"))
+        .addApiResponse("500", new ApiResponse().description("Server error")));
+
+    if (openApi.getPaths().get(path) != null) {
+      pathItem = openApi.getPaths().get(path);
+    }
+
+    switch (method) {
+      case GET:
+        pathItem.get(operation);
+        break;
+      case PUT:
+        pathItem.put(operation);
+        break;
+      case POST:
+        pathItem.post(operation);
+        break;
+      case DELETE:
+        pathItem.delete(operation);
+        break;
+      case PATCH:
+        pathItem.patch(operation);
+        break;
+      default:
+        throw new IllegalArgumentException("Méthode " + method.name() + " non gérée");
+    }
+
+    openApi.path(path, pathItem);
   }
 
   @Override
