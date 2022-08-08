@@ -89,6 +89,10 @@ module.exports = configure(function(/* ctx */) {
           changeOrigin: false,
           ws: true,
         },
+        "/swagger-ui": {
+          target: `http://localhost:${process.env.DEV_BACKEND_PORT || 8080}`,
+          changeOrigin: false,
+        },
       },
     },
 

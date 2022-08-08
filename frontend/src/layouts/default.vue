@@ -107,6 +107,12 @@
                     </q-item-section>
                     <q-item-section>Sessions actives</q-item-section>
                   </q-item>
+                  <q-item :to="{name: 'admin-swagger'}" class="q-btn--rounded" clickable>
+                    <q-item-section side>
+                      <q-icon name="api"></q-icon>
+                    </q-item-section>
+                    <q-item-section>API Swagger</q-item-section>
+                  </q-item>
                 </q-list>
               </q-card-section>
             </q-card>

@@ -14,6 +14,7 @@ const routes: RouteRecordRaw[] = [
       {
         name: "admin", path: "admin", component: () => import("components/BlankPage.vue"), children: [
           { name: "admin-connections", path: "connections", component: () => import("pages/admin/connections.vue"), meta: { access: [ "ADMIN" ] } },
+          { name: "admin-swagger", path: "swagger", component: () => import("pages/admin/swagger.vue"), meta: { access: [ "ADMIN" ] } },
         ],
       },
     ],
