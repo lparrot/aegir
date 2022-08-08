@@ -1,6 +1,8 @@
 <template>
   <q-page>
-    <iframe :src="swaggerPage" class="full-height full-width absolute no-border"></iframe>
+    <object ref="swaggerContent" :data="swaggerPage" class="full-height full-width absolute" type="text/html">
+      L'element 'object' n'est pas géré par votre navigateur
+    </object>
   </q-page>
 </template>
 

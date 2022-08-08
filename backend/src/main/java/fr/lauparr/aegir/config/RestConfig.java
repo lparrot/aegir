@@ -53,11 +53,7 @@ public class RestConfig implements ApplicationContextAware {
       RequestMappingInfo.BuilderConfiguration options = new RequestMappingInfo.BuilderConfiguration();
       options.setPatternParser(new PathPatternParser());
 
-      this.handlerMapping.registerMapping(
-        RequestMappingInfo.paths(path)
-          .produces(MediaType.APPLICATION_JSON_VALUE)
-          .methods(RequestMethod.GET)
-          .options(options).build(),
+      this.handlerMapping.registerMapping(RequestMappingInfo.paths(path).produces(MediaType.APPLICATION_JSON_VALUE).methods(RequestMethod.GET).options(options).build(),
 
         baseApiController,
 
@@ -69,13 +65,7 @@ public class RestConfig implements ApplicationContextAware {
   public OpenApiCustomiser generatedApis(ServletContext servletContext) {
     Server server = new Server().description("Default server URL").url(servletContext.getContextPath());
     return openApi -> {
-      openApi
-        .info(new Info()
-          .title("PPlanner")
-          .description("OpenAPI Swagger pour projet PPlanner")
-        )
-        .servers(Collections.singletonList(server))
-        .addSecurityItem(new SecurityRequirement().addList("bearerAuth"));
+      openApi.info(new Info().title("PPlanner").description("OpenAPI Swagger pour projet PPlanner")).servers(Collections.singletonList(server)).addSecurityItem(new SecurityRequirement().addList("bearerAuth"));
 
       openApi.getComponents().getSchemas().putAll(ModelConverters.getInstance().read(RestApiResponse.class));
       openApi.getComponents().getSchemas().putAll(ModelConverters.getInstance().read(RestApiError.class));
@@ -109,16 +99,7 @@ public class RestConfig implements ApplicationContextAware {
     Schema<?> apiResponseSchema = new Schema<RestApiResponse>().$ref("#/components/schemas/" + RestApiResponse.class.getName());
     Schema<?> apiErrorSchema = new Schema<RestApiError>().$ref("#/components/schemas/" + RestApiError.class.getName());
 
-    Operation operation = new Operation()
-      .operationId(method.name().toLowerCase())
-      .description(description)
-      .tags(Collections.singletonList("generated"))
-      .responses(new ApiResponses()
-        .addApiResponse(HttpStatus.OK.getReasonPhrase(), new ApiResponse().content(new Content().addMediaType(MediaType.APPLICATION_JSON_VALUE, new io.swagger.v3.oas.models.media.MediaType().schema(apiResponseSchema))))
-        .addApiResponse(HttpStatus.BAD_REQUEST.getReasonPhrase(), new ApiResponse().content(new Content().addMediaType(MediaType.APPLICATION_JSON_VALUE, new io.swagger.v3.oas.models.media.MediaType().schema(apiErrorSchema))))
-        .addApiResponse(HttpStatus.UNAUTHORIZED.getReasonPhrase(), new ApiResponse().content(new Content().addMediaType(MediaType.APPLICATION_JSON_VALUE, new io.swagger.v3.oas.models.media.MediaType().schema(apiErrorSchema))))
-        .addApiResponse(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), new ApiResponse().content(new Content().addMediaType(MediaType.APPLICATION_JSON_VALUE, new io.swagger.v3.oas.models.media.MediaType().schema(apiErrorSchema))))
-      );
+    Operation operation = new Operation().operationId(method.name().toLowerCase()).description(description).tags(Collections.singletonList("generated")).responses(new ApiResponses().addApiResponse(HttpStatus.OK.getReasonPhrase(), new ApiResponse().content(new Content().addMediaType(MediaType.APPLICATION_JSON_VALUE, new io.swagger.v3.oas.models.media.MediaType().schema(apiResponseSchema)))).addApiResponse(HttpStatus.BAD_REQUEST.getReasonPhrase(), new ApiResponse().content(new Content().addMediaType(MediaType.APPLICATION_JSON_VALUE, new io.swagger.v3.oas.models.media.MediaType().schema(apiErrorSchema)))).addApiResponse(HttpStatus.UNAUTHORIZED.getReasonPhrase(), new ApiResponse().content(new Content().addMediaType(MediaType.APPLICATION_JSON_VALUE, new io.swagger.v3.oas.models.media.MediaType().schema(apiErrorSchema)))).addApiResponse(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), new ApiResponse().content(new Content().addMediaType(MediaType.APPLICATION_JSON_VALUE, new io.swagger.v3.oas.models.media.MediaType().schema(apiErrorSchema)))));
 
     if (openApi.getPaths().get(path) != null) {
       pathItem = openApi.getPaths().get(path);
