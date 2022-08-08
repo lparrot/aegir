@@ -1,6 +1,7 @@
 package fr.lauparr.aegir.utils;
 
 import fr.lauparr.aegir.config.AutowireHelper;
+import lombok.experimental.UtilityClass;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.expression.BeanFactoryResolver;
 import org.springframework.core.env.Environment;
@@ -17,20 +18,18 @@ import javax.validation.*;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class SpringUtils {
+@UtilityClass
+public class SpringUtils {
 
-  private SpringUtils() {
-  }
-
-  public static String getProperty(final String key) {
+  public String getProperty(final String key) {
     return AutowireHelper.getBean(Environment.class).getProperty(key);
   }
 
-  public static <T> T getProperty(final String key, final Class<T> clazz) {
+  public <T> T getProperty(final String key, final Class<T> clazz) {
     return AutowireHelper.getBean(Environment.class).getProperty(key, clazz);
   }
 
-  public static String getUrlFromRequest(final HttpServletRequest request) {
+  public String getUrlFromRequest(final HttpServletRequest request) {
     try {
       if (request != null) {
         return ServletUriComponentsBuilder.fromServletMapping(request).build().toString();
@@ -41,7 +40,7 @@ public abstract class SpringUtils {
     return null;
   }
 
-  public static HttpServletRequest getRequest() {
+  public HttpServletRequest getRequest() {
     final RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
     if (requestAttributes instanceof ServletRequestAttributes) {
       return ((ServletRequestAttributes) requestAttributes).getRequest();
@@ -49,7 +48,7 @@ public abstract class SpringUtils {
     return null;
   }
 
-  public static <T> void validate(final T data) {
+  public <T> void validate(final T data) {
     final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     final Validator validator = factory.getValidator();
     final Set<ConstraintViolation<T>> violations = validator.validate(data);
@@ -58,7 +57,7 @@ public abstract class SpringUtils {
     }
   }
 
-  public static Object getExpressionValue(final String expression, final Map<String, Object> contextVariables) {
+  public Object getExpressionValue(final String expression, final Map<String, Object> contextVariables) {
     final BeanFactory beanFactory = AutowireHelper.getApplicationContext().getAutowireCapableBeanFactory();
 
     final ExpressionParser parser = new SpelExpressionParser();

@@ -1,6 +1,7 @@
 package fr.lauparr.aegir.utils;
 
 import fr.lauparr.aegir.config.AutowireHelper;
+import lombok.experimental.UtilityClass;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.projection.ProjectionFactory;
@@ -15,32 +16,33 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class DaoUtils {
+@UtilityClass
+public class DaoUtils {
 
-  private static final String SPLIT_CHAR = "\\.";
+  private final String SPLIT_CHAR = "\\.";
 
-  public static <T> T convertToDto(final Object data, final Class<T> entityClass) {
+  public <T> T convertToDto(final Object data, final Class<T> entityClass) {
     if (data == null) {
       return null;
     }
     return AutowireHelper.getBean(ProjectionFactory.class).createProjection(entityClass, data);
   }
 
-  public static <T> List<T> convertListDto(final List<?> liste, final Class<T> entityClass) {
+  public <T> List<T> convertListDto(final List<?> liste, final Class<T> entityClass) {
     if (liste == null) {
       return new ArrayList<>();
     }
     return liste.stream().map(x -> DaoUtils.convertToDto(x, entityClass)).collect(Collectors.toList());
   }
 
-  public static <T> Page<T> convertPageDto(final Page<?> page, final Class<T> entityClass) {
+  public <T> Page<T> convertPageDto(final Page<?> page, final Class<T> entityClass) {
     if (page == null) {
       return Page.empty();
     }
     return page.map(x -> DaoUtils.convertToDto(x, entityClass));
   }
 
-  public static <T> T findRandom(final PagingAndSortingRepository<T, ?> repository) {
+  public <T> T findRandom(final PagingAndSortingRepository<T, ?> repository) {
     final long count = repository.count();
     final int idx = new SecureRandom().nextInt((int) count);
     final List<T> result = repository.findAll(PageRequest.of(idx, 1)).getContent();
@@ -53,7 +55,7 @@ public abstract class DaoUtils {
   /**
    * Récupère le Path à partir d'un Root
    */
-  public static <T> Path<T> getPathFromRoot(final Root<T> root, final String field) {
+  public <T> Path<T> getPathFromRoot(final Root<T> root, final String field) {
     final String principal;
     String[] fields = null;
     if (field != null) {
@@ -77,14 +79,14 @@ public abstract class DaoUtils {
   /**
    * Vérifie qu'il ne s'agit pas du dernier Path "extractible"
    */
-  private static boolean isSubPath(final String[] fields) {
+  private boolean isSubPath(final String[] fields) {
     return fields != null && fields.length > 0;
   }
 
   /**
    * Récupère un Path à partir du Path et de la liste de champs filtrés
    */
-  private static <T> Path<T> crossPathToPath(final Path<T> path, final String[] fields) {
+  private <T> Path<T> crossPathToPath(final Path<T> path, final String[] fields) {
     Path<T> lastPath = path;
     if (fields != null) {
       for (final String key : fields) {
