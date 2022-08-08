@@ -58,7 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // Sécurité sur toutes les api
     urlRegistry
       .antMatchers(HttpMethod.GET, "/api/app/informations").permitAll()
-      .antMatchers(HttpMethod.POST, "/api/auth/login**").permitAll()
+      .antMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
       .antMatchers(HttpMethod.POST, "/api/auth").permitAll()
       .antMatchers("/ws/**").permitAll()
       .anyRequest().not().hasAuthority(ROLE_ANONYMOUS);

@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ApiConstraint implements Serializable {
+public class RestApiConstraint implements Serializable {
 
   /**
    * Le champ (l'attribut) où se trouve l'erreur de validation
@@ -37,7 +37,7 @@ public class ApiConstraint implements Serializable {
   /**
    * Constructeur
    */
-  public ApiConstraint(final ConstraintViolation<?> constraint) {
+  public RestApiConstraint(final ConstraintViolation<?> constraint) {
     setField(constraint.getPropertyPath().toString());
     setMessage(constraint.getMessage());
     setClazz(constraint.getRootBeanClass());
@@ -47,7 +47,7 @@ public class ApiConstraint implements Serializable {
   /**
    * Constructeur
    */
-  public ApiConstraint(final ObjectError error) {
+  public RestApiConstraint(final ObjectError error) {
     if (error instanceof FieldError) {
       FieldError fieldError = (FieldError) error;
       setField(fieldError.getField());

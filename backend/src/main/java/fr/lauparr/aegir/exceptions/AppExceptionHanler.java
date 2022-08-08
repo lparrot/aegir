@@ -1,6 +1,6 @@
 package fr.lauparr.aegir.exceptions;
 
-import fr.lauparr.aegir.dto.api.ApiError;
+import fr.lauparr.aegir.dto.api.RestApiError;
 import fr.lauparr.aegir.utils.ControllerUtils;
 import org.omg.CORBA.portable.ApplicationException;
 import org.springframework.http.HttpHeaders;
@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotWritableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -22,32 +23,43 @@ import javax.validation.ConstraintViolationException;
 public class AppExceptionHanler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(ApplicationException.class)
-  public final ResponseEntity<?> handleApplicationException(ApplicationException e, WebRequest request) {
-    ApiError exceptionResponse = ControllerUtils.createExceptionResponse(e);
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  public final ResponseEntity<RestApiError> handleApplicationException(ApplicationException e, WebRequest request) {
+    RestApiError exceptionResponse = ControllerUtils.createExceptionResponse(e);
     return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   @ExceptionHandler(TaggedApplicationException.class)
-  public final ResponseEntity<?> handleTaggedApplicationException(TaggedApplicationException e, WebRequest request) {
-    ApiError exceptionResponse = ControllerUtils.createExceptionResponse(e);
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  public final ResponseEntity<RestApiError> handleTaggedApplicationException(TaggedApplicationException e, WebRequest request) {
+    RestApiError exceptionResponse = ControllerUtils.createExceptionResponse(e);
     exceptionResponse.getDetail().put("tag", e.getTag());
     return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   @ExceptionHandler(MessageException.class)
-  public final ResponseEntity<?> handleMessageException(MessageException e, WebRequest request) {
-    ApiError exceptionResponse = ControllerUtils.createMessageResponse(e.getColor(), e.getMessage(), e.getTitle());
+  @ResponseStatus(HttpStatus.OK)
+  public final ResponseEntity<RestApiError> handleMessageException(MessageException e, WebRequest request) {
+    RestApiError exceptionResponse = ControllerUtils.createMessageResponse(e.getColor(), e.getMessage(), e.getTitle());
     return new ResponseEntity<>(exceptionResponse, HttpStatus.OK);
   }
 
   @ExceptionHandler(value = ConstraintViolationException.class)
-  public ResponseEntity<?> handlerConstraintViolationException(ConstraintViolationException e, WebRequest request) {
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ResponseEntity<RestApiError> handlerConstraintViolationException(ConstraintViolationException e, WebRequest request) {
     return new ResponseEntity<>(ControllerUtils.createValidationResponse(ControllerUtils.createViolations(e)), new HttpHeaders(), HttpStatus.BAD_REQUEST);
   }
 
+  @ExceptionHandler(value = AccessDeniedException.class)
+  @ResponseStatus(HttpStatus.UNAUTHORIZED)
+  public ResponseEntity<RestApiError> handlerAccessDeniedException(AccessDeniedException e, WebRequest request) {
+    return new ResponseEntity<>(ControllerUtils.createExceptionResponse(e), new HttpHeaders(), HttpStatus.UNAUTHORIZED);
+  }
+
   @ExceptionHandler(Throwable.class)
-  public final ResponseEntity<?> handleAllException(Exception e, WebRequest request) throws Exception {
-    ApiError exceptionResponse = ControllerUtils.createExceptionResponse(e);
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  public final ResponseEntity<RestApiError> handleAllException(Exception e, WebRequest request) {
+    RestApiError exceptionResponse = ControllerUtils.createExceptionResponse(e);
 
     if (e instanceof ResponseStatusException) {
       return new ResponseEntity<>(exceptionResponse, ((ResponseStatusException) e).getResponseHeaders(), ((ResponseStatusException) e).getStatus());
@@ -74,14 +86,15 @@ public class AppExceptionHanler extends ResponseEntityExceptionHandler {
     return new ResponseEntity<>(exceptionResponse, headers, httpStatus);
   }
 
-  @Override
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
   protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpHeaders headers, HttpStatus status, WebRequest request) {
     return new ResponseEntity<>(ControllerUtils.createValidationResponse(ControllerUtils.createViolations(e)), new HttpHeaders(), HttpStatus.BAD_REQUEST);
   }
 
   @Override
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   protected ResponseEntity<Object> handleHttpMessageNotWritable(HttpMessageNotWritableException e, HttpHeaders headers, HttpStatus status, WebRequest request) {
-    ApiError exceptionResponse = ControllerUtils.createExceptionResponse(e);
+    RestApiError exceptionResponse = ControllerUtils.createExceptionResponse(e);
     return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 

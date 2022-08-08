@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 @Getter
 @Setter
 @Accessors(chain = true)
-public abstract class BaseApi {
+public abstract class BaseRestApi<T> {
 
   private boolean success;
 

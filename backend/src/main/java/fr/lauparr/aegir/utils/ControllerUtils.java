@@ -1,7 +1,7 @@
 package fr.lauparr.aegir.utils;
 
-import fr.lauparr.aegir.dto.api.ApiConstraint;
-import fr.lauparr.aegir.dto.api.ApiError;
+import fr.lauparr.aegir.dto.api.RestApiConstraint;
+import fr.lauparr.aegir.dto.api.RestApiError;
 import lombok.experimental.UtilityClass;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
@@ -12,30 +12,30 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class ControllerUtils {
 
-  public ApiError createExceptionResponse(Throwable throwable) {
+  public RestApiError createExceptionResponse(Throwable throwable) {
     Map<String, Object> detail = new HashMap<>();
     detail.put("class", throwable.getClass());
     detail.put("trace", Arrays.stream(throwable.getStackTrace()).map(StackTraceElement::toString).collect(Collectors.toList()));
-    return new ApiError().setMessage(throwable.getMessage()).setType("exception").setDetail(detail);
+    return new RestApiError().setMessage(throwable.getMessage()).setType("exception").setDetail(detail);
   }
 
-  public ApiError createMessageResponse(String color, String message, String title) {
+  public RestApiError createMessageResponse(String color, String message, String title) {
     Map<String, Object> detail = new HashMap<>();
     detail.put("color", color);
     detail.put("title", title);
-    return new ApiError().setMessage(message).setType("message").setDetail(detail);
+    return new RestApiError().setMessage(message).setType("message").setDetail(detail);
   }
 
-  public ApiError createMessageResponse(String color, String message) {
+  public RestApiError createMessageResponse(String color, String message) {
     return createMessageResponse(color, message, null);
   }
 
-  public ApiError createValidationResponse(List<ApiConstraint> violations) {
+  public RestApiError createValidationResponse(List<RestApiConstraint> violations) {
     Map<String, Object> detail = new HashMap<>();
     violations.forEach(violation -> {
       detail.put(violation.getField(), violation);
     });
-    return new ApiError().setMessage(MessageUtils.getMessage("error.validation")).setType("validation").setDetail(detail);
+    return new RestApiError().setMessage(MessageUtils.getMessage("error.validation")).setType("validation").setDetail(detail);
   }
 
   public <T> void validate(T data) {
@@ -49,16 +49,16 @@ public class ControllerUtils {
     }
   }
 
-  public List<ApiConstraint> createViolations(ConstraintViolationException exception) {
-    return exception.getConstraintViolations().stream().map(ApiConstraint::new).collect(Collectors.toList());
+  public List<RestApiConstraint> createViolations(ConstraintViolationException exception) {
+    return exception.getConstraintViolations().stream().map(RestApiConstraint::new).collect(Collectors.toList());
   }
 
-  public List<ApiConstraint> createViolations(MethodArgumentNotValidException exception) {
-    return exception.getBindingResult().getAllErrors().stream().map(ApiConstraint::new).collect(Collectors.toList());
+  public List<RestApiConstraint> createViolations(MethodArgumentNotValidException exception) {
+    return exception.getBindingResult().getAllErrors().stream().map(RestApiConstraint::new).collect(Collectors.toList());
   }
 
-  public List<ApiConstraint> createViolations(Set<ConstraintViolation<?>> violations) {
-    return violations.stream().map(ApiConstraint::new).collect(Collectors.toList());
+  public List<RestApiConstraint> createViolations(Set<ConstraintViolation<?>> violations) {
+    return violations.stream().map(RestApiConstraint::new).collect(Collectors.toList());
   }
 
 }

@@ -6,6 +6,7 @@ import fr.lauparr.aegir.entities.repositories.ProjectRepository;
 import fr.lauparr.aegir.enums.EnumProjectItemType;
 import fr.lauparr.aegir.exceptions.MessageException;
 import fr.lauparr.aegir.utils.MessageUtils;
+import fr.lauparr.aegir.utils.SpringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +19,9 @@ public class ProjectSrv {
   @Autowired
   private ProjectRepository projectRepository;
 
-  public List<Project> getUserProjects(User currentUser) {
-    return currentUser.getProjects();
+  public List<Project> getUserProjects() {
+    User user = SpringUtils.getCurrentUser();
+    return user.getProjects();
   }
 
   public Project getById(Long projectId) {

@@ -1,6 +1,7 @@
 package fr.lauparr.aegir.features.project_item;
 
 import fr.lauparr.aegir.controllers.base.BaseController;
+import fr.lauparr.aegir.dto.api.RestApiResponse;
 import fr.lauparr.aegir.utils.DaoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class ProjectItemCtrl extends BaseController {
   private ProjectItemSrv service;
 
   @GetMapping("{projectItemId}")
-  public ResponseEntity<?> getById(@PathVariable("projectItemId") Long projectItemId) {
+  public ResponseEntity<RestApiResponse<ProjectItemInfo>> getById(@PathVariable("projectItemId") Long projectItemId) {
     return this.ok(DaoUtils.convertToDto(this.service.getItemById(projectItemId), ProjectItemInfo.class));
   }
 

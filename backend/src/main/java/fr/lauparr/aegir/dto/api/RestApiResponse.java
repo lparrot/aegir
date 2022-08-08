@@ -9,16 +9,16 @@ import java.util.Map;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class ApiResponse extends BaseApi {
-  private Object result;
+public class RestApiResponse<T> extends BaseRestApi<T> {
+  private T result;
   private Map<String, ?> params;
   private String type;
 
-  public ApiResponse() {
+  public RestApiResponse() {
     this(true);
   }
 
-  public ApiResponse(boolean success) {
+  public RestApiResponse(boolean success) {
     this.setSuccess(success);
   }
 }

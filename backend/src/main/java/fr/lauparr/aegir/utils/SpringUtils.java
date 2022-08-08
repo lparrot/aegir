@@ -8,6 +8,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -27,6 +29,10 @@ public class SpringUtils {
 
   public <T> T getProperty(final String key, final Class<T> clazz) {
     return AutowireHelper.getBean(Environment.class).getProperty(key, clazz);
+  }
+
+  public <T extends UserDetails> T getCurrentUser() {
+    return (T) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   }
 
   public String getUrlFromRequest(final HttpServletRequest request) {
