@@ -21,7 +21,7 @@ public abstract class BaseController {
    * Réponse OK sans donnée et un statut
    */
   private ResponseEntity<?> ok(int status) {
-    return ResponseEntity.status(status).body(ApiResponse.builder().success(true).build());
+    return ResponseEntity.status(status).body(new ApiResponse());
   }
 
   /**
@@ -42,7 +42,7 @@ public abstract class BaseController {
    * Réponse OK avec données, un statut et des paramètres
    */
   public ResponseEntity<?> ok(Object result, int status, Map<String, ?> params) {
-    return ResponseEntity.status(status).body(ApiResponse.builder().success(true).result(result).params(params).build());
+    return ResponseEntity.status(status).body(new ApiResponse().setResult(result).setParams(params));
   }
 
   /**
@@ -70,7 +70,7 @@ public abstract class BaseController {
    * Réponse OK avec données, type, un statut et des paramètres
    */
   public ResponseEntity<?> okWithType(String type, Object result, int status, Map<String, ?> params) {
-    return ResponseEntity.status(status).body(ApiResponse.builder().success(true).type(type).result(result).params(params).build());
+    return ResponseEntity.status(status).body(new ApiResponse().setType(type).setResult(result).setParams(params));
   }
 
   /**
@@ -84,7 +84,7 @@ public abstract class BaseController {
    * Réponse OK avec erreur fonctionnelle sans donnée et un statut
    */
   public ResponseEntity<?> notOk(int status) {
-    return ResponseEntity.status(status).body(ApiResponse.builder().success(false).build());
+    return ResponseEntity.status(status).body(new ApiResponse(false));
   }
 
   /**
@@ -105,7 +105,7 @@ public abstract class BaseController {
    * Réponse OK avec erreur fonctionnelle, données, statut et paramètres
    */
   public ResponseEntity<?> notOk(Object result, int status, Map<String, ?> params) {
-    return ResponseEntity.status(status).body(ApiResponse.builder().success(false).result(result).params(params).build());
+    return ResponseEntity.status(status).body(new ApiResponse(false).setResult(result).setParams(params));
   }
 
   /**
@@ -133,7 +133,7 @@ public abstract class BaseController {
    * Réponse OK avec erreur fonctionnelle, données, type, statut et paramètres
    */
   public ResponseEntity<?> notOkWithType(String type, Object result, int status, Map<String, ?> params) {
-    return ResponseEntity.status(status).body(ApiResponse.builder().success(false).type(type).result(result).params(params).build());
+    return ResponseEntity.status(status).body(new ApiResponse(false).setType(type).setResult(result).setParams(params));
   }
 
   /**

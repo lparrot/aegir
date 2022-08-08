@@ -14,14 +14,14 @@ public abstract class ControllerUtils {
     Map<String, Object> detail = new HashMap<>();
     detail.put("class", throwable.getClass());
     detail.put("trace", Arrays.stream(throwable.getStackTrace()).map(StackTraceElement::toString).collect(Collectors.toList()));
-    return ApiError.builder().message(throwable.getMessage()).type("exception").detail(detail).build();
+    return new ApiError().setMessage(throwable.getMessage()).setType("exception").setDetail(detail);
   }
 
   public static ApiError createMessageResponse(String color, String message, String title) {
     Map<String, Object> detail = new HashMap<>();
     detail.put("color", color);
     detail.put("title", title);
-    return ApiError.builder().message(message).type("message").detail(detail).build();
+    return new ApiError().setMessage(message).setType("message").setDetail(detail);
   }
 
   public static ApiError createMessageResponse(String color, String message) {
@@ -33,7 +33,7 @@ public abstract class ControllerUtils {
     violations.forEach(violation -> {
       detail.put(violation.getField(), violation);
     });
-    return ApiError.builder().message(MessageUtils.getMessage("error.validation")).type("validation").detail(detail).build();
+    return new ApiError().setMessage(MessageUtils.getMessage("error.validation")).setType("validation").setDetail(detail);
   }
 
   public static <T> void validate(T data) {

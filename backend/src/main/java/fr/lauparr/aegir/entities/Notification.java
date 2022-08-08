@@ -1,10 +1,9 @@
 package fr.lauparr.aegir.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -13,7 +12,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@NoArgsConstructor
+@Accessors(chain = true)
 @EntityListeners(AuditingEntityListener.class)
 public class Notification {
 
@@ -33,8 +32,4 @@ public class Notification {
   @JoinColumn(foreignKey = @ForeignKey(name = "FK_notification_user"))
   private User user;
 
-  @Builder
-  public Notification(String name) {
-    this.name = name;
-  }
 }

@@ -4,10 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,7 +20,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@NoArgsConstructor
+@Accessors(chain = true)
 public class User implements UserDetails {
 
   @Id
@@ -47,23 +46,22 @@ public class User implements UserDetails {
   @JoinColumn(name = "user_data_id")
   private UserData userData;
 
-  @Builder
-  public User(String username, String password, Profile profile) {
-    this.username = username;
-    this.password = password;
-    this.profile = profile;
+  @PostPersist
+  @PostUpdate
+  public void postSave() {
+    projects.forEach(project -> {
+      project.setUser(this);
+    });
   }
 
   public User addProject(Project project) {
-    project.setUser(this);
-    this.setProjects(new ArrayList<>(this.getProjects()));
-    this.getProjects().add(project);
+    this.projects.add(project);
     return this;
   }
 
   public Claims getClaims() {
     final Claims claims = Jwts.claims();
-    claims.put("id", this.getId());
+    claims.put("id", this.id);
     claims.put("username", this.getUsername());
     return claims;
   }

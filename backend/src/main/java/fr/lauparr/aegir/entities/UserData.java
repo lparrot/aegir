@@ -1,15 +1,15 @@
 package fr.lauparr.aegir.entities;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Accessors(chain = true)
 public class UserData {
 
   @Id

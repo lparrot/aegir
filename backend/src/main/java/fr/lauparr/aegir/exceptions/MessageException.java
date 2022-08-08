@@ -1,19 +1,32 @@
 package fr.lauparr.aegir.exceptions;
 
-import lombok.Builder;
 import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
+@Getter
+@Setter
+@Accessors(chain = true)
 public class MessageException extends RuntimeException {
-  @Getter
-  private final String color;
-  @Getter
-  private final String title;
+  private String color;
+  private String title;
 
-  @Builder
-  public MessageException(String color, String message, String title, Throwable cause) {
+  public MessageException() {
+  }
+
+  public MessageException(String message) {
+    super(message);
+  }
+
+  public MessageException(String message, Throwable cause) {
     super(message, cause);
-    this.color = StringUtils.isBlank(color) ? "negative" : color;
-    this.title = title;
+  }
+
+  public MessageException(Throwable cause) {
+    super(cause);
+  }
+
+  public MessageException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
   }
 }

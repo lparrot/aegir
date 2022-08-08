@@ -2,16 +2,16 @@ package fr.lauparr.aegir.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import fr.lauparr.aegir.entities.User;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Accessors(chain = true)
 public class SocketUserSession implements Principal {
 
   private Long id;

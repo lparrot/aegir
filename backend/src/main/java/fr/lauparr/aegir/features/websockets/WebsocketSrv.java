@@ -31,7 +31,7 @@ public class WebsocketSrv {
   }
 
   public void sendMessage(String topic, EnumWebsocketMessageType type, Object message) {
-    this.messagingTemplate.convertAndSend(topic, new WebsocketTypedMessage(type, message));
+    this.messagingTemplate.convertAndSend(topic, new WebsocketTypedMessage(type).setData(message));
   }
 
   public void sendMessage(String topic, EnumWebsocketMessageType type, final Function<Map<String, Object>, Map<String, Object>> data) {

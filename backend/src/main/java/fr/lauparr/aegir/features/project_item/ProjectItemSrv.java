@@ -14,6 +14,6 @@ public class ProjectItemSrv {
   private ProjectItemRepository projectItemRepository;
 
   public ProjectItem getItemById(Long projectItemId) {
-    return this.projectItemRepository.findById(projectItemId).orElseThrow(() -> MessageException.builder().message(MessageUtils.getMessage("error.not_found.project_item")).build());
+    return this.projectItemRepository.findById(projectItemId).orElseThrow(() -> new MessageException(MessageUtils.getMessage("error.not_found.project_item")));
   }
 }

@@ -34,20 +34,19 @@ public class AuthSrv {
 
     // Si aucun utilisateur n'a été trouvé à partir du login
     if (user == null) {
-      throw MessageException.builder().message(MessageUtils.getMessage("error.auth.bad_credentials")).build();
+      throw new MessageException(MessageUtils.getMessage("error.auth.bad_credentials"));
     }
 
     // Si le mot de passe entré ne correspond pas à celui en base de données
     if (!this.passwordEncoder.matches(password, user.getPassword())) {
-      throw MessageException.builder().message(MessageUtils.getMessage("error.auth.bad_credentials")).build();
+      throw new MessageException(MessageUtils.getMessage("error.auth.bad_credentials"));
     }
 
     final String token = this.tokenSrv.createToken(user);
 
-    return JwtTokenDto.builder()
-      .token(token)
-      .claims(this.tokenSrv.getClaims(token))
-      .build();
+    return new JwtTokenDto()
+      .setToken(token)
+      .setClaims(this.tokenSrv.getClaims(token));
   }
 
   public User getUserData(final String name) {
@@ -58,15 +57,14 @@ public class AuthSrv {
     final Optional<User> user = this.userRepository.findFirstByUsername(params.getUsername());
 
     if (user.isPresent()) {
-      throw MessageException.builder().message(MessageUtils.getMessage("error.auth.same_email")).build();
+      throw new MessageException(MessageUtils.getMessage("error.auth.same_email"));
     }
 
     final Profile defaultProfile = this.profileRepository.findDefaultProfile();
 
-    final User userToCreate = User.builder()
-      .username(params.getUsername())
-      .profile(defaultProfile)
-      .build();
+    final User userToCreate = new User()
+      .setUsername(params.getUsername())
+      .setProfile(defaultProfile);
 
     userToCreate.setPassword(this.passwordEncoder.encode(params.getPassword()));
 

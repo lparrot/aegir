@@ -23,7 +23,7 @@ public class ProjectSrv {
   }
 
   public Project getById(Long projectId) {
-    Project project = projectRepository.findById(projectId).orElseThrow(() -> MessageException.builder().message(MessageUtils.getMessage("error.not_foun.project")).build());
+    Project project = projectRepository.findById(projectId).orElseThrow(() -> new MessageException(MessageUtils.getMessage("error.not_foun.project")));
     project.setItems(project.getItems().stream().filter(projectItem -> projectItem.getType().equals(EnumProjectItemType.WORKSPACE)).collect(Collectors.toList()));
     return project;
   }

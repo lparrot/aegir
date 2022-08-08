@@ -1,9 +1,9 @@
 package fr.lauparr.aegir.dto;
 
 import fr.lauparr.aegir.enums.EnumWebsocketMessageType;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,15 +11,11 @@ import java.util.function.Function;
 
 @Getter
 @Setter
+@Accessors(chain = true)
 public class WebsocketTypedMessage {
-  private final EnumWebsocketMessageType type;
-  private final Object data;
 
-  @Builder
-  public WebsocketTypedMessage(final EnumWebsocketMessageType type, final Object data) {
-    this.type = type;
-    this.data = data;
-  }
+  private EnumWebsocketMessageType type;
+  private Object data;
 
   public WebsocketTypedMessage(final EnumWebsocketMessageType type) {
     this(type, data -> data);
@@ -29,4 +25,5 @@ public class WebsocketTypedMessage {
     this.type = type;
     this.data = data.apply(new HashMap<>());
   }
+
 }

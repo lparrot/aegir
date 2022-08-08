@@ -2,7 +2,9 @@ package fr.lauparr.aegir.entities;
 
 import com.fasterxml.jackson.annotation.*;
 import fr.lauparr.aegir.enums.EnumProjectItemType;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -10,11 +12,12 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
 @Entity
-@NoArgsConstructor
+@Accessors(chain = true)
 @EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Long.class)
 public class ProjectItem {
@@ -49,13 +52,9 @@ public class ProjectItem {
   @JoinColumn(foreignKey = @ForeignKey(name = "FK_project_item_user"))
   private User user;
 
-  @Builder
-  public ProjectItem(String name, EnumProjectItemType type, ProjectItem parent, @Singular List<ProjectItem> children) {
-    this.name = name;
-    this.type = type;
-    this.parent = parent;
-    this.children = children;
-  }
+  @JsonManagedReference("project_item_task")
+  @OneToMany(mappedBy = "view", orphanRemoval = true, cascade = CascadeType.ALL)
+  private List<Task> tasks = new ArrayList<>();
 
   @JsonIgnore
   public String[] getItemNameHierarchy() {
@@ -71,11 +70,25 @@ public class ProjectItem {
     return items.stream().sorted(Comparator.reverseOrder()).toArray(String[]::new);
   }
 
+  @PostPersist
+  @PostUpdate
+  public void postSave() {
+    this.children.forEach(projectItem -> {
+      projectItem.setParent(this);
+      projectItem.setProject(this.project);
+    });
+  }
+
   public ProjectItem addChild(ProjectItem projectItem) {
-    projectItem.setParent(this);
-    projectItem.setProject(this.getProject());
-    this.setChildren(new ArrayList<>(this.getChildren()));
-    this.getChildren().add(projectItem);
+    this.children.add(projectItem);
+    return this;
+  }
+
+  public ProjectItem addTask(Task task) {
+    if (Objects.equals(this.type, EnumProjectItemType.VIEW)) {
+      task.setView(this);
+      tasks.add(task);
+    }
     return this;
   }
 }

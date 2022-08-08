@@ -40,83 +40,78 @@ public class DbInitializerSrv {
   public void initialize() {
     if (userRepository.count() <= 0) {
 
-      Profile defaultProfile = Profile.builder().label("Invited").role(Role.USER).defaultProfile(true).build();
-      Profile adminProfile = Profile.builder().label("Administrator").role(Role.ADMIN).role(Role.USER).defaultProfile(false).build();
+      Profile defaultProfile = new Profile().setLabel("Invited").setDefaultProfile(true).addRole(Role.USER);
+      Profile adminProfile = new Profile().setLabel("Administrator").setDefaultProfile(false).addRole(Role.ADMIN).addRole(Role.USER);
 
       profileRepository.saveAll(Arrays.asList(defaultProfile, adminProfile));
 
-      UserData userData = UserData.builder()
-        .email("laurent.parrot78@gmail.com")
-        .lastname("Parrot")
-        .firstname("Laurent")
-        .address(faker.address().streetAddress())
-        .city(faker.address().city())
-        .postalCode(faker.address().zipCode())
-        .about("Administrateur du système d'informations AEGIR")
-        .build();
+      UserData userData = new UserData()
+        .setEmail("laurent.parrot78@gmail.com")
+        .setLastname("Parrot")
+        .setFirstname("Laurent")
+        .setAddress(faker.address().streetAddress())
+        .setCity(faker.address().city())
+        .setPostalCode(faker.address().zipCode())
+        .setAbout("Administrateur du système d'informations AEGIR");
 
       // Create users
-      User root = authSrv.createAccount(userData, ParamsSecurityCreateAccount.builder()
-        .username("root")
-        .password("123")
-        .build());
-
-      root.setProfile(adminProfile);
+      User root = authSrv.createAccount(userData, new ParamsSecurityCreateAccount()
+          .setUsername("root")
+          .setPassword("123"))
+        .setProfile(adminProfile);
 
       authenticate(root);
 
-      final ProjectItem workspaceTaches = ProjectItem.builder().type(EnumProjectItemType.WORKSPACE).name("Taches").build();
-      final ProjectItem folderVabf = ProjectItem.builder().type(EnumProjectItemType.FOLDER).name("VABF").build();
-      final ProjectItem viewModuleSolde = ProjectItem.builder().type(EnumProjectItemType.VIEW).name("Module solde").build();
-      final ProjectItem viewModuleDossierFormation = ProjectItem.builder().type(EnumProjectItemType.VIEW).name("Module dossier formation").build();
-      final ProjectItem viewDev = ProjectItem.builder().type(EnumProjectItemType.VIEW).name("DEV").build();
-      final ProjectItem workspaceBugs = ProjectItem.builder().type(EnumProjectItemType.WORKSPACE).name("Bugs").build();
+      root
+        .addProject(new Project().setName("Soleil")
+          .addProjectItem(new ProjectItem().setType(EnumProjectItemType.WORKSPACE).setName("Taches")
+            .addChild(new ProjectItem().setType(EnumProjectItemType.FOLDER).setName("VABF")
+              .addChild(new ProjectItem().setType(EnumProjectItemType.VIEW).setName("Module solde"))
+              .addChild(new ProjectItem().setType(EnumProjectItemType.VIEW).setName("Module dossier formation")))
+            .addChild(new ProjectItem().setType(EnumProjectItemType.VIEW).setName("DEV")))
 
-      Project projectSoleil = Project.builder().name("Soleil").build().addProjectItem(workspaceTaches).addProjectItem(workspaceBugs);
-      workspaceTaches.addChild(folderVabf).addChild(viewDev);
-      folderVabf.addChild(viewModuleSolde).addChild(viewModuleDossierFormation);
+          .addProjectItem(new ProjectItem().setType(EnumProjectItemType.WORKSPACE).setName("Bugs")));
 
-      root.addProject(projectSoleil);
+      root
+        .addProject(new Project().setName("CCS")
+          .addProjectItem(new ProjectItem().setType(EnumProjectItemType.WORKSPACE).setName("PROD")
+            .addChild(new ProjectItem().setType(EnumProjectItemType.VIEW).setName("Bugs")
+              .addTask(new Task().setName("Corriger le problème de mot de passe lors de la connexion").addComment(new TaskComment().setContent("Correction en cours ...")))
+              .addTask(new Task().setName("Modifier le libellé du bouton de création d'un profil").addComment(new TaskComment().setContent("Modification mineure, n'est pas prioritaire")))))
 
-      ProjectItem workspaceProd = ProjectItem.builder().type(EnumProjectItemType.WORKSPACE).name("PROD").build();
-      ProjectItem workspaceDev = ProjectItem.builder().type(EnumProjectItemType.WORKSPACE).name("DEV").build();
-      ProjectItem viewProdBugs = ProjectItem.builder().type(EnumProjectItemType.VIEW).name("Bugs").build();
-      ProjectItem viewDevBugs = ProjectItem.builder().type(EnumProjectItemType.VIEW).name("Bugs").build();
-      ProjectItem viewDevEvol = ProjectItem.builder().type(EnumProjectItemType.VIEW).name("Evolutions").build();
-
-      Project projectCcs = Project.builder().name("CCS").build().addProjectItem(workspaceProd).addProjectItem(workspaceDev);
-      workspaceProd.addChild(viewProdBugs);
-      workspaceDev.addChild(viewDevBugs).addChild(viewDevEvol);
-
-      root.addProject(projectCcs);
+          .addProjectItem(new ProjectItem().setType(EnumProjectItemType.WORKSPACE).setName("DEV")
+            .addChild(new ProjectItem().setType(EnumProjectItemType.VIEW).setName("Bugs")
+              .addTask(new Task().setName("Corriger le commentaire sur la méthode getUserByTaskId()")))
+            .addChild(new ProjectItem().setType(EnumProjectItemType.VIEW).setName("Evolutions")
+              .addTask(new Task().setName("Création de l'écran d'administration des profils"))
+              .addTask(new Task().setName("Création de l'écran de tableau de bord")
+                .addComment(new TaskComment().setContent("Attention, doit être réalisé par une équipe encadrée par un lead dev"))
+              ))));
 
       userDataRepository.save(userData);
 
-      UserData randomUserData = null;
-      User randomUser = null;
+      UserData randomUserData;
+      User randomUser;
 
       for (int i = 0; i < 20; i++) {
         String firstname = faker.name().firstName();
         String lastname = faker.name().lastName();
         String username = StringUtils.stripAccents(firstname.toLowerCase() + "." + lastname.toLowerCase());
 
-        randomUserData = UserData.builder()
-          .email(faker.internet().emailAddress(username))
-          .lastname(lastname)
-          .firstname(firstname)
-          .address(faker.address().streetAddress())
-          .city(faker.address().city())
-          .postalCode(faker.address().zipCode())
-          .about(faker.superhero().descriptor())
-          .build();
+        randomUserData = new UserData()
+          .setEmail(faker.internet().emailAddress(username))
+          .setLastname(lastname)
+          .setFirstname(firstname)
+          .setAddress(faker.address().streetAddress())
+          .setCity(faker.address().city())
+          .setPostalCode(faker.address().zipCode())
+          .setAbout(faker.superhero().descriptor());
 
         // Create users
-        randomUser = authSrv.createAccount(randomUserData, ParamsSecurityCreateAccount.builder()
-          .username(username)
-          .password("123")
-          .build());
-
-        randomUser.setProfile(adminProfile);
+        randomUser = authSrv.createAccount(randomUserData, new ParamsSecurityCreateAccount()
+            .setUsername(username)
+            .setPassword("123"))
+          .setProfile(adminProfile);
 
         userRepository.save(randomUser);
       }

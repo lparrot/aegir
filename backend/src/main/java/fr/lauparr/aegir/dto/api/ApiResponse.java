@@ -1,23 +1,24 @@
 package fr.lauparr.aegir.dto.api;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.util.Map;
 
 @Getter
+@Setter
+@Accessors(chain = true)
 public class ApiResponse extends BaseApi {
+  private Object result;
+  private Map<String, ?> params;
+  private String type;
 
-  private final Object result;
-  private final Map<String, ?> params;
-  private final String type;
-
-  @Builder
-  public ApiResponse(boolean success, Object result, String type, Map<String, ?> params) {
-    super(success);
-    this.result = result;
-    this.type = type;
-    this.params = params;
+  public ApiResponse() {
+    this(true);
   }
 
+  public ApiResponse(boolean success) {
+    this.setSuccess(success);
+  }
 }

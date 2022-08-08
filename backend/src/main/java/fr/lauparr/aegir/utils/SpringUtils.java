@@ -58,14 +58,14 @@ public abstract class SpringUtils {
     }
   }
 
-  public static <T> T getExpressionValue(final String expression, final Map<String, Object> contextVariables) {
+  public static Object getExpressionValue(final String expression, final Map<String, Object> contextVariables) {
     final BeanFactory beanFactory = AutowireHelper.getApplicationContext().getAutowireCapableBeanFactory();
 
     final ExpressionParser parser = new SpelExpressionParser();
     final StandardEvaluationContext context = new StandardEvaluationContext();
     context.setBeanResolver(new BeanFactoryResolver(beanFactory));
     contextVariables.forEach(context::setVariable);
-    return (T) parser.parseExpression(expression).getValue(context);
+    return parser.parseExpression(expression).getValue(context);
   }
 
 }

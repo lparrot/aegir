@@ -1,6 +1,8 @@
 package fr.lauparr.aegir.entities;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,7 +12,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
+@Accessors(chain = true)
 public class Profile implements Serializable {
 
   @Id
@@ -27,10 +29,8 @@ public class Profile implements Serializable {
   @CollectionTable(name = "profile_role")
   private List<Role> roles = new ArrayList<>();
 
-  @Builder
-  public Profile(String label, boolean defaultProfile, @Singular List<Role> roles) {
-    this.label = label;
-    this.defaultProfile = defaultProfile;
-    this.roles = roles;
+  public Profile addRole(Role role) {
+    this.roles.add(role);
+    return this;
   }
 }

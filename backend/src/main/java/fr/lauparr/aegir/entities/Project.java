@@ -3,7 +3,9 @@ package fr.lauparr.aegir.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -14,7 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@NoArgsConstructor
+@Accessors(chain = true)
 @EntityListeners(AuditingEntityListener.class)
 public class Project {
 
@@ -35,16 +37,16 @@ public class Project {
   @JoinColumn(foreignKey = @ForeignKey(name = "FK_project_user"))
   private User user;
 
-  @Builder
-  public Project(String name, @Singular List<ProjectItem> items) {
-    this.name = name;
-    this.items = items;
+  @PostPersist
+  @PostUpdate
+  public void postSave() {
+    items.forEach(projectItem -> {
+      projectItem.setProject(this);
+    });
   }
 
   public Project addProjectItem(ProjectItem projectItem) {
-    projectItem.setProject(this);
-    this.setItems(new ArrayList<>(this.getItems()));
-    this.getItems().add(projectItem);
+    this.items.add(projectItem);
     return this;
   }
 }
