@@ -19,16 +19,11 @@ module.exports = configure(function(/* ctx */) {
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
     boot: [
-      "events",
-      "axios",
-      "app",
-      "auth",
-    ],
+      "events", "axios", "app", "auth" ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
     css: [
-      "app.scss",
-    ],
+      "app.scss" ],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
@@ -47,8 +42,7 @@ module.exports = configure(function(/* ctx */) {
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
     build: {
       target: {
-        browser: [ "es2019", "edge88", "firefox78", "chrome87", "safari13.1" ],
-        node: "node16",
+        browser: [ "es2019", "edge88", "firefox78", "chrome87", "safari13.1" ], node: "node16",
       },
 
       vueRouterMode: "history", // available values: 'hash', 'history'
@@ -60,21 +54,19 @@ module.exports = configure(function(/* ctx */) {
 
       // publicPath: '/',
       // analyze: true,
-      env: require("dotenv").config().parsed,
-      // rawDefine: {}
+      env: require("dotenv").config().parsed, // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,
       // polyfillModulePreload: true,
       distDir: "target/dist",
 
       extendViteConf(viteConf) {
-        viteConf.server.watch = {
-          ignored: [ "**/.generated/**" ],
-        };
-
-        console.log(viteConf);
-      },
-      // viteVuePluginOptions: {},
+        if (viteConf.server != null) {
+          viteConf.server.watch = {
+            ignored: [ "**/.generated/**" ],
+          };
+        }
+      }, // viteVuePluginOptions: {},
 
       // vitePlugins: [
       //   [ 'package-name', { ..options.. } ]
@@ -87,17 +79,11 @@ module.exports = configure(function(/* ctx */) {
       open: false, // opens browser window automatically
       proxy: {
         "/api": {
-          target: `http://localhost:${process.env.DEV_BACKEND_PORT || 8080}`,
-          changeOrigin: false,
-        },
-        "/ws": {
-          target: `http://localhost:${process.env.DEV_BACKEND_PORT || 8080}`,
-          changeOrigin: false,
-          ws: true,
-        },
-        "/swagger-ui": {
-          target: `http://localhost:${process.env.DEV_BACKEND_PORT || 8080}`,
-          changeOrigin: false,
+          target: `http://localhost:${process.env.DEV_BACKEND_PORT || 8080}`, changeOrigin: false,
+        }, "/ws": {
+          target: `http://localhost:${process.env.DEV_BACKEND_PORT || 8080}`, changeOrigin: false, ws: true,
+        }, "/swagger-ui": {
+          target: `http://localhost:${process.env.DEV_BACKEND_PORT || 8080}`, changeOrigin: false,
         },
       },
     },
@@ -106,17 +92,11 @@ module.exports = configure(function(/* ctx */) {
     framework: {
       config: {
         brand: {
-          primary: "#2b2b2b",
-          secondary: "#26A69A",
-          accent: "#9C27B0",
+          primary: "#2b2b2b", secondary: "#26A69A", accent: "#9C27B0",
 
-          dark: "#1d1d1d",
-          "dark-page": "#121212",
+          dark: "#1d1d1d", "dark-page": "#121212",
 
-          positive: "#21BA45",
-          negative: "#C10015",
-          info: "#31CCEC",
-          warning: "#F2C037",
+          positive: "#21BA45", negative: "#C10015", info: "#31CCEC", warning: "#F2C037",
         },
       },
 
@@ -132,11 +112,7 @@ module.exports = configure(function(/* ctx */) {
 
       // Quasar plugins
       plugins: [
-        "Dialog",
-        "Loading",
-        "LocalStorage",
-        "Notify",
-      ],
+        "Dialog", "Loading", "LocalStorage", "Notify" ],
     },
 
     animations: "all", // --- includes all animations
@@ -179,11 +155,7 @@ module.exports = configure(function(/* ctx */) {
     // https://v2.quasar.dev/quasar-cli-vite/developing-pwa/configuring-pwa
     pwa: {
       workboxMode: "generateSW", // or 'injectManifest'
-      injectPwaMetaTags: true,
-      swFilename: "sw.js",
-      manifestFilename: "manifest.json",
-      useCredentialsForManifestTag: false,
-      // extendGenerateSWOptions (cfg) {}
+      injectPwaMetaTags: true, swFilename: "sw.js", manifestFilename: "manifest.json", useCredentialsForManifestTag: false, // extendGenerateSWOptions (cfg) {}
       // extendInjectManifestOptions (cfg) {},
       // extendManifestJson (json) {}
       // extendPWACustomSWConf (esbuildConf) {}
@@ -231,8 +203,7 @@ module.exports = configure(function(/* ctx */) {
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-browser-extensions/configuring-bex
     bex: {
       contentScripts: [
-        "my-content-script",
-      ],
+        "my-content-script" ],
 
       // extendBexScriptsConf (esbuildConf) {}
       // extendBexManifestJson (json) {}

@@ -8,8 +8,8 @@ WORKDIR /app
 
 COPY . /app
 
-RUN mvn -pl backend compile --quiet
-RUN mvn clean package --quiet
+RUN mvn -pl backend compile
+RUN mvn clean package
 
 FROM adoptopenjdk/openjdk8:alpine
 
