@@ -8,6 +8,7 @@ WORKDIR /app
 
 COPY . /app
 
+RUN mvn -pl backend typescript-generator:generate --quiet
 RUN mvn clean package --quiet
 
 FROM adoptopenjdk/openjdk8:alpine

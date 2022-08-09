@@ -1,5 +1,6 @@
 package fr.lauparr.aegir.dto.api;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,7 +33,8 @@ public class RestApiConstraint implements Serializable {
   /**
    * La classe de l'objet où il y a une erreur de validation
    */
-  private Class clazz;
+  @JsonIgnore
+  private Class<?> clazz;
 
   /**
    * Constructeur

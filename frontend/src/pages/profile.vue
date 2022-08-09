@@ -45,13 +45,12 @@
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
 import { FormActions } from "vee-validate";
-import useAuthRepository from "src/composables/repositories/useAuthRepository";
+import { api } from "boot/axios";
 
-const authRepository = useAuthRepository();
 const user = ref();
 
 onMounted(async () => {
-  const { success, result } = await authRepository.getUserData();
+  const { success, result } = await api.getAuthUserData();
   if (success) {
     user.value = result;
   }

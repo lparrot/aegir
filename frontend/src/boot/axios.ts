@@ -1,10 +1,12 @@
 import { boot } from "quasar/wrappers";
-import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
+import axios, * as Axios from "axios";
+import { AxiosError, AxiosInstance, AxiosResponse } from "axios";
 import { Dialog, Notify } from "quasar";
 import { useAuthStore } from "stores/auth";
 import { CustomAxiosInstance } from "src/types";
 import useAppLocalStorage from "src/composables/useAppLocalStorage";
 import ErrorDialog from "components/ErrorDialog.vue";
+import { HttpClient, RestApplicationClient, RestResponse } from "app/.generated/rest";
 
 declare module "@vue/runtime-core" {
   interface ComponentCustomProperties {
@@ -12,10 +14,55 @@ declare module "@vue/runtime-core" {
   }
 }
 
-const api: Partial<CustomAxiosInstance> = axios.create();
+class AxiosHttpClient implements HttpClient {
+
+  constructor(public axios: Partial<CustomAxiosInstance>) {
+  }
+
+  request<R>(requestConfig: { method: string; url: string; queryParams?: any; data?: any; copyFn?: (data: R) => R; options?: Axios.AxiosRequestConfig; }): RestResponse<R> {
+    function assign(target: any, source?: any) {
+      if (source != undefined) {
+        for (const key in source) {
+          if (source.hasOwnProperty(key)) {
+            target[key] = source[key];
+          }
+        }
+      }
+      return target;
+    }
+
+    const config: Axios.AxiosRequestConfig = {};
+    config.method = requestConfig.method as typeof config.method;
+    config.url = requestConfig.url;
+    config.params = requestConfig.queryParams;
+    config.data = requestConfig.data;
+    assign(config, requestConfig.options);
+    const copyFn = requestConfig.copyFn;
+
+    const axiosResponse = this.axios.$request(config);
+    return axiosResponse.then(axiosResponse => {
+      if (copyFn && axiosResponse.data) {
+        (axiosResponse as any).originalData = axiosResponse.data;
+        axiosResponse.data = copyFn(axiosResponse.data);
+      }
+      return axiosResponse;
+    });
+  }
+}
+
+export class AxiosRestApplicationClient extends RestApplicationClient {
+
+  declare httpClient: AxiosHttpClient;
+
+  constructor(axiosInstance: Partial<CustomAxiosInstance> = axios.create()) {
+    super(new AxiosHttpClient(axiosInstance));
+  }
+}
+
+const api: AxiosRestApplicationClient = new AxiosRestApplicationClient();
 
 for (const method of [ "request", "delete", "get", "head", "options", "post", "put", "patch" ]) {
-  api["$" + method] = function() {
+  api.httpClient.axios["$" + method] = function() {
     return this[method].apply(this, arguments).then(res => res && res.data);
   };
 }
@@ -26,18 +73,18 @@ export default boot(({ app, router, urlPath, redirect }) => {
   app.config.globalProperties.$axios = axios;
   app.config.globalProperties.$api = api;
 
-  api.defaults.timeout = 2000;
-  api.defaults.timeoutErrorMessage = "timeout";
+  api.httpClient.axios.defaults.timeout = 2000;
+  api.httpClient.axios.defaults.timeoutErrorMessage = "timeout";
 
-  api.interceptors.request.use((config) => {
+  api.httpClient.axios.interceptors.request.use((config) => {
     if (storageToken.value != null) {
-      config.headers.common["Authorization"] = `Bearer ${ storageToken.value }`;
+      config.headers.common["Authorization"] = `Bearer ${storageToken.value}`;
     }
 
     return config;
   });
 
-  api.interceptors.response.use((response) => {
+  api.httpClient.axios.interceptors.response.use((response) => {
     const data = response.data;
 
     if (urlPath.includes("errors/bad-gateway")) {
@@ -76,7 +123,7 @@ export default boot(({ app, router, urlPath, redirect }) => {
           });
           await authStore.disconnect();
           delete error.config.headers["Authorization"];
-          const result = await api.request(error.config);
+          const result = await api.httpClient.axios.request(error.config);
           return Promise.resolve(result);
         }
         break;

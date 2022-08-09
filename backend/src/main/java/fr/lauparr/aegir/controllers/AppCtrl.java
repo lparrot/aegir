@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.info.InfoEndpoint;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,15 +15,20 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("api/app")
-public class AppController extends BaseController {
+public class AppCtrl extends BaseController {
 
   @Autowired
   private InfoEndpoint infoEndpoint;
 
   @Operation(description = "Retourne les paramètres de type info.' du fichier application.properties")
   @GetMapping("informations")
-  public ResponseEntity<RestApiResponse<Map<String, Object>>> getInformations() {
+  public ResponseEntity<RestApiResponse<Map<String, Object>>> getAppInformations() {
     return this.ok(this.infoEndpoint.info());
+  }
+
+  @PostMapping("toto")
+  public ResponseEntity<RestApiResponse<String>> postToto() {
+    return this.ok("Hello");
   }
 
 }

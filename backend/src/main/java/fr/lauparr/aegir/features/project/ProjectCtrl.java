@@ -20,12 +20,12 @@ public class ProjectCtrl extends BaseController {
   private ProjectSrv service;
 
   @GetMapping("current_user")
-  public ResponseEntity<RestApiResponse<List<ProjectInfo>>> getUserProjects() {
+  public ResponseEntity<RestApiResponse<List<ProjectInfo>>> getProjectsByCurrentUser() {
     return this.ok(DaoUtils.convertListDto(this.service.getUserProjects(), ProjectInfo.class));
   }
 
   @GetMapping("{projectId}")
-  public ResponseEntity<RestApiResponse<ProjectWithItemsInfo>> getById(@PathVariable("projectId") Long projectId) {
+  public ResponseEntity<RestApiResponse<ProjectWithItemsInfo>> getProjectsById(@PathVariable("projectId") Long projectId) {
     return this.ok(DaoUtils.convertToDto(this.service.getById(projectId), ProjectWithItemsInfo.class));
   }
 

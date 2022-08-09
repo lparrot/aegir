@@ -18,6 +18,7 @@
   <properties>
     <maven.compiler.source>8</maven.compiler.source>
     <maven.compiler.target>8</maven.compiler.target>
+    <typescript-generator.version>2.36.1070</typescript-generator.version>
   </properties>
 
   <dependencyManagement>
@@ -143,6 +144,52 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>cz.habarta.typescript-generator</groupId>
+        <artifactId>typescript-generator-maven-plugin</artifactId>
+        <version>${typescript-generator.version}</version>
+        <executions>
+          <execution>
+            <id>generate</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <phase>process-classes</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <jsonLibrary>jackson2</jsonLibrary>
+          <outputKind>module</outputKind>
+
+          <outputFileType>implementationFile</outputFileType>
+
+          <classPatterns>
+            <pattern>fr.lauparr.aegir.dto.**</pattern>
+            <pattern>fr.lauparr.aegir.**.*Ctrl</pattern>
+          </classPatterns>
+
+          <customTypeNaming>
+            <naming>java.lang.Class:any</naming>
+          </customTypeNaming>
+
+          <scanSpringApplication>true</scanSpringApplication>
+          <generateSpringApplicationClient>true</generateSpringApplicationClient>
+
+          <outputFile>../frontend/.generated/rest.ts</outputFile>
+          <mapClasses>asClasses</mapClasses>
+          <mapEnum>asEnum</mapEnum>
+          <nonConstEnums>true</nonConstEnums>
+          <optionalProperties>useLibraryDefinition</optionalProperties>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>cz.habarta.typescript-generator</groupId>
+            <artifactId>typescript-generator-spring</artifactId>
+            <version>${typescript-generator.version}</version>
+          </dependency>
+        </dependencies>
       </plugin>
     </plugins>
   </build>

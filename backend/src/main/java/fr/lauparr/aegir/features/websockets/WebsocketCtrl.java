@@ -20,12 +20,12 @@ public class WebsocketCtrl extends BaseController {
   private WebsocketSrv websocketSrv;
 
   @GetMapping
-  public ResponseEntity<RestApiResponse<List<SocketUserSession>>> get() {
+  public ResponseEntity<RestApiResponse<List<SocketUserSession>>> getWebsockets() {
     return ok(websocketSrv.getSessions());
   }
 
   @PutMapping
-  public ResponseEntity<RestApiResponse<List<SocketUserSession>>> put() {
+  public ResponseEntity<RestApiResponse<List<SocketUserSession>>> putWebsockets() {
     return ok(websocketSrv.getSessions());
   }
 

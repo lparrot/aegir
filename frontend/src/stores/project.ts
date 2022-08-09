@@ -1,19 +1,17 @@
 import { defineStore } from "pinia";
 import { useAuthStore } from "stores/auth";
 import useAppLocalStorage from "src/composables/useAppLocalStorage";
-import useProjectRepository from "src/composables/repositories/useProjectRepository";
-import useProjectItemsRepository from "src/composables/repositories/useProjectItemsRepository";
+import { ProjectInfo } from "app/.generated/rest";
+import { api } from "boot/axios";
 
 interface StateInformations {
-  userProjects: [];
-  selectedProject: any;
+  userProjects: ProjectInfo[];
+  selectedProject: ProjectInfo;
   selectedItem: any;
 }
 
 const authStore = useAuthStore();
 const { storageSidebar } = useAppLocalStorage();
-const projectRepository = useProjectRepository();
-const projectItemsRepository = useProjectItemsRepository();
 
 export const useProjectStore = defineStore("project", {
   state: (): StateInformations => ({
@@ -27,7 +25,7 @@ export const useProjectStore = defineStore("project", {
   actions: {
     async fetchUserProjects() {
       if (authStore.isLoggedIn) {
-        const { success, result } = await projectRepository.getUserProjects();
+        const { success, result } = await api.getProjectsByCurrentUser();
         if (success) {
           this.userProjects = result;
         }
@@ -36,7 +34,7 @@ export const useProjectStore = defineStore("project", {
 
     async fetchSelectedProject() {
       if (authStore.isLoggedIn && storageSidebar.value.project_selected != null) {
-        const { success, result } = await projectRepository.getById(storageSidebar.value.project_selected);
+        const { success, result } = await api.getProjectsById(storageSidebar.value.project_selected);
         if (success) {
           this.selectedProject = result;
           if (storageSidebar.value.item_selected == null) {
@@ -48,7 +46,7 @@ export const useProjectStore = defineStore("project", {
 
     async fetchSelectedItem() {
       if (authStore.isLoggedIn && storageSidebar.value.item_selected != null) {
-        const { success, result } = await projectItemsRepository.getById(storageSidebar.value.item_selected);
+        const { success, result } = await api.getProjectItemsById(storageSidebar.value.item_selected);
         if (success) {
           this.selectedItem = result;
         }

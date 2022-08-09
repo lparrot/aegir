@@ -11,16 +11,15 @@
 </template>
 
 <script lang="ts" setup>
-import useWebsocketRepository from "src/composables/repositories/useWebsocketRepository";
 import { onBeforeUnmount, ref } from "vue";
 import useWebsocket from "src/composables/useWebsocket";
 import { QTableColumn } from "quasar";
+import { api } from "boot/axios";
 
 ////////////////
 // Composables
 ////////////////
 const socket = useWebsocket();
-const websocketRepository = useWebsocketRepository();
 
 const connections = ref([]);
 const fields = ref<QTableColumn[]>([
@@ -33,7 +32,7 @@ const fields = ref<QTableColumn[]>([
 ]);
 
 const fetchConnections = async () => {
-  const { success, result } = await websocketRepository.getConnections();
+  const { success, result } = await api.getWebsockets();
 
   if (success) {
     connections.value = result;

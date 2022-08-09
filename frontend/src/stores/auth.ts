@@ -4,7 +4,7 @@ import { LoginParams } from "src/models/auth.model";
 import { getInitials } from "src/utils/string.utils";
 import useAppEventBus from "src/composables/useAppEventBus";
 import useAppLocalStorage from "src/composables/useAppLocalStorage";
-import useAuthRepository from "src/composables/repositories/useAuthRepository";
+import { api } from "boot/axios";
 
 interface StateInformations {
   user?: any;
@@ -12,7 +12,6 @@ interface StateInformations {
 
 const bus = useAppEventBus();
 const { storageToken, resetLocalStorage } = useAppLocalStorage();
-const authRepository = useAuthRepository();
 
 export const useAuthStore = defineStore("auth", {
   state: (): StateInformations => ({
@@ -34,7 +33,7 @@ export const useAuthStore = defineStore("auth", {
   actions: {
     async login(formData: LoginParams) {
 
-      const { success, result } = await authRepository.login(formData.username, formData.password);
+      const { success, result } = await api.postAuthlogin({ username: formData.username, password: formData.password });
 
       if (success) {
         storageToken.value = result.token;
@@ -45,7 +44,7 @@ export const useAuthStore = defineStore("auth", {
         await this.$router.push({ name: "tasks" });
 
         Notify.create({
-          message: `Vous êtes connecté sous ${ this.user.username }`,
+          message: `Vous êtes connecté sous ${this.user.username}`,
           color: "positive",
         });
       }
@@ -59,7 +58,7 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async refreshUser() {
-      const { success, result } = await authRepository.getUser();
+      const { success, result } = await api.getAuthUser();
 
       if (success) {
         this.user = result;

@@ -22,22 +22,22 @@ public class AuthCtrl extends BaseController {
   private TokenSrv tokenSrv;
 
   @PostMapping("/login")
-  public ResponseEntity<RestApiResponse<JwtTokenDto>> login(@RequestBody final ParamsSecurityLogin params) {
+  public ResponseEntity<RestApiResponse<JwtTokenDto>> postAuthlogin(@RequestBody final ParamsSecurityLogin params) {
     return this.ok(this.authSrv.login(params.getUsername(), params.getPassword()));
   }
 
   @GetMapping("/user")
-  public ResponseEntity<RestApiResponse<Claims>> getUser(final HttpServletRequest request) {
+  public ResponseEntity<RestApiResponse<Claims>> getAuthUser(final HttpServletRequest request) {
     return this.ok(this.tokenSrv.getClaims(request));
   }
 
   @GetMapping("/user_data")
-  public ResponseEntity<RestApiResponse<UserInfo>> getUserData(final Principal principal) {
+  public ResponseEntity<RestApiResponse<UserInfo>> getAuthUserData(final Principal principal) {
     return this.ok(DaoUtils.convertToDto(this.authSrv.getUserData(principal.getName()), UserInfo.class));
   }
 
   @PostMapping
-  public ResponseEntity<RestApiResponse<String>> createAccount(@RequestBody final ParamsSecurityCreateAccount params) {
+  public ResponseEntity<RestApiResponse<String>> postAuth(@RequestBody final ParamsSecurityCreateAccount params) {
     // TODO ajouter le user data pour la création de compte
     final User user = this.authSrv.createAccount(null, params);
     return this.ok(this.tokenSrv.createToken(user));

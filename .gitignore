@@ -1,6 +1,7 @@
 ### Application ###
 application-*.properties
 .env
+frontend/.generated
 
 ### Maven ###
 
