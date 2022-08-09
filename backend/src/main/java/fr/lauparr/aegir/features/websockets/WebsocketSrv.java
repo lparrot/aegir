@@ -38,6 +38,18 @@ public class WebsocketSrv {
     this.messagingTemplate.convertAndSend(topic, new WebsocketTypedMessage(type, data));
   }
 
+  public void sendMessageToUser(String username, String topic, EnumWebsocketMessageType type) {
+    this.messagingTemplate.convertAndSendToUser(username, topic, new WebsocketTypedMessage(type));
+  }
+
+  public void sendMessageToUser(String username, String topic, EnumWebsocketMessageType type, Object message) {
+    this.messagingTemplate.convertAndSendToUser(username, topic, new WebsocketTypedMessage(type).setData(message));
+  }
+
+  public void sendMessageToUser(String username, String topic, EnumWebsocketMessageType type, final Function<Map<String, Object>, Map<String, Object>> data) {
+    this.messagingTemplate.convertAndSendToUser(username, topic, new WebsocketTypedMessage(type, data));
+  }
+
   public SocketUserSession getSession(final Predicate<SocketUserSession> condition) {
     return this.sessions.stream().filter(condition).findFirst().orElse(null);
   }

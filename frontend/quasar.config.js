@@ -67,7 +67,13 @@ module.exports = configure(function(/* ctx */) {
       // polyfillModulePreload: true,
       distDir: "target/dist",
 
-      // extendViteConf (viteConf) {},
+      extendViteConf(viteConf) {
+        viteConf.server.watch = {
+          ignored: [ "**/.generated/**" ],
+        };
+
+        console.log(viteConf);
+      },
       // viteVuePluginOptions: {},
 
       // vitePlugins: [

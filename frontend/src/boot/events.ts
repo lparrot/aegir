@@ -7,6 +7,7 @@ import useAppLocalStorage from "src/composables/useAppLocalStorage";
 import useWebsocket from "src/composables/useWebsocket";
 import { Notify } from "quasar";
 import { useAuthStore } from "stores/auth";
+import { EnumWebsocketMessageType, WebsocketTypedMessage } from "app/.generated/rest";
 
 const authStore = useAuthStore();
 const socket = useWebsocket();
@@ -24,11 +25,32 @@ export default boot(async ({ app, router }) => {
 
       refreshMenu();
 
-      await socket.subscribe("/topic/session", message => {
-        Notify.create({
-          message: `${ message.type }: ${ message.data?.user }`,
-          color: "info",
-        });
+      await socket.subscribe("/topic/session", async (message: WebsocketTypedMessage) => {
+        switch (message.type) {
+          case EnumWebsocketMessageType.CONNECT:
+          case EnumWebsocketMessageType.DISCONNECT:
+            Notify.create({
+              message: `${message.type}: ${message.data?.user}`,
+              color: "info",
+            });
+            break;
+          default:
+            break;
+        }
+      });
+
+      await socket.subscribe("/user/topic/session", async (message: WebsocketTypedMessage) => {
+        switch (message.type) {
+          case EnumWebsocketMessageType.CLOSE_SESSION:
+            await authStore.disconnect();
+            Notify.create({
+              message: `Vous avez été déconnecté par l'action d'un administrateur`,
+              color: "warning",
+            });
+            break;
+          default:
+            break;
+        }
       });
     }
   });

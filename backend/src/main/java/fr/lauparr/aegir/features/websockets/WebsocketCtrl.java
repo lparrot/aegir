@@ -3,12 +3,10 @@ package fr.lauparr.aegir.features.websockets;
 import fr.lauparr.aegir.controllers.base.BaseController;
 import fr.lauparr.aegir.dto.SocketUserSession;
 import fr.lauparr.aegir.dto.api.RestApiResponse;
+import fr.lauparr.aegir.enums.EnumWebsocketMessageType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,9 +22,10 @@ public class WebsocketCtrl extends BaseController {
     return ok(websocketSrv.getSessions());
   }
 
-  @PutMapping
-  public ResponseEntity<RestApiResponse<List<SocketUserSession>>> putWebsockets() {
-    return ok(websocketSrv.getSessions());
+  @DeleteMapping
+  public ResponseEntity<RestApiResponse<Void>> deleteWebsocketsByUsername(@RequestParam("username") String username) {
+    websocketSrv.sendMessageToUser(username, "/topic/session", EnumWebsocketMessageType.CLOSE_SESSION);
+    return ok();
   }
 
 }
