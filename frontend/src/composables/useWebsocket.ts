@@ -4,6 +4,7 @@ import useAppLocalStorage from "src/composables/useAppLocalStorage";
 import SockJS from "sockjs-client/dist/sockjs";
 import { Dialog, DialogChainObject } from "quasar";
 import ApplicationCloseMessage from "components/ApplicationCloseMessage.vue";
+import { until } from "@vueuse/core";
 
 const client = ref<Client>();
 const dialog = ref<DialogChainObject>();
@@ -71,6 +72,8 @@ export default function useWebsocket() {
     if (!client.value.active) {
       await connect();
     }
+
+    await until(isConnected).toBe(true);
 
     return client.value.subscribe(topic, async (message) => {
       await callback(JSON.parse(message.body));

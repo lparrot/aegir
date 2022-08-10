@@ -32,8 +32,10 @@ export default boot(async ({ app, router }) => {
   const { addPlugin } = useDayjs();
   dayjs.locale("fr");
 
-  await socket.initialize();
-  await socket.connect();
+  if (socket.client == null) {
+    await socket.initialize();
+    await socket.connect();
+  }
 
   addPlugin(RelativeTimePlugin);
   addPlugin(CustomPathFormatPlugin);
