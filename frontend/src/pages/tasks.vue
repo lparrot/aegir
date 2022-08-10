@@ -8,6 +8,20 @@
         </q-breadcrumbs>
       </div>
     </div>
+
+    <q-separator class="q-my-sm"></q-separator>
+
+    <div v-for="taskByItem in tasks" :key="taskByItem.master?.id">
+      <q-card flat>
+        <q-card-section>
+          <div class="text-h6">{{ taskByItem.master.name }}</div>
+        </q-card-section>
+
+        <q-card-section>
+          <task-by-status v-for="taskByStatus in taskByItem.details" :key="taskByStatus.master?.id" :status="taskByStatus.master" :tasks="taskByStatus.details"></task-by-status>
+        </q-card-section>
+      </q-card>
+    </div>
   </q-page>
 </template>
 
@@ -15,12 +29,17 @@
 import { useProjectStore } from "stores/project";
 import { computed, ref, watch } from "vue";
 import { api } from "boot/axios";
+import { GroupByMapper, ProjectItemInfo, TaskInfo, TaskStatusInfo } from "app/.generated/rest";
+import TaskByStatus from "components/TaskByStatus.vue";
 
 const projectStore = useProjectStore();
-const tasks = ref();
+const tasks = ref<GroupByMapper<ProjectItemInfo, GroupByMapper<TaskStatusInfo, TaskInfo>>[]>();
 
 const fetchTasks = async (projectItemId) => {
-  tasks.value = await api.getTasksByProjectItemId(projectItemId);
+  const { result, success } = await api.getTasksByProjectItemId(projectItemId);
+  if (success) {
+    tasks.value = result;
+  }
 };
 
 watch(

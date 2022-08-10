@@ -62,29 +62,54 @@ public class DbInitializerSrv {
 
       authenticate(root);
 
+      TaskStatus statutsSoleilTachesTodo = new TaskStatus().setName("To Do");
+      TaskStatus statutsSoleilTachesInProgress = new TaskStatus().setName("In Progress");
+
+      TaskStatus statutsSoleilBugsTodo = new TaskStatus().setName("To Do");
+      TaskStatus statutsSoleilBugsInProgress = new TaskStatus().setName("In Progress");
+      TaskStatus statutsSoleilBugsToTest = new TaskStatus().setName("To Test");
+
+      TaskStatus statutsCcsProdTodo = new TaskStatus().setName("To Do");
+      TaskStatus statutsCcsProdInProgress = new TaskStatus().setName("In Progress");
+
+      TaskStatus statutsCcsDevTodo = new TaskStatus().setName("To Do");
+      TaskStatus statutsCcsDevInProgress = new TaskStatus().setName("In Progress");
+      TaskStatus statutsCcsDevToTest = new TaskStatus().setName("To Test");
+
       root
         .addProject(new Project().setName("Soleil")
           .addProjectItem(new ProjectItem().setType(EnumProjectItemType.WORKSPACE).setName("Taches")
+            .addStatus(statutsSoleilTachesTodo)
+            .addStatus(statutsSoleilTachesInProgress)
             .addChild(new ProjectItem().setType(EnumProjectItemType.FOLDER).setName("VABF")
               .addChild(new ProjectItem().setType(EnumProjectItemType.VIEW).setName("Module solde"))
               .addChild(new ProjectItem().setType(EnumProjectItemType.VIEW).setName("Module dossier formation")))
             .addChild(new ProjectItem().setType(EnumProjectItemType.VIEW).setName("DEV")))
 
-          .addProjectItem(new ProjectItem().setType(EnumProjectItemType.WORKSPACE).setName("Bugs")));
+          .addProjectItem(new ProjectItem().setType(EnumProjectItemType.WORKSPACE).setName("Bugs")
+            .addStatus(statutsSoleilBugsTodo)
+            .addStatus(statutsSoleilBugsInProgress)
+            .addStatus(statutsSoleilBugsToTest)
+          ));
 
       root
         .addProject(new Project().setName("CCS")
           .addProjectItem(new ProjectItem().setType(EnumProjectItemType.WORKSPACE).setName("PROD")
+            .addStatus(statutsCcsProdTodo)
+            .addStatus(statutsCcsProdInProgress)
             .addChild(new ProjectItem().setType(EnumProjectItemType.VIEW).setName("Bugs")
-              .addTask(new Task().setName("Corriger le problème de mot de passe lors de la connexion").addComment(new TaskComment().setContent("Correction en cours ...")))
-              .addTask(new Task().setName("Modifier le libellé du bouton de création d'un profil").addComment(new TaskComment().setContent("Modification mineure, n'est pas prioritaire")))))
+              .addTask(new Task().setName("Corriger le problème de mot de passe lors de la connexion").setStatus(statutsCcsProdInProgress).addComment(new TaskComment().setContent("Correction en cours ...")))
+              .addTask(new Task().setName("Modifier le libellé du bouton de création d'un profil").setStatus(statutsCcsProdTodo).addComment(new TaskComment().setContent("Modification mineure, n'est pas prioritaire")))))
 
           .addProjectItem(new ProjectItem().setType(EnumProjectItemType.WORKSPACE).setName("DEV")
+            .addStatus(statutsCcsDevTodo)
+            .addStatus(statutsCcsDevInProgress)
+            .addStatus(statutsCcsDevToTest)
             .addChild(new ProjectItem().setType(EnumProjectItemType.VIEW).setName("Bugs")
-              .addTask(new Task().setName("Corriger le commentaire sur la méthode getUserByTaskId()")))
+              .addTask(new Task().setName("Corriger le commentaire sur la méthode getUserByTaskId()").setStatus(statutsCcsDevInProgress)))
             .addChild(new ProjectItem().setType(EnumProjectItemType.VIEW).setName("Evolutions")
-              .addTask(new Task().setName("Création de l'écran d'administration des profils"))
-              .addTask(new Task().setName("Création de l'écran de tableau de bord")
+              .addTask(new Task().setName("Création de l'écran d'administration des profils").setStatus(statutsCcsDevTodo))
+              .addTask(new Task().setName("Création de l'écran de tableau de bord").setStatus(statutsCcsDevTodo)
                 .addComment(new TaskComment().setContent("Attention, doit être réalisé par une équipe encadrée par un lead dev"))
               ))));
 

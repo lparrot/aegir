@@ -34,7 +34,7 @@ public class Task {
 
   private LocalDateTime assignedAt;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
   @JoinColumn(foreignKey = @ForeignKey(name = "FK_task_task_status"))
   private TaskStatus status;
 

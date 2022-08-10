@@ -7,7 +7,7 @@ import fr.lauparr.aegir.entities.Task;
 import fr.lauparr.aegir.features.project_item.ProjectItemInfo;
 import fr.lauparr.aegir.utils.DaoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +24,7 @@ public class TaskCtrl extends BaseController {
   private TaskSrv taskSrv;
 
   @GetMapping("/project_items/{projectItemId}")
-  public HttpEntity<RestApiResponse<List<GroupByMapper<ProjectItemInfo, GroupByMapper<TaskStatusInfo, TaskInfo>>>>> getTasksByProjectItemId(@PathVariable("projectItemId") Long projectItemId) {
+  public ResponseEntity<RestApiResponse<List<GroupByMapper<ProjectItemInfo, GroupByMapper<TaskStatusInfo, TaskInfo>>>>> getTasksByProjectItemId(@PathVariable("projectItemId") Long projectItemId) {
     List<Task> tasks = taskSrv.getTasksByProjectItemId(projectItemId);
 
     return this.ok(taskSrv.groupTasksByViews(tasks).stream().map(mapperView -> mapperView.convert(
