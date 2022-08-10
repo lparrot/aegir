@@ -95,7 +95,7 @@ public class TokenSrv {
       try {
         return Jwts.parser().setSigningKey(this.secretKey).parseClaimsJws(token).getBody();
       } catch (final JwtException e) {
-        throw new TaggedApplicationException("jwt", MessageUtils.getMessage("error.security.token_conversion", e.getMessage()));
+        throw new TaggedApplicationException("jwt", MessageUtils.getMessage("message.error.security.token_conversion", e.getMessage()));
       }
     }
     return Jwts.claims();

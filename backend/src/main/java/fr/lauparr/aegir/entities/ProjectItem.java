@@ -41,6 +41,10 @@ public class ProjectItem {
   @OneToMany(mappedBy = "parent", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, orphanRemoval = true)
   private List<ProjectItem> children = new ArrayList<>();
 
+  @JsonManagedReference("project_item_statuses")
+  @OneToMany(mappedBy = "workspace", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, orphanRemoval = true)
+  private List<TaskStatus> statuses = new ArrayList<>();
+
   @JsonBackReference("project_project_items")
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(foreignKey = @ForeignKey(name = "FK_project_item_project"))
@@ -90,5 +94,24 @@ public class ProjectItem {
       tasks.add(task);
     }
     return this;
+  }
+
+  public ProjectItem addStatus(TaskStatus taskStatus) {
+    if (Objects.equals(this.type, EnumProjectItemType.WORKSPACE)) {
+      taskStatus.setWorkspace(this);
+      statuses.add(taskStatus);
+    }
+    return this;
+  }
+
+  public List<ProjectItem> getAllChildren() {
+    List<ProjectItem> allChildren = new ArrayList<>();
+
+    for (ProjectItem child : children) {
+      allChildren.add(child);
+      allChildren.addAll(child.getAllChildren());
+    }
+
+    return allChildren;
   }
 }

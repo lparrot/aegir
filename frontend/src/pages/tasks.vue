@@ -13,9 +13,25 @@
 
 <script lang="ts" setup>
 import { useProjectStore } from "stores/project";
-import { computed } from "vue";
+import { computed, ref, watch } from "vue";
+import { api } from "boot/axios";
 
 const projectStore = useProjectStore();
+const tasks = ref();
+
+const fetchTasks = async (projectItemId) => {
+  tasks.value = await api.getTasksByProjectItemId(projectItemId);
+};
+
+watch(
+  () => projectStore.selectedItem,
+  async (selectedItem) => {
+    if (selectedItem != null) {
+      await fetchTasks(selectedItem?.id);
+    }
+  },
+  { immediate: true },
+);
 
 const itemIcon = computed(() => {
   switch (projectStore.selectedItem?.type) {

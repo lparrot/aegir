@@ -34,12 +34,12 @@ public class AuthSrv {
 
     // Si aucun utilisateur n'a été trouvé à partir du login
     if (user == null) {
-      throw new MessageException(MessageUtils.getMessage("error.auth.bad_credentials"));
+      throw new MessageException(MessageUtils.getMessage("message.error.auth.bad_credentials"));
     }
 
     // Si le mot de passe entré ne correspond pas à celui en base de données
     if (!this.passwordEncoder.matches(password, user.getPassword())) {
-      throw new MessageException(MessageUtils.getMessage("error.auth.bad_credentials"));
+      throw new MessageException(MessageUtils.getMessage("message.error.auth.bad_credentials"));
     }
 
     final String token = this.tokenSrv.createToken(user);
@@ -57,7 +57,7 @@ public class AuthSrv {
     final Optional<User> user = this.userRepository.findFirstByUsername(params.getUsername());
 
     if (user.isPresent()) {
-      throw new MessageException(MessageUtils.getMessage("error.auth.same_email"));
+      throw new MessageException(MessageUtils.getMessage("message.error.auth.same_email"));
     }
 
     final Profile defaultProfile = this.profileRepository.findDefaultProfile();

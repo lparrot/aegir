@@ -25,7 +25,7 @@ public class ProjectSrv {
   }
 
   public Project getById(Long projectId) {
-    Project project = projectRepository.findById(projectId).orElseThrow(() -> new MessageException(MessageUtils.getMessage("error.not_foun.project")));
+    Project project = projectRepository.findById(projectId).orElseThrow(() -> new MessageException(MessageUtils.getMessage("message.error.not_found.project")));
     project.setItems(project.getItems().stream().filter(projectItem -> projectItem.getType().equals(EnumProjectItemType.WORKSPACE)).collect(Collectors.toList()));
     return project;
   }

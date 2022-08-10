@@ -35,6 +35,10 @@ public class Task {
   private LocalDateTime assignedAt;
 
   @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(foreignKey = @ForeignKey(name = "FK_task_task_status"))
+  private TaskStatus status;
+
+  @ManyToOne(fetch = FetchType.LAZY)
   @JsonBackReference("project_item_task")
   @JoinColumn(foreignKey = @ForeignKey(name = "FK_task_project_item_view"))
   private ProjectItem view;

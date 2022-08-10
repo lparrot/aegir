@@ -181,7 +181,11 @@
           <mapClasses>asClasses</mapClasses>
           <mapEnum>asEnum</mapEnum>
           <nonConstEnums>true</nonConstEnums>
+          <generateInfoJson>true</generateInfoJson>
           <optionalProperties>useLibraryDefinition</optionalProperties>
+
+          <sortTypeDeclarations>true</sortTypeDeclarations>
+          <sortDeclarations>true</sortDeclarations>
         </configuration>
         <dependencies>
           <dependency>

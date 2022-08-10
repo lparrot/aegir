@@ -35,7 +35,7 @@ public class ControllerUtils {
     violations.forEach(violation -> {
       detail.put(violation.getField(), violation);
     });
-    return new RestApiError().setMessage(MessageUtils.getMessage("error.validation")).setType("validation").setDetail(detail);
+    return new RestApiError().setMessage(MessageUtils.getMessage("message.error.validation")).setType("validation").setDetail(detail);
   }
 
   public <T> void validate(T data) {

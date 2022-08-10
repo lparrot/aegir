@@ -62,9 +62,9 @@ module.exports = configure(function(/* ctx */) {
 
       extendViteConf(viteConf) {
         if (viteConf.server != null) {
-          viteConf.server.watch = {
-            ignored: [ "**/.generated/**" ],
-          };
+          // viteConf.server.watch = {
+          //   ignored: [ "**/.generated/**" ],
+          // };
         }
       }, // viteVuePluginOptions: {},
 
