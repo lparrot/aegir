@@ -57,8 +57,7 @@ public class WebsocketConfig implements WebSocketMessageBrokerConfigurer {
       @Override
       public Message<?> preSend(final Message<?> message, final MessageChannel channel) {
 
-        final StompHeaderAccessor accessor =
-          MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
+        final StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 
         if (accessor != null && StompCommand.CONNECT.equals(accessor.getCommand())) {
           final String jwtToken = accessor.getFirstNativeHeader(WebsocketConfig.this.headerName);

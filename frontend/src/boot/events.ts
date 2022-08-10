@@ -4,7 +4,7 @@ import { useProjectStore } from "stores/project";
 import useAppEventBus from "src/composables/useAppEventBus";
 import useMenu from "src/composables/useMenu";
 import useAppLocalStorage from "src/composables/useAppLocalStorage";
-import useWebsocket from "src/composables/useWebsocket";
+import useWebsocket, { getHeaders } from "src/composables/useWebsocket";
 import { Notify } from "quasar";
 import { useAuthStore } from "stores/auth";
 import { EnumWebsocketMessageType, WebsocketTypedMessage } from "app/.generated/rest";
@@ -24,6 +24,8 @@ export default boot(async ({ app, router }) => {
       await projectStore.fetchSelectedItem();
 
       refreshMenu();
+
+      socket.client.value.connectHeaders = getHeaders();
 
       await socket.subscribe("/topic/session", async (message: WebsocketTypedMessage) => {
         switch (message.type) {

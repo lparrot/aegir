@@ -24,6 +24,7 @@ public class WebSocketEventListener {
   @EventListener
   public void handleWebSocketConnectListener(final SessionConnectedEvent event) {
     final SocketUserSession user = (SocketUserSession) event.getUser();
+
     if (user != null) {
       final SocketUserSession session = this.websocketSrv.getSession(socketUserSession -> socketUserSession.getUsername().equals(user.getUsername()));
 
@@ -44,17 +45,16 @@ public class WebSocketEventListener {
     final SocketUserSession user = (SocketUserSession) event.getUser();
     if (user != null) {
       this.websocketSrv.removeSession(userSession -> !userSession.getUsername().equals(user.getUsername()));
+      this.websocketSrv.sendMessage("/topic/session", EnumWebsocketMessageType.DISCONNECT, data -> {
+        if (event.getUser() != null) {
+          data.put("user", event.getUser().getName());
+        }
+        return data;
+      });
     } else {
       final StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
       final String sessionId = accessor.getSessionId();
       this.websocketSrv.removeSession(userSession -> !userSession.getSessionId().equals(sessionId));
     }
-    this.websocketSrv.sendMessage("/topic/session", EnumWebsocketMessageType.DISCONNECT, data -> {
-      if (event.getUser() != null) {
-        data.put("user", event.getUser().getName());
-      }
-      return data;
-    });
-
   }
 }

@@ -11,7 +11,7 @@ const dialog = ref<DialogChainObject>();
 const isConnected = ref<boolean>(false);
 const { storageToken } = useAppLocalStorage();
 
-const getHeaders = () => {
+export const getHeaders = () => {
   const headers = {};
   if (storageToken.value != null) {
     headers["Authorization"] = storageToken.value;
