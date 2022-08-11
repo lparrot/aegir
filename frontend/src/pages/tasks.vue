@@ -12,13 +12,15 @@
     <q-separator class="q-my-sm"></q-separator>
 
     <div v-for="taskByItem in tasks" :key="taskByItem.master?.id">
-      <q-card flat>
+      <q-card bordered flat>
         <q-card-section>
-          <div class="text-h6">{{ taskByItem.master.name }}</div>
-        </q-card-section>
+          <q-expansion-item default-opened dense switch-toggle-side>
+            <template v-slot:header>
+              <div class="text-h6">{{ taskByItem.master.name }}</div>
+            </template>
 
-        <q-card-section>
-          <task-by-status v-for="taskByStatus in taskByItem.details" :key="taskByStatus.master?.id" :status="taskByStatus.master" :tasks="taskByStatus.details"></task-by-status>
+            <task-by-status v-for="taskByStatus in taskByItem.details" :key="taskByStatus.master?.id" :status="taskByStatus.master" :tasks="taskByStatus.details"></task-by-status>
+          </q-expansion-item>
         </q-card-section>
       </q-card>
     </div>

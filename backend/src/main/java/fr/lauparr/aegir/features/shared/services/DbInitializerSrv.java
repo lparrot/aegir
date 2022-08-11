@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -62,19 +63,19 @@ public class DbInitializerSrv {
 
       authenticate(root);
 
-      TaskStatus statutsSoleilTachesTodo = new TaskStatus().setName("To Do");
-      TaskStatus statutsSoleilTachesInProgress = new TaskStatus().setName("In Progress");
+      TaskStatus statutsSoleilTachesTodo = new TaskStatus().setName("To Do").setColor("green");
+      TaskStatus statutsSoleilTachesInProgress = new TaskStatus().setName("In Progress").setColor("blue");
 
-      TaskStatus statutsSoleilBugsTodo = new TaskStatus().setName("To Do");
-      TaskStatus statutsSoleilBugsInProgress = new TaskStatus().setName("In Progress");
-      TaskStatus statutsSoleilBugsToTest = new TaskStatus().setName("To Test");
+      TaskStatus statutsSoleilBugsTodo = new TaskStatus().setName("To Do").setColor("green");
+      TaskStatus statutsSoleilBugsInProgress = new TaskStatus().setName("In Progress").setColor("blue");
+      TaskStatus statutsSoleilBugsToTest = new TaskStatus().setName("To Test").setColor("orange");
 
-      TaskStatus statutsCcsProdTodo = new TaskStatus().setName("To Do");
-      TaskStatus statutsCcsProdInProgress = new TaskStatus().setName("In Progress");
+      TaskStatus statutsCcsProdTodo = new TaskStatus().setName("To Do").setColor("green");
+      TaskStatus statutsCcsProdInProgress = new TaskStatus().setName("In Progress").setColor("blue");
 
-      TaskStatus statutsCcsDevTodo = new TaskStatus().setName("To Do");
-      TaskStatus statutsCcsDevInProgress = new TaskStatus().setName("In Progress");
-      TaskStatus statutsCcsDevToTest = new TaskStatus().setName("To Test");
+      TaskStatus statutsCcsDevTodo = new TaskStatus().setName("To Do").setColor("green");
+      TaskStatus statutsCcsDevInProgress = new TaskStatus().setName("In Progress").setColor("blue");
+      TaskStatus statutsCcsDevToTest = new TaskStatus().setName("To Test").setColor("orange");
 
       root
         .addProject(new Project().setName("Soleil")
@@ -99,7 +100,7 @@ public class DbInitializerSrv {
             .addStatus(statutsCcsProdInProgress)
             .addChild(new ProjectItem().setType(EnumProjectItemType.VIEW).setName("Bugs")
               .addTask(new Task().setName("Corriger le problème de mot de passe lors de la connexion").setStatus(statutsCcsProdInProgress).addComment(new TaskComment().setContent("Correction en cours ...")))
-              .addTask(new Task().setName("Modifier le libellé du bouton de création d'un profil").setStatus(statutsCcsProdTodo).addComment(new TaskComment().setContent("Modification mineure, n'est pas prioritaire")))))
+              .addTask(new Task().setName("Modifier le libellé du bouton de création d'un profil").setStatus(statutsCcsProdTodo).setAssigned(root).setAssignedAt(LocalDateTime.now()).addComment(new TaskComment().setContent("Modification mineure, n'est pas prioritaire")))))
 
           .addProjectItem(new ProjectItem().setType(EnumProjectItemType.WORKSPACE).setName("DEV")
             .addStatus(statutsCcsDevTodo)
@@ -108,7 +109,7 @@ public class DbInitializerSrv {
             .addChild(new ProjectItem().setType(EnumProjectItemType.VIEW).setName("Bugs")
               .addTask(new Task().setName("Corriger le commentaire sur la méthode getUserByTaskId()").setStatus(statutsCcsDevInProgress)))
             .addChild(new ProjectItem().setType(EnumProjectItemType.VIEW).setName("Evolutions")
-              .addTask(new Task().setName("Création de l'écran d'administration des profils").setStatus(statutsCcsDevTodo))
+              .addTask(new Task().setName("Création de l'écran d'administration des profils").setAssigned(root).setAssignedAt(LocalDateTime.now()).setStatus(statutsCcsDevTodo))
               .addTask(new Task().setName("Création de l'écran de tableau de bord").setStatus(statutsCcsDevTodo)
                 .addComment(new TaskComment().setContent("Attention, doit être réalisé par une équipe encadrée par un lead dev"))
               ))));

@@ -4,4 +4,6 @@ public interface TaskStatusInfo {
   Long getId();
 
   String getName();
+
+  String getColor();
 }

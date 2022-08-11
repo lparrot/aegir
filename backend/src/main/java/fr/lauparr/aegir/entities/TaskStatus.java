@@ -20,6 +20,8 @@ public class TaskStatus implements Serializable {
 
   private String name;
 
+  private String color;
+
   @JsonBackReference("project_item_statuses")
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(foreignKey = @ForeignKey(name = "FK_task_status_workspace"))
