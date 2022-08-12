@@ -8,7 +8,7 @@ WORKDIR /app
 
 COPY . /app
 
-RUN mvn -pl backend compile
+RUN mvn -pl backend clean verify -P typescript
 RUN mvn clean package
 
 FROM adoptopenjdk/openjdk8:alpine
