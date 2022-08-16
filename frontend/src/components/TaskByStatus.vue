@@ -5,10 +5,27 @@
         <q-badge :color="status.color">{{ status.name }}</q-badge>
       </template>
 
-      <q-table :columns="columns" :rows="tasks" bordered class="q-mt-md" dense flat>
+      <q-table :columns="columns" :grid="$q.screen.lt.md" :rows="tasks" bordered class="q-mt-md" dense flat hide-header>
+        <template #item="props">
+          <div class="row content-stretch q-pa-xs col-xs-12 col-sm-6 col-md-4 ">
+            <q-card class="full-width">
+              <q-card-section class="flex items-center">
+                <q-avatar v-if="props.row.assigned != null" color="primary" size="sm" text-color="white">{{ getInitials(props.row.assigned?.username) }}</q-avatar>
+                <q-avatar v-else color="green" size="sm" text-color="white">?</q-avatar>
+                <q-space></q-space>
+                <div class="text-caption">{{ $dayjs(props.value).format("DD/MM/YYYY HH:mm") }}</div>
+              </q-card-section>
+
+              <q-card-section>
+                <div>{{ props.row.name }}</div>
+              </q-card-section>
+            </q-card>
+          </div>
+        </template>
+
         <template #body-cell-assigned="props">
           <q-td :props="props">
-            <q-avatar v-if="props.value != null" color="primary" size="sm" text-color="white">{{ getInitials(props.value?.username) }}</q-avatar>
+            <q-avatar v-if="props.value != null" color="primary" size="sm" text-color="white">{{ getInitials(props.value.username) }}</q-avatar>
             <q-avatar v-else color="green" size="sm" text-color="white">?</q-avatar>
           </q-td>
         </template>
@@ -24,9 +41,9 @@
 </template>
 
 <script lang="ts" setup>
+import { getInitials } from "src/utils/string.utils";
 import { TaskInfo, TaskStatusInfo } from "app/.generated/rest";
 import { QTableColumn } from "quasar";
-import { getInitials } from "src/utils/string.utils";
 import { Ref, ref } from "vue";
 
 defineProps<{

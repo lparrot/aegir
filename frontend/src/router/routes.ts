@@ -22,7 +22,6 @@ const routes: RouteRecordRaw[] = [
   {
     path: "/errors", component: () => import("components/BlankPage.vue"), children: [
       { name: "errors-401", path: "/access-denied", component: () => import("pages/errors/access-denied.vue") },
-      { name: "errors-502", path: "/bad-gateway", component: () => import("pages/errors/bad-gateway.vue") },
     ],
   },
   { name: "errors-404", path: "/:catchAll(.*)*", component: () => import("pages/errors/not-found.vue"), meta: { no_match: true } },

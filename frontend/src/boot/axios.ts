@@ -73,12 +73,9 @@ export default boot(({ app, router, urlPath, redirect }) => {
   app.config.globalProperties.$axios = axios;
   app.config.globalProperties.$api = api;
 
-  api.httpClient.axios.defaults.timeout = 2000;
-  api.httpClient.axios.defaults.timeoutErrorMessage = "timeout";
-
   api.httpClient.axios.interceptors.request.use((config) => {
     if (storageToken.value != null) {
-      config.headers.common["Authorization"] = `Bearer ${storageToken.value}`;
+      config.headers.common["Authorization"] = `Bearer ${ storageToken.value }`;
     }
 
     return config;
@@ -86,14 +83,6 @@ export default boot(({ app, router, urlPath, redirect }) => {
 
   api.httpClient.axios.interceptors.response.use((response) => {
     const data = response.data;
-
-    if (urlPath.includes("errors/bad-gateway")) {
-      if (storageCurrentRoute.value != null) {
-        redirect(storageCurrentRoute.value);
-      } else {
-        redirect({ name: "index" });
-      }
-    }
 
     if (data?.type === "message") {
       Notify.create({
@@ -105,11 +94,6 @@ export default boot(({ app, router, urlPath, redirect }) => {
 
     return response;
   }, async function(error: AxiosError) {
-    if (error.code === "ECONNABORTED") {
-      await router.push({ name: "errors-502" });
-      return;
-    }
-
     const response: AxiosResponse = error.response;
 
     let authStore = useAuthStore();
