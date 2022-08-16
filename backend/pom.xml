@@ -205,5 +205,64 @@
         </plugins>
       </build>
     </profile>
+
+    <profile>
+      <id>typescript-ng</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>cz.habarta.typescript-generator</groupId>
+            <artifactId>typescript-generator-maven-plugin</artifactId>
+            <version>${typescript-generator.version}</version>
+            <executions>
+              <execution>
+                <id>generate</id>
+                <goals>
+                  <goal>generate</goal>
+                </goals>
+                <phase>integration-test</phase>
+              </execution>
+            </executions>
+            <configuration>
+              <jsonLibrary>jackson2</jsonLibrary>
+              <outputKind>module</outputKind>
+
+              <outputFileType>implementationFile</outputFileType>
+
+              <classPatterns>
+                <pattern>fr.lauparr.aegir.dto.**</pattern>
+                <pattern>fr.lauparr.aegir.**.*Ctrl</pattern>
+              </classPatterns>
+
+              <customTypeNaming>
+                <naming>java.lang.Class:any</naming>
+              </customTypeNaming>
+
+              <scanSpringApplication>true</scanSpringApplication>
+              <generateSpringApplicationClient>true</generateSpringApplicationClient>
+
+              <outputFile>../frontend-ng/.generated/rest.ts</outputFile>
+              <mapClasses>asClasses</mapClasses>
+              <mapEnum>asEnum</mapEnum>
+              <nonConstEnums>true</nonConstEnums>
+              <generateInfoJson>true</generateInfoJson>
+              <optionalProperties>useLibraryDefinition</optionalProperties>
+              <restResponseType><![CDATA[Observable<R>]]></restResponseType>
+              <importDeclarations><![CDATA[import { Observable } from "rxjs"]]></importDeclarations>
+
+              <sortTypeDeclarations>true</sortTypeDeclarations>
+              <sortDeclarations>true</sortDeclarations>
+            </configuration>
+            <dependencies>
+              <dependency>
+                <groupId>cz.habarta.typescript-generator</groupId>
+                <artifactId>typescript-generator-spring</artifactId>
+                <version>${typescript-generator.version}</version>
+              </dependency>
+            </dependencies>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
 </project>
