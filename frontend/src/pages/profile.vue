@@ -8,9 +8,8 @@
         </q-card-section>
 
         <q-card-section class="row q-col-gutter-sm">
-          <Field #default="{ errorMessage, value, field }" as="div" class="col-12 col-md-6" label="nom d'utilisateur" name="username" rules="required">
-            <q-input :error="!!errorMessage" :error-message="errorMessage" :model-value="value" aria-autocomplete="both" autocomplete class="q-mb-sm" dense label="Nom d'utilisateur" outlined type="text" v-bind="field"/>
-          </Field>
+          <q-input :model-value="user?.username" aria-autocomplete="both" autocomplete class="col-12 col-md-6 q-mb-sm" dense disable label="Nom d'utilisateur" outlined type="text"/>
+
           <Field #default="{ errorMessage, value, field }" as="div" class="col-12 col-md-6" label="adresse email" name="userData.email" rules="required">
             <q-input :error="!!errorMessage" :error-message="errorMessage" :model-value="value" aria-autocomplete="both" autocomplete class="q-mb-sm" dense label="Adresse email" outlined type="text" v-bind="field"/>
           </Field>
@@ -35,7 +34,7 @@
         </q-card-section>
 
         <q-card-actions align="right">
-          <q-btn color="primary" unelevated>Modifier les informations</q-btn>
+          <q-btn color="primary" type="submit" unelevated>Modifier les informations</q-btn>
         </q-card-actions>
       </q-card>
     </Form>
@@ -43,11 +42,13 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { onMounted, Ref, ref } from "vue";
 import { FormActions } from "vee-validate";
 import { api } from "boot/axios";
+import { UserInfo } from "app/.generated/rest";
+import { Notify } from "quasar";
 
-const user = ref();
+const user: Ref<UserInfo> = ref<UserInfo>();
 
 onMounted(async () => {
   const { success, result } = await api.getAuthUserData();
@@ -56,7 +57,14 @@ onMounted(async () => {
   }
 });
 
-const onSubmit = async (values, actions: FormActions<any>) => {
+const onSubmit = async (values: UserInfo, actions: FormActions<any>) => {
+  const { success } = await api.putAuthUserData(user.value.id, values.userData);
 
+  if (success) {
+    Notify.create({
+      message: "Modification effectuée",
+      color: "positive",
+    });
+  }
 };
 </script>

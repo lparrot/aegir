@@ -20,6 +20,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Cacheable
 @Accessors(chain = true)
 public class User implements UserDetails {
 
@@ -41,7 +42,7 @@ public class User implements UserDetails {
   @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
   private List<Project> projects = new ArrayList<>();
 
-  @OneToOne(fetch = FetchType.LAZY)
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @MapsId
   @JoinColumn(name = "user_data_id")
   private UserData userData;

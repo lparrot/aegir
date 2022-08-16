@@ -1,10 +1,18 @@
 import { NgModule } from "@angular/core";
+import { LayoutComponent } from "./layout/layout.component";
 
+export const ui_components = [
+  LayoutComponent,
+];
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    ...ui_components,
+  ],
   imports: [],
-  exports: [],
+  exports: [
+    ...ui_components,
+  ],
 })
 export class AegirUiModule {
 }

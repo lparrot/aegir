@@ -36,6 +36,12 @@ public class AuthCtrl extends BaseController {
     return this.ok(DaoUtils.convertToDto(this.authSrv.getUserData(principal.getName()), UserInfo.class));
   }
 
+  @PutMapping("/user_data/{userId}")
+  public ResponseEntity<RestApiResponse<UserInfo>> putAuthUserData(@PathVariable("userId") Long userId, @RequestBody ParamsAuthUpdateUserData params) {
+    this.authSrv.putUserData(userId, params);
+    return this.ok();
+  }
+
   @PostMapping
   public ResponseEntity<RestApiResponse<String>> postAuth(@RequestBody final ParamsSecurityCreateAccount params) {
     // TODO ajouter le user data pour la création de compte

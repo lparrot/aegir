@@ -13,6 +13,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Accessors(chain = true)
+@Cacheable
 @EntityListeners(AuditingEntityListener.class)
 public class Dashboard {
 

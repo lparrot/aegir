@@ -11,6 +11,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Entity
+@Cacheable
 @Accessors(chain = true)
 public class TaskStatus implements Serializable {
 

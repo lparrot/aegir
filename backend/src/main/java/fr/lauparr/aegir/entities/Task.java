@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -17,6 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Cacheable
 @Accessors(chain = true)
 @EntityListeners(AuditingEntityListener.class)
 public class Task {
@@ -58,6 +60,7 @@ public class Task {
   private User user;
 
   @JsonIgnore
+  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
   @OneToMany(mappedBy = "task", orphanRemoval = true, cascade = CascadeType.ALL)
   private List<TaskComment> comments = new ArrayList<>();
 

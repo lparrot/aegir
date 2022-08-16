@@ -4,11 +4,10 @@ import { ApiService } from "./api.service";
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
-  styles: [],
+  styleUrls: [ "./app.component.scss" ],
 })
 export class AppComponent {
   title = "app";
-
 
   constructor(api: ApiService) {
     api.getAppInformations()

@@ -11,6 +11,7 @@ import fr.lauparr.aegir.utils.MessageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
@@ -73,5 +74,24 @@ public class AuthSrv {
     this.userRepository.save(userToCreate);
 
     return userToCreate;
+  }
+
+  @Transactional
+  public void putUserData(Long userId, ParamsAuthUpdateUserData params) {
+    User user = userRepository.findById(userId).orElseThrow(() -> new MessageException(MessageUtils.getMessage("message.error.not_found.project")));
+
+    if (user.getUserData() == null) {
+      user.setUserData(new UserData().setUser(user));
+    }
+
+    user.getUserData().setEmail(params.getEmail());
+    user.getUserData().setFirstname(params.getFirstname());
+    user.getUserData().setLastname(params.getLastname());
+    user.getUserData().setAddress(params.getAddress());
+    user.getUserData().setPostalCode(params.getPostalCode());
+    user.getUserData().setCity(params.getCity());
+    user.getUserData().setAbout(params.getAbout());
+
+    userRepository.save(user);
   }
 }

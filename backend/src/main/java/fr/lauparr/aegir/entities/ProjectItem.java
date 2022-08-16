@@ -5,6 +5,7 @@ import fr.lauparr.aegir.enums.EnumProjectItemType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -18,6 +19,7 @@ import java.util.Objects;
 @Setter
 @Entity
 @Accessors(chain = true)
+@Cacheable
 @EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Long.class)
 public class ProjectItem {
@@ -38,10 +40,12 @@ public class ProjectItem {
   private ProjectItem parent;
 
   @JsonManagedReference("project_item_children")
+  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
   @OneToMany(mappedBy = "parent", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, orphanRemoval = true)
   private List<ProjectItem> children = new ArrayList<>();
 
   @JsonManagedReference("project_item_statuses")
+  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
   @OneToMany(mappedBy = "workspace", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, orphanRemoval = true)
   private List<TaskStatus> statuses = new ArrayList<>();
 
@@ -57,6 +61,7 @@ public class ProjectItem {
   private User user;
 
   @JsonManagedReference("project_item_task")
+  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
   @OneToMany(mappedBy = "view", orphanRemoval = true, cascade = CascadeType.ALL)
   private List<Task> tasks = new ArrayList<>();
 

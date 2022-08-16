@@ -8,7 +8,7 @@
       "schematics": {
         "@schematics/angular:component": {
           "inlineTemplate": false,
-          "inlineStyle": true,
+          "inlineStyle": false,
           "style": "scss",
           "skipTests": true
         },
@@ -114,9 +114,38 @@
     },
     "ui": {
       "projectType": "library",
+      "schematics": {
+        "@schematics/angular:component": {
+          "inlineTemplate": false,
+          "inlineStyle": false,
+          "style": "scss",
+          "skipTests": true
+        },
+        "@schematics/angular:class": {
+          "skipTests": true
+        },
+        "@schematics/angular:directive": {
+          "skipTests": true
+        },
+        "@schematics/angular:guard": {
+          "skipTests": true
+        },
+        "@schematics/angular:interceptor": {
+          "skipTests": true
+        },
+        "@schematics/angular:pipe": {
+          "skipTests": true
+        },
+        "@schematics/angular:resolver": {
+          "skipTests": true
+        },
+        "@schematics/angular:service": {
+          "skipTests": true
+        }
+      },
       "root": "projects/ui",
       "sourceRoot": "projects/ui/src",
-      "prefix": "lib",
+      "prefix": "aeg",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
