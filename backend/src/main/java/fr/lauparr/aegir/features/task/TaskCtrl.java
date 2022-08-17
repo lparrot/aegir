@@ -34,13 +34,13 @@ public class TaskCtrl extends BaseController {
   }
 
   @GetMapping("/{taskId}/details")
-  public ResponseEntity<RestApiResponse<TaskDetailDto>> getTaskDetails(@PathVariable("taskId") Long taskId) {
-    return this.ok(DaoUtils.mapToDto(taskSrv.getTaskById(taskId), TaskDetailDto.class));
+  public ResponseEntity<RestApiResponse<TaskDto_Detail>> getTaskDetails(@PathVariable("taskId") Long taskId) {
+    return this.ok(DaoUtils.mapToDto(taskSrv.getTaskById(taskId), TaskDto_Detail.class));
   }
 
   @PostMapping("/{taskId}/comments")
-  public ResponseEntity<RestApiResponse<TaskDetailDto.TaskCommentDto>> postAddComment(@PathVariable("taskId") Long taskId, @RequestBody ParamsTaskPostAddComment params) {
-    return this.ok(DaoUtils.mapToDto(taskSrv.addComment(taskId, params), TaskDetailDto.TaskCommentDto.class));
+  public ResponseEntity<RestApiResponse<TaskDto_Detail.TaskCommentDto>> postAddComment(@PathVariable("taskId") Long taskId, @RequestBody ParamsTaskPostAddComment params) {
+    return this.ok(DaoUtils.mapToDto(taskSrv.addComment(taskId, params), TaskDto_Detail.TaskCommentDto.class));
   }
 
 }

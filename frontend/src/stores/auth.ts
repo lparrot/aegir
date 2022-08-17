@@ -44,7 +44,7 @@ export const useAuthStore = defineStore("auth", {
         await this.$router.push({ name: "tasks" });
 
         Notify.create({
-          message: `Vous êtes connecté sous ${this.user.username}`,
+          message: `Vous êtes connecté sous ${ this.user.username }`,
           color: "positive",
         });
       }

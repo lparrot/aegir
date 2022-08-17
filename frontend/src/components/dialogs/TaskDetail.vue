@@ -9,7 +9,7 @@
         </q-card-section>
 
         <q-card-section class="col">
-          <div class="row q-gutter-sm full-height">
+          <div :class="{'full-height': $q.screen.gt.sm}" class="row q-gutter-sm">
             <div class="col-xs-12 col-md-6 col-lg-7">
               <Form :initial-values="task" as="">
                 <Field #default="{ errorMessage, value, field }" label="nom de la tâche" name="name" rules="required">
@@ -31,7 +31,7 @@
                     </q-item-section>
 
                     <q-item-section>
-                      <q-item-label class="text-weight-bold" lines="1">{{ comment.fullname }}<span v-if="authStore.user.id === comment.userId"> (vous)</span></q-item-label>
+                      <q-item-label class="cursor-pointer text-weight-bold text-indigo-4" lines="1" @click="showUserInfo(comment.userId)">{{ comment.userDataFullname }}<span v-if="authStore.user.id === comment.userId"> (vous)</span></q-item-label>
                       <q-item-label caption>{{ comment.content }}</q-item-label>
                     </q-item-section>
                   </q-item>
@@ -58,12 +58,13 @@
 </template>
 
 <script lang="ts" setup>
-import { useDialogPluginComponent } from "quasar";
-import { onBeforeMount, Ref, ref } from "vue";
+import { Dialog, QDialogOptions, useDialogPluginComponent } from "quasar";
+import { onBeforeMount, ref } from "vue";
 import { api } from "boot/axios";
-import { TaskDetailDto } from "app/.generated/rest";
+import { TaskDto_Detail } from "app/.generated/rest";
 import { getInitials } from "src/utils/string.utils";
 import { useAuthStore } from "stores/auth";
+import DialogUserInfo from "./DialogUserInfo.vue";
 
 interface Props {
   taskId: number;
@@ -80,7 +81,7 @@ const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginC
 const authStore = useAuthStore();
 const loaded = ref(false);
 const newComment = ref<string>(null);
-const task: Ref<TaskDetailDto> = ref<TaskDetailDto>();
+const task = ref<TaskDto_Detail>();
 
 const fetchTask = async () => {
   const { success, result } = await api.getTaskDetails(props.taskId);
@@ -101,5 +102,21 @@ const submitComment = async () => {
   if (success) {
     task.value.comments.push(result);
   }
+};
+
+const showUserInfo = (userId) => {
+  const dialogOptions: QDialogOptions = {
+    fullHeight: true,
+    fullWidth: true,
+    position: "right",
+  };
+
+  Dialog.create({
+    component: DialogUserInfo,
+    componentProps: {
+      dialogOptions,
+      userId,
+    },
+  });
 };
 </script>

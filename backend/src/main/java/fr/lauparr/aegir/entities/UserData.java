@@ -35,4 +35,21 @@ public class UserData {
   @PrimaryKeyJoinColumn
   private User user;
 
+  public String getFullname() {
+    if (lastname == null && firstname == null) {
+      return null;
+    }
+
+    if (lastname == null) {
+      return firstname;
+    }
+
+
+    if (firstname == null) {
+      return lastname;
+    }
+
+    return lastname + " " + firstname;
+  }
+
 }
