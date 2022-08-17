@@ -3,6 +3,7 @@ package fr.lauparr.aegir.config;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import fr.lauparr.aegir.entities.User;
+import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,6 +47,11 @@ public class JpaConfig {
       .map(Authentication::getPrincipal)
       .filter(o -> !SecurityConfig.ROLE_ANONYMOUS.equals(o))
       .map(User.class::cast);
+  }
+
+  @Bean
+  public ModelMapper modelMapper() {
+    return new ModelMapper();
   }
 
 }

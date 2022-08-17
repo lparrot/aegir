@@ -1,0 +1,105 @@
+<template>
+  <q-dialog ref="dialogRef" full-height full-width>
+    <template v-if="loaded">
+      <q-card class="column">
+        <q-card-section class="row items-center q-py-sm">
+          <div class="text-h6">Détail de la tâche #{{ task.id }}</div>
+          <q-space/>
+          <q-btn v-close-popup flat icon="close" round></q-btn>
+        </q-card-section>
+
+        <q-card-section class="col">
+          <div class="row q-gutter-sm full-height">
+            <div class="col-xs-12 col-md-6 col-lg-7">
+              <Form :initial-values="task" as="">
+                <Field #default="{ errorMessage, value, field }" label="nom de la tâche" name="name" rules="required">
+                  <label class="q-field__label" for="task_name">Nom de la tâche</label>
+                  <q-input id="task_name" :error="!!errorMessage" :error-message="errorMessage" :model-value="value" aria-autocomplete="both" autocomplete class="q-mb-sm" dense outlined type="text" v-bind="field"/>
+                </Field>
+
+                <label class="q-field__label" for="task_description">Description</label>
+                <q-input id="task_description" v-model="task.description" dense outlined type="textarea"></q-input>
+              </Form>
+            </div>
+
+            <div class="col">
+              <div class="column full-width full-height bg-grey-1 rounded-borders">
+                <q-list class="col">
+                  <q-item v-for="comment in task.comments">
+                    <q-item-section avatar>
+                      <q-avatar color="primary" size="sm" text-color="white">{{ getInitials(comment.userUsername) }}</q-avatar>
+                    </q-item-section>
+
+                    <q-item-section>
+                      <q-item-label class="text-weight-bold" lines="1">{{ comment.fullname }}<span v-if="authStore.user.id === comment.userId"> (vous)</span></q-item-label>
+                      <q-item-label caption>{{ comment.content }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+
+                <q-space></q-space>
+
+                <form @submit.prevent="submitComment">
+                  <q-input v-model="newComment" filled placeholder="Entrez votre commentaire" square></q-input>
+                </form>
+              </div>
+            </div>
+          </div>
+        </q-card-section>
+
+        <q-space></q-space>
+
+        <q-card-actions align="right">
+          <q-btn v-close-popup color="primary" unelevated>Fermer</q-btn>
+        </q-card-actions>
+      </q-card>
+    </template>
+  </q-dialog>
+</template>
+
+<script lang="ts" setup>
+import { useDialogPluginComponent } from "quasar";
+import { onBeforeMount, Ref, ref } from "vue";
+import { api } from "boot/axios";
+import { TaskDetailDto } from "app/.generated/rest";
+import { getInitials } from "src/utils/string.utils";
+import { useAuthStore } from "stores/auth";
+
+interface Props {
+  taskId: number;
+}
+
+const props = defineProps<Props>();
+
+defineEmits([
+  ...useDialogPluginComponent.emits,
+]);
+
+const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent();
+
+const authStore = useAuthStore();
+const loaded = ref(false);
+const newComment = ref<string>(null);
+const task: Ref<TaskDetailDto> = ref<TaskDetailDto>();
+
+const fetchTask = async () => {
+  const { success, result } = await api.getTaskDetails(props.taskId);
+
+  if (success) {
+    task.value = result;
+  }
+};
+
+onBeforeMount(async () => {
+  await fetchTask();
+  loaded.value = true;
+});
+
+const submitComment = async () => {
+  const { success, result } = await api.postAddComment(task.value.id, { content: newComment.value });
+
+  if (success) {
+    task.value.comments.push(result);
+  }
+};
+</script>

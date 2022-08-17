@@ -2,6 +2,7 @@ package fr.lauparr.aegir.utils;
 
 import fr.lauparr.aegir.config.AutowireHelper;
 import lombok.experimental.UtilityClass;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.projection.ProjectionFactory;
@@ -28,18 +29,39 @@ public class DaoUtils {
     return AutowireHelper.getBean(ProjectionFactory.class).createProjection(entityClass, data);
   }
 
-  public <T> List<T> convertListDto(final List<?> liste, final Class<T> entityClass) {
+  public <T> List<T> convertToListDto(final List<?> liste, final Class<T> entityClass) {
     if (liste == null) {
       return new ArrayList<>();
     }
     return liste.stream().map(x -> DaoUtils.convertToDto(x, entityClass)).collect(Collectors.toList());
   }
 
-  public <T> Page<T> convertPageDto(final Page<?> page, final Class<T> entityClass) {
+  public <T> Page<T> convertToPageDto(final Page<?> page, final Class<T> entityClass) {
     if (page == null) {
       return Page.empty();
     }
     return page.map(x -> DaoUtils.convertToDto(x, entityClass));
+  }
+
+  public <T> T mapToDto(final Object data, final Class<T> entityClass) {
+    if (data == null) {
+      return null;
+    }
+    return AutowireHelper.getBean(ModelMapper.class).map(data, entityClass);
+  }
+
+  public <T> List<T> mapToListDto(final List<?> liste, final Class<T> entityClass) {
+    if (liste == null) {
+      return new ArrayList<>();
+    }
+    return liste.stream().map(x -> DaoUtils.mapToDto(x, entityClass)).collect(Collectors.toList());
+  }
+
+  public <T> Page<T> mapToPageDto(final Page<?> page, final Class<T> entityClass) {
+    if (page == null) {
+      return Page.empty();
+    }
+    return page.map(x -> DaoUtils.mapToDto(x, entityClass));
   }
 
   public <T> T findRandom(final PagingAndSortingRepository<T, ?> repository) {

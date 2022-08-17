@@ -78,7 +78,7 @@ public class AuthSrv {
 
   @Transactional
   public void putUserData(Long userId, ParamsAuthUpdateUserData params) {
-    User user = userRepository.findById(userId).orElseThrow(() -> new MessageException(MessageUtils.getMessage("message.error.not_found.project")));
+    User user = userRepository.findById(userId).orElseThrow(() -> new MessageException(MessageUtils.getMessage("message.error.not_found.user")));
 
     if (user.getUserData() == null) {
       user.setUserData(new UserData().setUser(user));

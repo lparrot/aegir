@@ -17,10 +17,16 @@
               </q-card-section>
 
               <q-card-section>
-                <div>{{ props.row.name }}</div>
+                <div class="cursor-pointer" @click="onTaskClick(props)">{{ props.row.name }}</div>
               </q-card-section>
             </q-card>
           </div>
+        </template>
+
+        <template #body-cell-name="props">
+          <q-td :props="props">
+            <div class="cursor-pointer" @click="onTaskClick(props)">{{ props.value }}</div>
+          </q-td>
         </template>
 
         <template #body-cell-assigned="props">
@@ -43,8 +49,9 @@
 <script lang="ts" setup>
 import { getInitials } from "src/utils/string.utils";
 import { TaskInfo, TaskStatusInfo } from "app/.generated/rest";
-import { QTableColumn } from "quasar";
+import { Dialog, QTableColumn } from "quasar";
 import { Ref, ref } from "vue";
+import TaskDetail from "components/dialogs/TaskDetail.vue";
 
 defineProps<{
   status: TaskStatusInfo,
@@ -58,4 +65,15 @@ columns.value = [
   { name: "assigned", field: "assigned", label: "Assigné à", align: "center", style: "width: 80px" },
   { name: "createdAt", field: "createdAt", label: "Crée le", align: "left", style: "width: 120px" },
 ];
+
+const onTaskClick = (props) => {
+  Dialog.create({
+    component: TaskDetail,
+    persistent: true,
+    maximized: true,
+    componentProps: {
+      taskId: props.row.id,
+    },
+  });
+};
 </script>

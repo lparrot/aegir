@@ -8,10 +8,7 @@ import fr.lauparr.aegir.features.project_item.ProjectItemInfo;
 import fr.lauparr.aegir.utils.DaoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,9 +28,19 @@ public class TaskCtrl extends BaseController {
       master -> DaoUtils.convertToDto(master, ProjectItemInfo.class),
       details -> taskSrv.groupTasksByStatus(details).stream().map(mapperStatus -> mapperStatus.convert(
         masterStatus -> DaoUtils.convertToDto(masterStatus, TaskStatusInfo.class),
-        detailsStatus -> DaoUtils.convertListDto(detailsStatus, TaskInfo.class)
+        detailsStatus -> DaoUtils.convertToListDto(detailsStatus, TaskInfo.class)
       )).collect(Collectors.toList())
     )).collect(Collectors.toList()));
+  }
+
+  @GetMapping("/{taskId}/details")
+  public ResponseEntity<RestApiResponse<TaskDetailDto>> getTaskDetails(@PathVariable("taskId") Long taskId) {
+    return this.ok(DaoUtils.mapToDto(taskSrv.getTaskById(taskId), TaskDetailDto.class));
+  }
+
+  @PostMapping("/{taskId}/comments")
+  public ResponseEntity<RestApiResponse<TaskDetailDto.TaskCommentDto>> postAddComment(@PathVariable("taskId") Long taskId, @RequestBody ParamsTaskPostAddComment params) {
+    return this.ok(DaoUtils.mapToDto(taskSrv.addComment(taskId, params), TaskDetailDto.TaskCommentDto.class));
   }
 
 }

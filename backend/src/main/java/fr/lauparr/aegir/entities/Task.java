@@ -64,15 +64,8 @@ public class Task {
   @OneToMany(mappedBy = "task", orphanRemoval = true, cascade = CascadeType.ALL)
   private List<TaskComment> comments = new ArrayList<>();
 
-  @PostPersist
-  @PostUpdate
-  public void postSave() {
-    comments.forEach(taskComment -> {
-      taskComment.setTask(this);
-    });
-  }
-
   public Task addComment(TaskComment comment) {
+    comment.setTask(this);
     comments.add(comment);
     return this;
   }

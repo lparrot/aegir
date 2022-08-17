@@ -5,7 +5,7 @@ import { Dialog, Notify } from "quasar";
 import { useAuthStore } from "stores/auth";
 import { CustomAxiosInstance } from "src/types";
 import useAppLocalStorage from "src/composables/useAppLocalStorage";
-import ErrorDialog from "components/ErrorDialog.vue";
+import ErrorDialog from "components/dialogs/ErrorDialog.vue";
 import { HttpClient, RestApplicationClient, RestResponse } from "app/.generated/rest";
 
 declare module "@vue/runtime-core" {

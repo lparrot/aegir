@@ -21,7 +21,7 @@ public class ProjectCtrl extends BaseController {
 
   @GetMapping("current_user")
   public ResponseEntity<RestApiResponse<List<ProjectInfo>>> getProjectsByCurrentUser() {
-    return this.ok(DaoUtils.convertListDto(this.service.getUserProjects(), ProjectInfo.class));
+    return this.ok(DaoUtils.convertToListDto(this.service.getUserProjects(), ProjectInfo.class));
   }
 
   @GetMapping("{projectId}")
