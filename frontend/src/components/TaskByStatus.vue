@@ -51,7 +51,7 @@ import { getInitials } from "src/utils/string.utils";
 import { TaskInfo, TaskStatusInfo } from "app/.generated/rest";
 import { Dialog, QTableColumn } from "quasar";
 import { Ref, ref } from "vue";
-import TaskDetail from "components/dialogs/TaskDetail.vue";
+import TaskDetail from "components/dialogs/DialogTaskDetail.vue";
 
 defineProps<{
   status: TaskStatusInfo,

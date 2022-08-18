@@ -8,7 +8,7 @@
           <q-btn v-close-popup flat icon="close" round></q-btn>
         </q-card-section>
 
-        <q-card-section class="col">
+        <q-card-section class="col scroll">
           <!-- -->
         </q-card-section>
 

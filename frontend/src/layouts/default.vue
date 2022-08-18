@@ -137,7 +137,7 @@ import { useAppStore } from "stores/app";
 import { useRouter } from "vue-router";
 import ApplicationMenu from "components/ApplicationMenu.vue";
 import { useProjectStore } from "stores/project";
-import CreateWorkspace from "components/dialogs/CreateWorkspace.vue";
+import CreateWorkspace from "components/dialogs/DialogCreateWorkspace.vue";
 import useAppLocalStorage from "src/composables/useAppLocalStorage";
 import TreeProjectItem from "components/TreeProjectItem.vue";
 
