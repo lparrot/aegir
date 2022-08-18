@@ -39,8 +39,12 @@
 
                 <q-space></q-space>
 
-                <form @submit.prevent="submitComment">
-                  <q-input v-model="newComment" filled placeholder="Entrez votre commentaire" square></q-input>
+                <form id="form_comment" @submit.prevent="submitComment">
+                  <q-input v-model="newComment" filled placeholder="Entrez votre commentaire" square>
+                    <template #append>
+                      <q-btn dense flat icon="send" round @click="submitComment"/>
+                    </template>
+                  </q-input>
                 </form>
               </div>
             </div>
@@ -101,6 +105,7 @@ const submitComment = async () => {
 
   if (success) {
     task.value.comments.push(result);
+    newComment.value = null
   }
 };
 
