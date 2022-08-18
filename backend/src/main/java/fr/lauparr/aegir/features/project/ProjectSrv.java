@@ -21,7 +21,7 @@ public class ProjectSrv {
 
   public List<Project> getUserProjects() {
     User user = SpringUtils.getCurrentUser();
-    return user.getProjects();
+    return projectRepository.findAllUserProjectsByUserId(user.getId());
   }
 
   public Project getById(Long projectId) {

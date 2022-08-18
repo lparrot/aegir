@@ -29,7 +29,7 @@ public class Profile implements Serializable {
   @Column(name = "role")
   @ElementCollection
   @Enumerated(EnumType.STRING)
-  @CollectionTable(name = "profile_role")
+  @CollectionTable(name = "profile_role", foreignKey = @ForeignKey(name = "FK_profile_role"))
   @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
   private List<Role> roles = new ArrayList<>();
 

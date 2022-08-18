@@ -45,7 +45,7 @@ public class TokenAuthenticationFilterSrv extends OncePerRequestFilter {
         }
       } catch (final Exception e) {
         SecurityContextHolder.clearContext();
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().write(new ObjectMapper().writeValueAsString(e));
         doFilter = false;

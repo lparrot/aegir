@@ -33,6 +33,7 @@ public class TaskComment implements Serializable {
 
   @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(foreignKey = @ForeignKey(name = "FK_task_comment_task"))
   private Task task;
 
   @CreatedBy

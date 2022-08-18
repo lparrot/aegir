@@ -25,7 +25,6 @@ import java.util.List;
 public class User implements UserDetails {
 
   @Id
-  @Column(name = "user_data_id")
   private Long id;
 
   @NotEmpty
@@ -44,7 +43,7 @@ public class User implements UserDetails {
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @MapsId
-  @JoinColumn(name = "user_data_id")
+  @JoinColumn(name = "id", foreignKey = @ForeignKey(name = "FK_user_user_data"))
   private UserData userData;
 
   @PostPersist

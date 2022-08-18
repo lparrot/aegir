@@ -33,6 +33,10 @@ public class Project {
   @OneToMany(mappedBy = "project", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, orphanRemoval = true)
   private List<ProjectItem> items = new ArrayList<>();
 
+  @ElementCollection
+  @CollectionTable(name = "project_member", joinColumns = @JoinColumn(name = "project_id"), foreignKey = @ForeignKey(name = "FK_project_member_project"))
+  private List<ProjectMember> members = new ArrayList<>();
+
   @CreatedBy
   @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY)
@@ -50,6 +54,11 @@ public class Project {
 
   public Project addProjectItem(ProjectItem projectItem) {
     this.items.add(projectItem);
+    return this;
+  }
+
+  public Project addMember(ProjectMember projectMember) {
+    this.members.add(projectMember);
     return this;
   }
 }
