@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { ApiService } from "./api.service";
+import { SessionService } from "./session.service";
 
 @Component({
   selector: "app-root",
@@ -7,12 +7,9 @@ import { ApiService } from "./api.service";
   styleUrls: [ "./app.component.scss" ],
 })
 export class AppComponent {
-  title = "app";
+  constructor(public session: SessionService) {}
 
-  constructor(api: ApiService) {
-    api.getAppInformations()
-      .subscribe(value => {
-        console.log(value);
-      });
+  capitalize(title: string) {
+    return title.charAt(0).toUpperCase() + title.substring(1);
   }
 }

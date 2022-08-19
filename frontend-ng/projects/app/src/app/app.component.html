@@ -1,4 +1,4 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<aeg-layout>
+<aeg-layout [description]="'v' + session.configuration.app.version" [title]="capitalize(session.configuration.app.title)">
   <router-outlet></router-outlet>
 </aeg-layout>

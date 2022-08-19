@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 
 @Component({
   selector: "aeg-layout",
@@ -6,6 +6,9 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: [ "./layout.component.css" ],
 })
 export class LayoutComponent implements OnInit {
+
+  @Input() title!: string;
+  @Input() description!: string;
 
   constructor() { }
 
