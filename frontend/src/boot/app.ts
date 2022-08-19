@@ -32,6 +32,10 @@ export default boot(async ({ app, router }) => {
   const { addPlugin } = useDayjs();
   dayjs.locale("fr");
 
+  app.config.globalProperties.$log = (data) => {
+    console.log(data);
+  };
+
   if (socket.client == null) {
     await socket.initialize();
     await socket.connect();

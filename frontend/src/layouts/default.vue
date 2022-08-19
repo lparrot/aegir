@@ -137,9 +137,11 @@ import { useAppStore } from "stores/app";
 import { useRouter } from "vue-router";
 import ApplicationMenu from "components/ApplicationMenu.vue";
 import { useProjectStore } from "stores/project";
-import CreateWorkspace from "components/dialogs/DialogCreateWorkspace.vue";
+import CreateWorkspace, { FormCreateWorkspace } from "components/dialogs/DialogCreateWorkspace.vue";
 import useAppLocalStorage from "src/composables/useAppLocalStorage";
 import TreeProjectItem from "components/TreeProjectItem.vue";
+import { api } from "boot/axios";
+import { EnumProjectItemType } from "app/.generated/rest";
 
 ////////////////
 // Composables
@@ -198,8 +200,17 @@ const showDialogCreateWorkspace = () => {
   $q.dialog({
     component: CreateWorkspace,
   })
-    .onOk(() => {
-      console.log("ok");
+    .onOk(async (formData: FormCreateWorkspace) => {
+      const { success } = await api.createProjectItem({
+        name: formData.name,
+        projectId: projectStore.selectedProject.id,
+        type: EnumProjectItemType.WORKSPACE,
+        statuses: [],
+      });
+
+      if (success) {
+        await projectStore.fetchSelectedProject();
+      }
     });
 };
 </script>

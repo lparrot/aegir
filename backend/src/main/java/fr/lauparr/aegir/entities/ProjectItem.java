@@ -50,7 +50,7 @@ public class ProjectItem {
   private List<TaskStatus> statuses = new ArrayList<>();
 
   @JsonBackReference("project_project_items")
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
   @JoinColumn(foreignKey = @ForeignKey(name = "FK_project_item_project"))
   private Project project;
 
