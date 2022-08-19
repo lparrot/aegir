@@ -7,6 +7,9 @@
           <q-breadcrumbs-el v-for="hierarchy in projectStore.selectedItem.itemHierarchy" :key="hierarchy" :label="hierarchy" tag="div"/>
         </q-breadcrumbs>
       </div>
+      <div v-if="projectStore.selectedItem.type === 'WORKSPACE'">
+        <q-btn color="positive" flat size="sm" @click="showDialogCreateList">Créer une liste</q-btn>
+      </div>
     </div>
 
     <q-separator class="q-my-sm"></q-separator>
@@ -31,8 +34,10 @@
 import { useProjectStore } from "stores/project";
 import { computed, ref, watch } from "vue";
 import { api } from "boot/axios";
-import { GroupByMapper, ProjectItemInfo, TaskInfo, TaskStatusInfo } from "app/.generated/rest";
+import { EnumProjectItemType, GroupByMapper, ProjectItemInfo, TaskInfo, TaskStatusInfo } from "app/.generated/rest";
 import TaskByStatus from "components/TaskByStatus.vue";
+import { Dialog } from "quasar";
+import DialogCreateList from "../components/dialogs/DialogCreateList.vue";
 
 const projectStore = useProjectStore();
 const tasks = ref<GroupByMapper<ProjectItemInfo, GroupByMapper<TaskStatusInfo, TaskInfo>>[]>();
@@ -42,6 +47,24 @@ const fetchTasks = async (projectItemId) => {
   if (success) {
     tasks.value = result;
   }
+};
+
+const showDialogCreateList = () => {
+  Dialog.create({
+    component: DialogCreateList,
+  })
+    .onOk(async (params) => {
+      const { success } = await api.createProjectItem({
+        name: params.name,
+        type: EnumProjectItemType.VIEW,
+        projectId: projectStore.selectedProject.id,
+        parentId: projectStore.selectedItem.id,
+      });
+
+      if (success) {
+        await projectStore.fetchSelectedProject();
+      }
+    });
 };
 
 watch(

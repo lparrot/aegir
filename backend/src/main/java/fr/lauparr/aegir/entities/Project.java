@@ -44,15 +44,8 @@ public class Project {
   @JoinColumn(foreignKey = @ForeignKey(name = "FK_project_user"))
   private User user;
 
-  @PostPersist
-  @PostUpdate
-  public void postSave() {
-    items.forEach(projectItem -> {
-      projectItem.setProject(this);
-    });
-  }
-
   public Project addProjectItem(ProjectItem projectItem) {
+    projectItem.setProject(this);
     this.items.add(projectItem);
     return this;
   }

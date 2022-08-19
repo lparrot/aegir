@@ -1,13 +1,13 @@
 import { defineStore } from "pinia";
 import { useAuthStore } from "stores/auth";
 import useAppLocalStorage from "src/composables/useAppLocalStorage";
-import { ProjectInfo } from "app/.generated/rest";
+import { ProjectInfo, ProjectItemInfo } from "app/.generated/rest";
 import { api } from "boot/axios";
 
 interface StateInformations {
   userProjects: ProjectInfo[];
   selectedProject: ProjectInfo;
-  selectedItem: any;
+  selectedItem: ProjectItemInfo;
 }
 
 const authStore = useAuthStore();

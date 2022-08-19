@@ -9,6 +9,7 @@ import fr.lauparr.aegir.exceptions.MessageException;
 import fr.lauparr.aegir.utils.MessageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,13 +27,10 @@ public class ProjectItemSrv {
     return this.projectItemRepository.findById(projectItemId).orElseThrow(() -> new MessageException(MessageUtils.getMessage("message.error.not_found.project_item")));
   }
 
+  @Transactional
   public void createProjectItem(ParamsProjectItemsCreate params) {
     ProjectItem parent = null;
     List<TaskStatus> statuses = new ArrayList<>();
-
-    if (params.getParentId() != null) {
-      parent = getItemById(params.getParentId());
-    }
 
     if (params.getStatuses().isEmpty()) {
       statuses.add(new TaskStatus().setName("To Do").setColor("green"));
@@ -44,13 +42,21 @@ public class ProjectItemSrv {
 
     final Project project = projectRepository.findById(params.getProjectId()).orElseThrow(() -> new MessageException(MessageUtils.getMessage("message.error.not_found.project")));
 
-    project.addProjectItem(new ProjectItem()
+    final ProjectItem projectItem = new ProjectItem()
       .setProject(project)
       .setName(params.getName())
-      .setType(params.getType())
-      .setParent(parent)
-      .setStatuses(statuses));
+      .setType(params.getType());
 
-    projectRepository.save(project);
+    statuses.forEach(projectItem::addStatus);
+
+    if (params.getParentId() != null) {
+      parent = getItemById(params.getParentId());
+      parent.addChild(projectItem);
+      projectItemRepository.save(parent);
+    } else {
+      project.addProjectItem(projectItem);
+      projectRepository.save(project);
+    }
+
   }
 }

@@ -35,18 +35,18 @@ public class ProjectItem {
   private EnumProjectItemType type;
 
   @JsonBackReference("project_item_children")
-  @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.LAZY)
+  @ManyToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
   @JoinColumn(foreignKey = @ForeignKey(name = "FK_project_item_parent"))
   private ProjectItem parent;
 
   @JsonManagedReference("project_item_children")
   @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-  @OneToMany(mappedBy = "parent", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, orphanRemoval = true)
+  @OneToMany(mappedBy = "parent", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, orphanRemoval = true)
   private List<ProjectItem> children = new ArrayList<>();
 
   @JsonManagedReference("project_item_statuses")
   @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-  @OneToMany(mappedBy = "workspace", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, orphanRemoval = true)
+  @OneToMany(mappedBy = "workspace", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, orphanRemoval = true)
   private List<TaskStatus> statuses = new ArrayList<>();
 
   @JsonBackReference("project_project_items")
@@ -79,16 +79,9 @@ public class ProjectItem {
     return items.stream().sorted(Comparator.reverseOrder()).toArray(String[]::new);
   }
 
-  @PostPersist
-  @PostUpdate
-  public void postSave() {
-    this.children.forEach(projectItem -> {
-      projectItem.setParent(this);
-      projectItem.setProject(this.project);
-    });
-  }
-
   public ProjectItem addChild(ProjectItem projectItem) {
+    projectItem.setParent(this);
+    projectItem.setProject(this.project);
     this.children.add(projectItem);
     return this;
   }
