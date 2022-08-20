@@ -28,8 +28,8 @@ public class ProjectItemSrv {
   }
 
   @Transactional
-  public void createProjectItem(ParamsProjectItemsCreate params) {
-    ProjectItem parent = null;
+  public ProjectItem createProjectItem(ParamsProjectItemsCreate params) {
+    ProjectItem parent;
     List<TaskStatus> statuses = new ArrayList<>();
 
     if (params.getStatuses().isEmpty()) {
@@ -42,12 +42,14 @@ public class ProjectItemSrv {
 
     final Project project = projectRepository.findById(params.getProjectId()).orElseThrow(() -> new MessageException(MessageUtils.getMessage("message.error.not_found.project")));
 
-    final ProjectItem projectItem = new ProjectItem()
+    ProjectItem projectItem = new ProjectItem()
       .setProject(project)
       .setName(params.getName())
       .setType(params.getType());
 
     statuses.forEach(projectItem::addStatus);
+
+    projectItem = projectItemRepository.save(projectItem);
 
     if (params.getParentId() != null) {
       parent = getItemById(params.getParentId());
@@ -58,5 +60,11 @@ public class ProjectItemSrv {
       projectRepository.save(project);
     }
 
+    return projectItem;
+  }
+
+  @Transactional
+  public void deleteProjectItem(Long projectItemId) {
+    projectItemRepository.deleteById(projectItemId);
   }
 }

@@ -201,7 +201,7 @@ const showDialogCreateWorkspace = () => {
     component: CreateWorkspace,
   })
     .onOk(async (formData: FormCreateWorkspace) => {
-      const { success } = await api.createProjectItem({
+      const { success, result } = await api.createProjectItem({
         name: formData.name,
         projectId: projectStore.selectedProject.id,
         type: EnumProjectItemType.WORKSPACE,
@@ -209,6 +209,8 @@ const showDialogCreateWorkspace = () => {
       });
 
       if (success) {
+        storageSidebar.value.item_selected = result.id;
+        await router.push({ name: "tasks" });
         await projectStore.fetchSelectedProject();
       }
     });

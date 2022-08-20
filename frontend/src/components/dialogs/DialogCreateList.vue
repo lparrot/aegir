@@ -1,8 +1,8 @@
 <template>
   <q-dialog ref="dialogRef">
     <template v-if="loaded">
-      <q-card class="column" style="max-width: 95vw; width: 50vh">
-        <q-card-section class="row items-center q-py-sm">
+      <q-card :style="{minWidth: $q.screen.lt.sm ? '95vw' : '50vw'}" class="column">
+        <q-card-section class="no-wrap row items-center q-py-sm">
           <div class="text-h6">Créer une liste</div>
           <q-space/>
           <q-btn v-close-popup flat icon="close" round></q-btn>
@@ -19,7 +19,7 @@
 
         <q-space></q-space>
 
-        <q-card-actions align="right">
+        <q-card-actions align="right" class="no-wrap">
           <q-btn v-close-popup color="primary" form="formCreate" unelevated>Fermer</q-btn>
           <q-btn form="formCreate" type="submit" unelevated>Créer la liste</q-btn>
         </q-card-actions>
@@ -31,6 +31,7 @@
 <script lang="ts" setup>
 import { useDialogPluginComponent } from "quasar";
 import { onBeforeMount, ref } from "vue";
+import { FormActions } from "vee-validate";
 
 interface Props {
 
@@ -52,7 +53,8 @@ onBeforeMount(async () => {
   loaded.value = true;
 });
 
-const onSubmit = async (values, actions) => {
-  onDialogOK(values);
+const onSubmit = async (values, actions: FormActions<any>) => {
+  await onDialogOK(values);
+  actions.resetForm();
 };
 </script>

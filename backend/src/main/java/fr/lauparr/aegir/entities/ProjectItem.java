@@ -1,25 +1,47 @@
 package fr.lauparr.aegir.entities;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import fr.lauparr.aegir.dto.ProjectItemHierarchy;
 import fr.lauparr.aegir.enums.EnumProjectItemType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
+import javax.persistence.Cacheable;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 @Getter
 @Setter
 @Entity
-@Accessors(chain = true)
 @Cacheable
+@Accessors(chain = true)
 @EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Long.class)
 public class ProjectItem {
@@ -35,19 +57,9 @@ public class ProjectItem {
   private EnumProjectItemType type;
 
   @JsonBackReference("project_item_children")
-  @ManyToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
+  @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE, CascadeType.DETACH}, fetch = FetchType.LAZY)
   @JoinColumn(foreignKey = @ForeignKey(name = "FK_project_item_parent"))
   private ProjectItem parent;
-
-  @JsonManagedReference("project_item_children")
-  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-  @OneToMany(mappedBy = "parent", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, orphanRemoval = true)
-  private List<ProjectItem> children = new ArrayList<>();
-
-  @JsonManagedReference("project_item_statuses")
-  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-  @OneToMany(mappedBy = "workspace", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, orphanRemoval = true)
-  private List<TaskStatus> statuses = new ArrayList<>();
 
   @JsonBackReference("project_project_items")
   @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
@@ -60,23 +72,45 @@ public class ProjectItem {
   @JoinColumn(foreignKey = @ForeignKey(name = "FK_project_item_user"))
   private User user;
 
+  @JsonManagedReference("project_item_children")
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+  @OneToMany(mappedBy = "parent", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH, CascadeType.DETACH}, orphanRemoval = true)
+  private List<ProjectItem> children = new ArrayList<>();
+
+  @JsonManagedReference("project_item_statuses")
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+  @OneToMany(mappedBy = "workspace", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH, CascadeType.DETACH}, orphanRemoval = true)
+  private List<TaskStatus> statuses = new ArrayList<>();
+
   @JsonManagedReference("project_item_task")
-  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
   @OneToMany(mappedBy = "view", orphanRemoval = true, cascade = CascadeType.ALL)
   private List<Task> tasks = new ArrayList<>();
 
+  public void preRemove() {
+    parent = null;
+    project = null;
+    user = null;
+    removeChildren();
+    removeTasks();
+    removeStatuses();
+  }
+
   @JsonIgnore
-  public String[] getItemNameHierarchy() {
-    List<String> items = new ArrayList<>();
-    items.add(this.name);
+  public List<ProjectItemHierarchy> getItemHierarchy() {
+    List<ProjectItemHierarchy> items = new ArrayList<>();
+    items.add(new ProjectItemHierarchy().setId(id).setName(name));
     ProjectItem current = this;
 
     while (current.getParent() != null) {
-      items.add(current.getParent().getName());
+      items.add(new ProjectItemHierarchy().setId(current.getParent().getId()).setName(current.getParent().getName()));
       current = current.getParent();
     }
-
-    return items.stream().sorted(Comparator.reverseOrder()).toArray(String[]::new);
+    Collections.reverse(items);
+    return items;
   }
 
   public ProjectItem addChild(ProjectItem projectItem) {
@@ -111,5 +145,17 @@ public class ProjectItem {
     }
 
     return allChildren;
+  }
+
+  public void removeChildren() {
+    children.clear();
+  }
+
+  public void removeTasks() {
+    tasks.clear();
+  }
+
+  public void removeStatuses() {
+    statuses.clear();
   }
 }

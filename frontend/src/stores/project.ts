@@ -3,6 +3,7 @@ import { useAuthStore } from "stores/auth";
 import useAppLocalStorage from "src/composables/useAppLocalStorage";
 import { ProjectInfo, ProjectItemInfo } from "app/.generated/rest";
 import { api } from "boot/axios";
+import { Loading } from "quasar";
 
 interface StateInformations {
   userProjects: ProjectInfo[];
@@ -45,11 +46,16 @@ export const useProjectStore = defineStore("project", {
     },
 
     async fetchSelectedItem() {
-      if (authStore.isLoggedIn && storageSidebar.value.item_selected != null) {
-        const { success, result } = await api.getProjectItemsById(storageSidebar.value.item_selected);
-        if (success) {
-          this.selectedItem = result;
+      try {
+        Loading.show();
+        if (authStore.isLoggedIn && storageSidebar.value.item_selected != null) {
+          const { success, result } = await api.getProjectItemsById(storageSidebar.value.item_selected);
+          if (success) {
+            this.selectedItem = result;
+          }
         }
+      } finally {
+        Loading.hide();
       }
     },
   },

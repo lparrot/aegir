@@ -1,5 +1,6 @@
 package fr.lauparr.aegir.features.project_item;
 
+import fr.lauparr.aegir.dto.ProjectItemHierarchy;
 import fr.lauparr.aegir.enums.EnumProjectItemType;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -17,6 +18,6 @@ public interface ProjectItemWithChildrenInfo {
 
   List<ProjectItemWithChildrenInfo> getChildren();
 
-  @Value("#{target.getItemNameHierarchy()}")
-  String[] getItemHierarchy();
+  @Value("#{target.getItemHierarchy()}")
+  List<ProjectItemHierarchy> getItemHierarchy();
 }
