@@ -1,12 +1,57 @@
-<div class="h-full">
-  <header>
-    <nav class="bg-blue-400 text-white">
-      <div class="flex items-baseline gap-3 px-4 py-2">
-        <div class="text-xl">{{title}}</div>
-        <div class="">{{description}}</div>
-      </div>
-    </nav>
-  </header>
+<!-- sidebar -->
+<aside [ngClass]="{'-translate-x-full': isSidebarClosed, 'translate-x-0': !isSidebarClosed}" class="flex flex-col flex-shrink-0 bg-primary w-72 text-white transition-transform duration-150 ease-in">
+  <div class="flex justify-between items-center h-12 py-4 px-4">
+    <div class="cursor-pointer hover:bg-gray-600 px-2 -mx-2 py-1 -my-1 rounded flex gap-3 items-baseline" routerLink="/">
+      <div class="text-xl">{{title}}</div>
+      <div class="">{{description}}</div>
+    </div>
+  </div>
 
-  <ng-content></ng-content>
+  <!-- menu -->
+  <div class="scrollbar scrollbar-thin scrollbar- scrollbar-thumb-gray-600 scrollbar-track-gray-300 px-4">
+    <ng-container *ngFor="let menu of menuItems; let i=index">
+      <ng-container [ngSwitch]="menu.type">
+        <div *ngSwitchCase="'heading'" class="font-thin py-2 text-sm text-gray-300">
+          {{menu.label}}
+        </div>
+
+        <div *ngSwitchCase="'item'" [routerLinkActiveOptions]="{exact:true}" [routerLink]="menu.route" class="cursor-pointer py-1 -mx-2 px-2 rounded hover:bg-gray-600 duration-150" routerLinkActive="bg-gray-500">
+          {{menu.label}}
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+</aside>
+
+<div [ngClass]="{'-ml-72': isSidebarClosed, 'ml-0': !isSidebarClosed}" class="flex flex-col bg-primary text-white transition-all duration-150 ease-in w-full">
+  <!-- navbar -->
+  <nav class="flex justify-between items-center px-4 w-full h-12 py-4">
+    <!-- navbar left -->
+    <div>
+      <div (click)="toggle()" *ngIf="isMobile" class="cursor-pointer rounded-full hover:bg-gray-600 duration-150 p-1">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- navbar right -->
+    <div>
+      <div class="cursor-pointer rounded-full hover:bg-gray-600 duration-150 p-1">
+        Log in
+      </div>
+    </div>
+  </nav>
+
+  <div class="flex flex-col h-screen w-full">
+    <header class="bg-white shadow">
+      <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <h1 class="text-3xl tracking-tight font-bold text-gray-900">Dashboard</h1>
+      </div>
+    </header>
+
+    <main class="bg-gray-100 scrollbar scrollbar-thin scrollbar- scrollbar-thumb-gray-600 scrollbar-track-gray-300 h-full">
+      <ng-content></ng-content>
+    </main>
+  </div>
 </div>
