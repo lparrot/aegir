@@ -8,18 +8,38 @@
   </div>
 
   <!-- menu -->
-  <div class="scrollbar scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300 px-4">
+  <div class="scrollbar scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300">
     <ng-container *ngFor="let menu of menuItems; let i=index">
       <ng-container [ngSwitch]="menu.type">
-        <div *ngSwitchCase="'heading'" class="font-thin py-2 text-sm text-gray-300">
+        <div *ngSwitchCase="'heading'" class="font-thin py-2 text-sm text-gray-300 px-4">
           {{menu.label}}
         </div>
 
-        <div *ngSwitchCase="'item'" [routerLinkActiveOptions]="{exact:true}" [routerLink]="menu.route" class="cursor-pointer my-1 py-1 -mx-2 px-2 rounded hover:bg-gray-600 duration-150" routerLinkActive="bg-gray-500">
+        <div *ngSwitchCase="'item'" [routerLinkActiveOptions]="{exact:true}" [routerLink]="menu.route" class="cursor-pointer my-1 py-1 px-6 hover:bg-gray-600 duration-150" routerLinkActive="bg-gray-500">
           {{menu.label}}
         </div>
       </ng-container>
     </ng-container>
+
+    <div class="border-separate"></div>
+
+    <aeg-accordion contentClass="bg-gray-600" titleClass="text-lg">
+      <aeg-accordion-item name="bookmarks" title="Favoris">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam aliquid aspernatur at, blanditiis perspiciatis reprehenderit tempore veniam vero voluptatibus? A ad atque debitis eaque illo ipsa praesentium quidem sint sit.
+      </aeg-accordion-item>
+
+      <aeg-accordion-item name="workspaces" title="Espaces">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque eveniet excepturi exercitationem facere id inventore, laborum minus nobis officiis pariatur recusandae reiciendis sed sit. Alias blanditiis consequuntur natus perferendis quod.
+      </aeg-accordion-item>
+
+      <aeg-accordion-item name="dashboards" title="Tableaux de bord">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque error facilis ipsam, nam non quaerat reiciendis? Animi assumenda consequuntur doloribus enim fugiat fugit magnam, nam officia officiis perferendis veritatis vitae!
+      </aeg-accordion-item>
+
+      <aeg-accordion-item name="documents" title="Documents">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus accusantium animi aspernatur atque autem delectus ducimus ea excepturi impedit labore nam, nulla possimus qui quod repellat saepe soluta tempora veritatis.
+      </aeg-accordion-item>
+    </aeg-accordion>
   </div>
 </aside>
 

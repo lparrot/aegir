@@ -5,7 +5,8 @@ import { Injectable } from "@angular/core";
 })
 export class SessionService {
 
-  public configuration: any = {};
+  public configuration!: any;
+  public user!: Map<string, any>;
 
   constructor() { }
 
