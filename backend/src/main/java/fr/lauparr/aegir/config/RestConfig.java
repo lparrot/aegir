@@ -65,7 +65,11 @@ public class RestConfig implements ApplicationContextAware {
   public OpenApiCustomiser generatedApis(ServletContext servletContext) {
     Server server = new Server().description("Default server URL").url(servletContext.getContextPath());
     return openApi -> {
-      openApi.info(new Info().title("PPlanner").description("OpenAPI Swagger pour projet PPlanner")).servers(Collections.singletonList(server)).addSecurityItem(new SecurityRequirement().addList("bearerAuth"));
+      openApi.info(new Info()
+          .title("PPlanner")
+          .description("OpenAPI Swagger pour projet PPlanner"))
+        .servers(Collections.singletonList(server))
+        .addSecurityItem(new SecurityRequirement().addList("bearerAuth"));
 
       openApi.getComponents().getSchemas().putAll(ModelConverters.getInstance().read(RestApiResponse.class));
       openApi.getComponents().getSchemas().putAll(ModelConverters.getInstance().read(RestApiError.class));

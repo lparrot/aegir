@@ -7,3 +7,7 @@
 html, body {
   @apply h-full;
 }
+
+router-outlet + * {
+  @apply w-full h-full;
+}

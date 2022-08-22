@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
+import { Title } from "@angular/platform-browser";
 
 interface MenuItem {
   label: string;
@@ -24,9 +25,12 @@ export class LayoutComponent implements OnInit {
     { type: "heading", label: "Menu" },
     { type: "item", label: "Home", route: "/" },
     { type: "item", label: "Tasks", route: "/tasks" },
+    { type: "heading", label: "Admin" },
+    { type: "item", label: "Utilisateurs connectés", route: "/admin/connected_users" },
+    { type: "item", label: "API", route: "/admin/api" },
   ];
 
-  constructor(public breakpointObserver: BreakpointObserver) { }
+  constructor(public breakpointObserver: BreakpointObserver, public titleService: Title) { }
 
   get isSidebarClosed() {
     return this.isMobile && !this.opened;

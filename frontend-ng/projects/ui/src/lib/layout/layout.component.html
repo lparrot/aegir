@@ -1,5 +1,5 @@
 <!-- sidebar -->
-<aside [ngClass]="{'-translate-x-full': isSidebarClosed, 'translate-x-0': !isSidebarClosed}" class="flex flex-col flex-shrink-0 bg-primary w-72 text-white transition-transform duration-150 ease-in">
+<aside [ngClass]="{'-translate-x-full': isSidebarClosed, 'translate-x-0': !isSidebarClosed}" class="flex flex-col flex-shrink-0 bg-primary w-72 text-white transition-transform duration-150 ease-in h-screen">
   <div class="flex justify-between items-center h-12 py-4 px-4">
     <div class="cursor-pointer hover:bg-gray-600 px-2 -mx-2 py-1 -my-1 rounded flex gap-3 items-baseline" routerLink="/">
       <div class="text-xl">{{title}}</div>
@@ -8,14 +8,14 @@
   </div>
 
   <!-- menu -->
-  <div class="scrollbar scrollbar-thin scrollbar- scrollbar-thumb-gray-600 scrollbar-track-gray-300 px-4">
+  <div class="scrollbar scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300 px-4">
     <ng-container *ngFor="let menu of menuItems; let i=index">
       <ng-container [ngSwitch]="menu.type">
         <div *ngSwitchCase="'heading'" class="font-thin py-2 text-sm text-gray-300">
           {{menu.label}}
         </div>
 
-        <div *ngSwitchCase="'item'" [routerLinkActiveOptions]="{exact:true}" [routerLink]="menu.route" class="cursor-pointer py-1 -mx-2 px-2 rounded hover:bg-gray-600 duration-150" routerLinkActive="bg-gray-500">
+        <div *ngSwitchCase="'item'" [routerLinkActiveOptions]="{exact:true}" [routerLink]="menu.route" class="cursor-pointer my-1 py-1 -mx-2 px-2 rounded hover:bg-gray-600 duration-150" routerLinkActive="bg-gray-500">
           {{menu.label}}
         </div>
       </ng-container>
@@ -23,9 +23,9 @@
   </div>
 </aside>
 
-<div [ngClass]="{'-ml-72': isSidebarClosed, 'ml-0': !isSidebarClosed}" class="flex flex-col bg-primary text-white transition-all duration-150 ease-in w-full">
+<div [ngClass]="{'-ml-72': isSidebarClosed, 'ml-0': !isSidebarClosed}" class="flex flex-col bg-primary text-white transition-all duration-150 ease-in h-screen w-full">
   <!-- navbar -->
-  <nav class="flex justify-between items-center px-4 w-full h-12 py-4">
+  <nav class="flex justify-between items-center px-4 h-12 py-4">
     <!-- navbar left -->
     <div>
       <div (click)="toggle()" *ngIf="isMobile" class="cursor-pointer rounded-full hover:bg-gray-600 duration-150 p-1">
@@ -37,21 +37,17 @@
 
     <!-- navbar right -->
     <div>
-      <div class="cursor-pointer rounded-full hover:bg-gray-600 duration-150 p-1">
+      <div class="cursor-pointer rounded-full hover:bg-gray-600 duration-150 p-1" routerLink="/login">
         Log in
       </div>
     </div>
   </nav>
 
-  <div class="flex flex-col h-screen w-full">
-    <header class="bg-white shadow">
-      <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <h1 class="text-3xl tracking-tight font-bold text-gray-900">Dashboard</h1>
-      </div>
-    </header>
+  <header class="flex py-6 px-4 text-3xl tracking-tight font-bold bg-white text-gray-900">
+    <h1>{{titleService.getTitle()}}</h1>
+  </header>
 
-    <main class="bg-gray-100 scrollbar scrollbar-thin scrollbar- scrollbar-thumb-gray-600 scrollbar-track-gray-300 h-full">
-      <ng-content></ng-content>
-    </main>
-  </div>
+  <main class="flex flex-col p-4 bg-gray-100 scrollbar scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300 h-full w-full text-gray-900">
+    <ng-content></ng-content>
+  </main>
 </div>
