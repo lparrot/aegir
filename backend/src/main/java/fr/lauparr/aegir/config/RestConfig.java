@@ -37,6 +37,8 @@ import java.util.List;
 @Component
 public class RestConfig implements ApplicationContextAware {
 
+  List<String> list = Arrays.asList("generated_users", "generated_profiles");
+
   @Autowired
   private RequestMappingHandlerMapping handlerMapping;
 
@@ -45,8 +47,6 @@ public class RestConfig implements ApplicationContextAware {
 
   @SneakyThrows
   public void registerApiPaths() {
-    List<String> list = Arrays.asList("users", "profiles");
-
     for (String item : list) {
       String path = String.format("/api/%s", item);
 
@@ -73,8 +73,6 @@ public class RestConfig implements ApplicationContextAware {
 
       openApi.getComponents().getSchemas().putAll(ModelConverters.getInstance().read(RestApiResponse.class));
       openApi.getComponents().getSchemas().putAll(ModelConverters.getInstance().read(RestApiError.class));
-
-      List<String> list = Arrays.asList("users", "profiles");
 
       for (String item : list) {
         String path = String.format("/api/%s", item);

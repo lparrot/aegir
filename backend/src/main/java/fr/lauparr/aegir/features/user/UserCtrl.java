@@ -10,12 +10,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/users")
 public class UserCtrl extends BaseController {
 
   @Autowired
   private UserSrv userSrv;
+
+  @GetMapping
+  public ResponseEntity<RestApiResponse<List<UserDto>>> getUsers() {
+    return this.ok(DaoUtils.mapToListDto(userSrv.getUsers(), UserDto.class));
+  }
 
   @GetMapping("/{userId}")
   public ResponseEntity<RestApiResponse<UserDto>> getUserById(@PathVariable("userId") Long userId) {
