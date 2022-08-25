@@ -1,43 +1,27 @@
-import { route } from "quasar/wrappers";
-import { createMemoryHistory, createRouter, createWebHashHistory, createWebHistory, RouteLocationNormalized, Router } from "vue-router";
-
-import routes from "./routes";
-import { useAuthStore } from "stores/auth";
-import useAppLocalStorage from "src/composables/useAppLocalStorage";
+import { createRouter, createWebHistory, RouteLocationNormalized } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
+import routes from "@/router/routes";
 
 const PAGE_ACCESS_DENIED = { name: "errors-401" };
 
-export let router: Router = null;
-const { storageCurrentRoute } = useAppLocalStorage();
-
-export default route(function(/* { store, ssrContext } */) {
-
-  const createHistory = process.env.SERVER
-    ? createMemoryHistory
-    : (process.env.VUE_ROUTER_MODE === "history" ? createWebHistory : createWebHashHistory);
-
-  router = createRouter({
-    scrollBehavior: () => ({ left: 0, top: 0 }),
-    routes,
-    history: createHistory(process.env.VUE_ROUTER_BASE),
-  });
-
-  router.beforeEach((to, from, next) => {
-    if (to.meta.no_match) {
-      return next();
-    }
-
-    if (checkAccess(to)) {
-      if (to.name != undefined && to.name !== "errors-502") {
-        storageCurrentRoute.value = to.path;
-      }
-      return next();
-    }
-    next(PAGE_ACCESS_DENIED);
-  });
-
-  return router;
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  scrollBehavior: () => ({ left: 0, top: 0 }),
+  routes,
 });
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.no_match) {
+    return next();
+  }
+
+  if (checkAccess(to)) {
+    return next();
+  }
+  next(PAGE_ACCESS_DENIED);
+});
+
+export default router;
 
 export const checkAccess = (route: RouteLocationNormalized) => {
   if (route == null || route.meta.no_match) {

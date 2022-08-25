@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind screens;
+@tailwind utilities;
+
+@import 'components/button';
+
+html, body {
+  @apply h-full subpixel-antialiased text-sm;
+}

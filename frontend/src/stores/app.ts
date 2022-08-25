@@ -1,23 +1,23 @@
 import { defineStore } from "pinia";
-import { api } from "boot/axios";
+import { api } from "@/api";
 
 interface StateInformations {
-  informations?: any;
+  informations: { [index: string]: any };
 }
 
 export const useAppStore = defineStore("app", {
   state: (): StateInformations => ({
-    informations: {},
+    informations: null,
   }),
 
   getters: {},
 
   actions: {
-    async fetchInformations() {
-      const data = await api.getAppInformations();
+    async getInformations() {
+      const { success, result } = await api.getAppInformations();
 
-      if (data?.success) {
-        this.informations = data.result;
+      if (success) {
+        this.informations = result;
       }
     },
   },

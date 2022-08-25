@@ -1,21 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title><%= productName %></title>
-
-  <meta charset="utf-8">
-  <meta content="<%= productDescription %>" name="description">
-  <meta content="telephone=no" name="format-detection">
-  <meta content="no" name="msapplication-tap-highlight">
-  <meta content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width<% if (ctx.mode.cordova || ctx.mode.capacitor) { %>, viewport-fit=cover<% } %>" name="viewport">
-
-  <link href="icons/favicon-128x128.png" rel="icon" sizes="128x128" type="image/png">
-  <link href="icons/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png">
-  <link href="icons/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
-  <link href="icons/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
-  <link href="favicon.ico" rel="icon" type="image/ico">
+  <meta charset="UTF-8"/>
+  <link href="/favicon.ico" rel="icon"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Aegir</title>
 </head>
 <body>
-<!-- quasar:entry-point -->
+<div id="app"></div>
+<script src="/src/main.ts" type="module"></script>
 </body>
 </html>

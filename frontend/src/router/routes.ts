@@ -1,30 +1,36 @@
-import { RouteRecordRaw } from "vue-router";
+import type { RouteRecordRaw } from "vue-router";
+import Layout from "@/components/Layout.vue";
+import BlankView from "../components/BlankView.vue";
 
-/**
- * Ajouter meta.access: boolean|Array pour définir la sécurité pour la page (true, false, [] pour dire que l'utilisateur doit être connecté ou ['ROLE1','ROLE2'] pour les rôles que l'utilisateur doit posséder au minimum
- */
 const routes: RouteRecordRaw[] = [
   {
-    path: "/", component: () => import("layouts/default.vue"), children: [
-      { name: "index", path: "/", component: () => import("pages/index.vue"), meta: { access: true } },
-      { name: "login", path: "/login", component: () => import("pages/login.vue"), meta: { access: true } },
-      { name: "profile", path: "/profile", component: () => import("pages/profile.vue"), meta: { access: [] } },
-      { name: "dashboard", path: "/dashboard", component: () => import("pages/dashboard.vue"), meta: { access: [ "USER" ] } },
-      { name: "tasks", path: "/tasks", component: () => import("pages/tasks.vue"), meta: { access: [ "USER" ] } },
+    path: "/", component: Layout, children: [
+      { path: "/", name: "home", component: () => import("@/views/HomeView.vue"), meta: { title: "Accueil" } },
+      { path: "/login", name: "login", component: () => import("@/views/LoginView.vue"), meta: { title: "Connexion" } },
+      { path: "/profile", name: "profile", component: () => import("@/views/ProfileView.vue"), meta: { title: "Profil utilisateur" } },
+      { path: "/tasks", name: "tasks", component: () => import("@/views/TasksView.vue"), meta: { title: "Tâches" } },
+
       {
-        name: "admin", path: "/admin", component: () => import("components/BlankPage.vue"), children: [
-          { name: "admin-connections", path: "/connections", component: () => import("pages/admin/connections.vue"), meta: { access: [ "ADMIN" ] } },
-          { name: "admin-swagger", path: "/swagger", component: () => import("pages/admin/swagger.vue"), meta: { access: [ "ADMIN" ] } },
+        path: "/admin", component: BlankView, children: [
+          { path: "/connected_users", name: "admin-connected-users", component: () => import("@/views/admin/ConnectedUsersView.vue"), meta: { title: "Utilisateurs connectés" } },
+          { path: "/swagger", name: "admin-swagger", component: () => import("@/views/admin/SwaggerView.vue"), meta: { title: "API" } },
+        ],
+      },
+
+      {
+        path: "/dev", component: BlankView, children: [
+          { path: "/datatable", name: "dev-datatable", component: () => import("@/views/dev/DevDatatableView.vue"), meta: { title: "DEV - Datatable" } },
+          { path: "/modal", name: "dev-modal", component: () => import("@/views/dev/DevModalView.vue"), meta: { title: "DEV - Modal" } },
+        ],
+      },
+
+      {
+        path: "/errors", component: BlankView, children: [
+          { name: "errors-404", path: "/:catchAll(.*)*", component: () => import("@/views/errors/Error404View.vue"), meta: { no_match: true } },
         ],
       },
     ],
   },
-  {
-    path: "/errors", component: () => import("components/BlankPage.vue"), children: [
-      { name: "errors-401", path: "/access-denied", component: () => import("pages/errors/access-denied.vue") },
-    ],
-  },
-  { name: "errors-404", path: "/:catchAll(.*)*", component: () => import("pages/errors/not-found.vue"), meta: { no_match: true } },
 ];
 
 export default routes;

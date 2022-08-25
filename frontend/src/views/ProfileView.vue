@@ -1,0 +1,52 @@
+<template>
+  <div class="lg:flex lg:items-center lg:justify-between">
+    <div class="flex-1 min-w-0">
+      <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:tracking-tight sm:truncate">Back End Developer</h2>
+      <div class="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
+        <div class="mt-2 flex items-center text-sm text-gray-500">
+          <BriefcaseIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"/>
+          Full-time
+        </div>
+        <div class="mt-2 flex items-center text-sm text-gray-500">
+          <LocationMarkerIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"/>
+          Remote
+        </div>
+        <div class="mt-2 flex items-center text-sm text-gray-500">
+          <CurrencyDollarIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"/>
+          $120k &ndash; $140k
+        </div>
+        <div class="mt-2 flex items-center text-sm text-gray-500">
+          <CalendarIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"/>
+          Closing on January 9, 2020
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-5 flex lg:mt-0 lg:ml-4">
+      <div>
+        <BaseButton class="flex" outlined type="button">
+          <PencilIcon class="-ml-1 mr-2 h-5 w-5"/>
+          Edit
+        </BaseButton>
+      </div>
+
+      <div class="ml-3">
+        <BaseButton class="flex" outlined type="button">
+          <LinkIcon class="-ml-1 mr-2 h-5 w-5"/>
+          View
+        </BaseButton>
+      </div>
+
+      <div class="ml-3">
+        <BaseButton class="flex" color="secondary" type="button">
+          <CheckIcon class="-ml-1 mr-2 h-5 w-5"/>
+          Publish
+        </BaseButton>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts" setup>
+import { BriefcaseIcon, CalendarIcon, CheckIcon, CurrencyDollarIcon, LinkIcon, LocationMarkerIcon, PencilIcon } from "@heroicons/vue/solid";
+import BaseButton from "@/components/shared/form/BaseButton.vue";</script>

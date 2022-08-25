@@ -1,10 +1,19 @@
 import "pinia";
 import { Router } from "vue-router";
 import { AxiosInstance, AxiosRequestConfig } from "axios";
+import "vue-router";
+import type { Ref } from "vue";
+
+declare module "@vue/runtime-core" {
+  interface ComponentCustomProperties {
+    $axios: AxiosInstance;
+    $log: (data: any) => any;
+  }
+}
 
 declare module "pinia" {
   export interface PiniaCustomProperties {
-    $router: Router;
+    router: Router;
   }
 }
 
@@ -25,3 +34,41 @@ interface CustomAxiosInstance extends AxiosInstance {
 
   $patch<T = any, R = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
 }
+
+declare module "vue-router" {
+  interface RouteMeta {
+    access?: Array<string> | boolean;
+    no_match?: boolean;
+    title?: string;
+  }
+}
+
+interface FloatProps {
+  as?: string | Component;
+  show?: boolean;
+  placement?: Placement;
+  strategy?: Strategy;
+  offset?: OffsetOptions;
+  shift?: boolean | number | Partial<ShiftOptions & DetectOverflowOptions>;
+  flip?: boolean | number | Partial<FlipOptions & DetectOverflowOptions>;
+  arrow?: boolean | number;
+  autoPlacement?: boolean | Partial<AutoPlacementOptions & DetectOverflowOptions>;
+  autoUpdate?: boolean | Partial<AutoUpdateOptions>;
+  zIndex?: number | string;
+  enter?: string;
+  enterFrom?: string;
+  enterTo?: string;
+  leave?: string;
+  leaveFrom?: string;
+  leaveTo?: string;
+  originClass?: string | OriginClassResolver;
+  tailwindcssOriginClass?: boolean;
+  portal?: boolean | string;
+  transform?: boolean;
+  middleware?: Middleware[] | ((refs: {
+    referenceEl: Ref<HTMLElement | null>,
+    floatingEl: Ref<HTMLElement | null>,
+  }) => Middleware[]);
+}
+
+type OriginClassResolver = (placement: Placement) => string

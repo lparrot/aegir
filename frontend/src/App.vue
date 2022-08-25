@@ -1,9 +1,9 @@
 <template>
   <Suspense>
-    <router-view/>
+    <RouterView/>
 
     <template #fallback>
-      Chargement ...
+      <div>Chargement ...</div>
     </template>
   </Suspense>
 </template>
