@@ -22,7 +22,7 @@
           </div>
 
           <RouterLink v-else #default="{navigate, href, isExactActive}" :to="menu.route" custom>
-            <a :class="{'bg-gray-500': isExactActive}" :href="href" class="block cursor-pointer my-1 py-1 px-6 hover:bg-gray-600 duration-150" @click="navigate">{{ menu.label }}</a>
+            <a :class="{'bg-gray-500': isExactActive}" :href="href" class="block cursor-pointer my-1 py-1 px-6 hover:bg-gray-600 duration-150" @click="() => { navigate(); data.opened = false}">{{ menu.label }}</a>
           </RouterLink>
         </template>
 
