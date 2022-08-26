@@ -12,7 +12,7 @@
 
       <tbody class="bg-white">
       <template v-if="items != null && items.length">
-        <tr v-for="(item, itemIndex) in items" :key="`item-${get(item, idField)}`" :class="[{'hover:bg-primary-100 cursor-pointer': selectable}]" class="border-b border-b-primary-200">
+        <tr v-for="(item, itemIndex) in items" :key="`item-${get(item, idField)}`" :class="[{'hover:bg-primary-100 cursor-pointer': selectable}]" class="border-b border-b-primary-200" @click="onRowClick(item)">
           <td v-for="field in fields" :key="'field-' + field.key + '-'+itemIndex" class="py-2 px-3 whitespace-nowrap">
             <slot :field="field" :item="item" :name="`cell(${field.key})`" :value="getValue(field, item)">
               <span>{{ getValue(field, item) }}</span>
@@ -42,6 +42,12 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   idField: "id",
 });
+
+const emit = defineEmits<{ (e: "row-click", item: any): void }>();
+
+const onRowClick = (item) => {
+  emit("row-click", item);
+};
 
 const getValue = (field, item) => field.transform != null ? field.transform(get(item, field.fieldName ?? field.key)) : get(item, field.fieldName ?? field.key);
 </script>
