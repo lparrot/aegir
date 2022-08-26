@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,6 +29,12 @@ public class UserCtrl extends BaseController {
   @GetMapping("/{userId}")
   public ResponseEntity<RestApiResponse<UserDto>> getUserById(@PathVariable("userId") Long userId) {
     return this.ok(DaoUtils.mapToDto(userSrv.getUserById(userId), UserDto.class));
+  }
+
+  @PutMapping("/{userId}")
+  public ResponseEntity<RestApiResponse<Void>> updateUser(@PathVariable("userId") Long userId, @RequestBody ParamsUserEdit params) {
+    this.userSrv.updateUser(userId, params);
+    return this.ok();
   }
 
 }

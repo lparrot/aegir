@@ -69,7 +69,9 @@
         </div>
 
         <!-- navbar right -->
-        <div>
+        <div class="flex items-center gap-2">
+          <div class="font-bold">{{ breakpoint }}</div>
+
           <template v-if="authStore.isLoggedIn">
             <Dropdown>
               <template #button>
@@ -112,15 +114,15 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, reactive, ref, watch } from "vue";
-import { useAppStore } from "@/stores/app";
-import { breakpointsTailwind, onClickOutside, useBreakpoints, useTitle } from "@vueuse/core";
-import { useRoute, useRouter } from "vue-router";
-import { DotsVerticalIcon, LogoutIcon, MenuIcon, UserCircleIcon, UserIcon, XIcon } from "@heroicons/vue/solid";
-import { useAuthStore } from "@/stores/auth";
-import useAppLocalStorage from "@/composables/useAppLocalStorage";
 import Dropdown from "@/components/shared/overlay/Dropdown.vue";
 import DropdownItem from "@/components/shared/overlay/DropdownItem.vue";
+import useAppLocalStorage from "@/composables/useAppLocalStorage";
+import { useAppStore } from "@/stores/app";
+import { useAuthStore } from "@/stores/auth";
+import { DotsVerticalIcon, LogoutIcon, MenuIcon, UserCircleIcon, UserIcon, XIcon } from "@heroicons/vue/solid";
+import { breakpointsTailwind, onClickOutside, useBreakpoints, useTitle } from "@vueuse/core";
+import { computed, reactive, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 interface Data {
   menuItems: Array<any>;
@@ -145,6 +147,13 @@ const data = reactive<Data>({
 
 const drawer_sidebar = ref(null);
 const isMobile = breakpoints.smaller("lg");
+const sm = breakpoints.smaller("sm");
+const md = breakpoints.between("sm", "md");
+const lg = breakpoints.between("md", "lg");
+const xl = breakpoints.between("lg", "xl");
+const xxl = breakpoints.between("xl", "2xl");
+const xxxl = breakpoints["2xl"];
+
 
 /* INIT */
 onClickOutside(drawer_sidebar, (_event) => data.opened = false);
@@ -165,6 +174,28 @@ data.menuItems = [
 /* COMPUTED */
 const isSidebarClosed = computed(() => {
   return isMobile.value && !data.opened;
+});
+
+const breakpoint = computed(() => {
+  if (sm.value) {
+    return "sm";
+  }
+  if (md.value) {
+    return "md";
+  }
+  if (lg.value) {
+    return "lg";
+  }
+  if (xl.value) {
+    return "xl";
+  }
+  if (xxl.value) {
+    return "2xl";
+  }
+  if (xxxl.value) {
+    return "3xl";
+  }
+  return null;
 });
 
 /* HOOKS */

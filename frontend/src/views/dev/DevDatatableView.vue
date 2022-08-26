@@ -7,19 +7,23 @@
 </template>
 
 <script lang="ts" setup>
-import Datatable from "@/components/shared/data/Datatable.vue";
-import { ref } from "vue";
 import { api } from "@/api";
-import map from "lodash/map";
+import Datatable from "@/components/shared/data/Datatable.vue";
 import useAegir from "@/composables/useAegir";
+import map from "lodash/map";
+import { ref } from "vue";
 import DialogEditUser from "../../components/dialogs/DialogEditUser.vue";
 
 const { dialog } = useAegir();
 
 const items = ref();
 
-const { result } = await api.getUsers();
-items.value = result;
+const fetchUsers = async () => {
+  const { result } = await api.getUsers();
+  items.value = result;
+};
+
+await fetchUsers();
 
 const fields = ref<DatatableField[]>([
   { key: "username", label: "Nom d'utilisateur" },
@@ -31,6 +35,9 @@ const onRowClick = (user) => {
     component: DialogEditUser,
     props: {
       user,
+    },
+    async onOk() {
+      await fetchUsers();
     },
   });
 };

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="field-group">
     <label v-if="label != null" :for="idLabel" class="block text-sm font-medium text-gray-700">{{ label }}</label>
     <div ref="slot_container" class="mt-1 flex rounded-md shadow-sm">
       <slot :error="error"></slot>
@@ -10,8 +10,8 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from "vue";
 import type { BaseValidation } from "@vuelidate/core";
+import { computed, onMounted, ref } from "vue";
 
 interface Props {
   validationField?: BaseValidation<any, any>;
@@ -27,7 +27,7 @@ const idLabel = ref();
 const slot_container = ref<HTMLElement>();
 
 onMounted(() => {
-  const inputs = slot_container.value.getElementsByTagName("input");
+  const inputs = slot_container.value.getElementsByTagName("input") ?? slot_container.value.getElementsByTagName("textarea") ?? slot_container.value.getElementsByTagName("select");
 
   if (inputs != null && inputs.length > 0) {
     idLabel.value = props.labelFor ?? inputs[0]?.id;
@@ -35,6 +35,9 @@ onMounted(() => {
 });
 
 const errorMessage = computed(() => {
+  if (props.validationField == null) {
+    return;
+  }
   if (error) {
     return props.validationField?.$errors[0]?.$message;
   }
@@ -42,6 +45,10 @@ const errorMessage = computed(() => {
 });
 
 const error = computed(() => {
+  if (props.validationField == null) {
+    return;
+  }
+
   return props.validationField!.$invalid;
 });
 </script>

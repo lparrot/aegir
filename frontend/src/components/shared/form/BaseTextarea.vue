@@ -1,5 +1,5 @@
 <template>
-  <input :id="id" v-model="data" :class="[errorClasses]" :placeholder="placeholder" class="shadow-sm mt-1 block w-full sm:text-sm border rounded-md" type="text">
+  <textarea :id="id" v-model="data" :class="[errorClasses]" :placeholder="placeholder" class="shadow-sm mt-1 block w-full sm:text-sm border rounded-md"></textarea>
 </template>
 
 <script lang="ts" setup>

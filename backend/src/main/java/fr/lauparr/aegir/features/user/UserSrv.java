@@ -22,4 +22,20 @@ public class UserSrv {
   public List<User> getUsers() {
     return userRepository.findAll();
   }
+
+  public void updateUser(Long userId, ParamsUserEdit params) {
+    User user = userRepository.findById(userId).orElseThrow(() -> new MessageException(MessageUtils.getMessage("message.error.not_found.user")));
+
+    user.setUsername(params.getUsername());
+    user.getUserData()
+      .setEmail(params.getEmail())
+      .setLastname(params.getLastname())
+      .setFirstname(params.getFirstname())
+      .setAddress(params.getAddress())
+      .setPostalCode(params.getPostalCode())
+      .setCity(params.getCity())
+      .setAbout(params.getAbout());
+
+    userRepository.save(user);
+  }
 }
