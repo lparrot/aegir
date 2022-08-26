@@ -1,11 +1,17 @@
 <template>
   <section class="flex w-full font-inter">
-    <aside :class="{'-translate-x-full': isSidebarClosed, 'translate-x-0': !isSidebarClosed}" class="flex flex-col flex-shrink-0 bg-primary-800 w-72 text-white transition-transform duration-150 ease-in h-screen">
+
+    <div v-if="isMobile && !isSidebarClosed" aria-hidden="true" class="fixed inset-0 bg-black/30"/>
+
+    <aside ref="drawer_sidebar" :class="{'-translate-x-full': isSidebarClosed, 'translate-x-0': !isSidebarClosed, 'fixed': isMobile}" class="flex flex-col flex-shrink-0 bg-primary-800 w-72 text-white transition-all duration-150 ease-in h-screen">
       <div class="flex justify-between items-center h-12 py-4 px-4">
         <RouterLink is="div" :to="{name: 'home'}" class="cursor-pointer hover:bg-gray-600 px-2 -mx-2 py-1 -my-1 rounded flex gap-3 items-baseline">
           <div class="text-xl">{{ appStore.informations.app.title }}</div>
           <div>v{{ appStore.informations.app.version }}</div>
         </RouterLink>
+        <div class="p-1 rounded-full hover:bg-primary-600" @click="data.opened = false">
+          <XIcon v-show="!isSidebarClosed && isMobile" class="h-5 w-5 cursor-pointer"/>
+        </div>
       </div>
 
       <!-- menu -->
@@ -52,7 +58,7 @@
       </div>
     </aside>
 
-    <div :class="{'-ml-72': isSidebarClosed, 'ml-0': !isSidebarClosed}" class="flex flex-col bg-primary-800 text-white transition-all duration-150 ease-in h-screen w-full">
+    <div :class="{'-ml-72': isSidebarClosed && !isMobile}" class="flex flex-col bg-primary-800 text-white h-screen w-full">
       <!-- navbar -->
       <nav class="flex justify-between items-center px-4 h-12 py-4">
         <!-- navbar left -->
@@ -106,11 +112,11 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, reactive, watch } from "vue";
+import { computed, reactive, ref, watch } from "vue";
 import { useAppStore } from "@/stores/app";
-import { breakpointsTailwind, useBreakpoints, useTitle } from "@vueuse/core";
+import { breakpointsTailwind, onClickOutside, useBreakpoints, useTitle } from "@vueuse/core";
 import { useRoute, useRouter } from "vue-router";
-import { DotsVerticalIcon, LogoutIcon, MenuIcon, UserCircleIcon, UserIcon } from "@heroicons/vue/solid";
+import { DotsVerticalIcon, LogoutIcon, MenuIcon, UserCircleIcon, UserIcon, XIcon } from "@heroicons/vue/solid";
 import { useAuthStore } from "@/stores/auth";
 import useAppLocalStorage from "@/composables/useAppLocalStorage";
 import Dropdown from "@/components/shared/overlay/Dropdown.vue";
@@ -137,20 +143,12 @@ const data = reactive<Data>({
   title: null,
 });
 
+const drawer_sidebar = ref(null);
 const isMobile = breakpoints.smaller("lg");
 
 /* INIT */
+onClickOutside(drawer_sidebar, (_event) => data.opened = false);
 await appStore.getInformations();
-
-watch(
-  storageToken,
-  async (token) => {
-    if (token != null) {
-      await authStore.getUser();
-    }
-  },
-  { immediate: true },
-);
 
 data.menuItems = [
   { type: "heading", label: "Menu" },
@@ -171,12 +169,30 @@ const isSidebarClosed = computed(() => {
 
 /* HOOKS */
 watch(route,
-  (value) => {
+  (_route) => {
     // Modification du titre dans l'onglet et récupération de la partie du titre pour affichage en titre de page
-    const title = useTitle(value.meta.title, { titleTemplate: "%s | " + appStore.informations.app.title });
+    const title = useTitle(_route.meta.title, { titleTemplate: "%s | " + appStore.informations.app.title });
     data.title = title.value;
   },
   { immediate: true },
+);
+
+watch(
+  storageToken,
+  async (_token) => {
+    if (_token != null) {
+      await authStore.getUser();
+    }
+  },
+  { immediate: true },
+);
+
+watch(isMobile,
+  (_isMobile) => {
+    if (_isMobile) {
+      data.opened = false;
+    }
+  },
 );
 
 /* METHODS */
