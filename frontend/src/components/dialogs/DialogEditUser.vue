@@ -49,16 +49,16 @@ import Modal from "@/components/shared/overlay/Modal.vue";
 import useDialog from "@/composables/useDialog";
 import useVuelidate from "@vuelidate/core";
 import { email, required } from "@vuelidate/validators";
-import { ParamsUserEdit, UserDto } from "back_types";
+import { ParamsUserEdit } from "back_types";
 import { ref } from "vue";
 
 interface Props {
-  user?: UserDto,
+  user: any,
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {});
 
-defineEmits([
+const emit = defineEmits([
   ...useDialog.emits,
 ]);
 

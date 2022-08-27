@@ -22,13 +22,13 @@ public class UserCtrl extends BaseController {
   private UserSrv userSrv;
 
   @GetMapping
-  public ResponseEntity<RestApiResponse<List<UserDto>>> getUsers() {
-    return this.ok(DaoUtils.mapToListDto(userSrv.getUsers(), UserDto.class));
+  public ResponseEntity<RestApiResponse<List<UserInfo>>> getUsers() {
+    return this.ok(DaoUtils.convertToListDto(userSrv.getUsers(), UserInfo.class));
   }
 
   @GetMapping("/{userId}")
-  public ResponseEntity<RestApiResponse<UserDto>> getUserById(@PathVariable("userId") Long userId) {
-    return this.ok(DaoUtils.mapToDto(userSrv.getUserById(userId), UserDto.class));
+  public ResponseEntity<RestApiResponse<UserInfo>> getUserById(@PathVariable("userId") Long userId) {
+    return this.ok(DaoUtils.convertToDto(userSrv.getUserById(userId), UserInfo.class));
   }
 
   @PutMapping("/{userId}")

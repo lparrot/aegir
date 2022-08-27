@@ -1,6 +1,6 @@
 package fr.lauparr.aegir.features.security;
 
-public interface UserInfo {
+public interface UserInfo_Security {
   Long getId();
 
   String getUsername();

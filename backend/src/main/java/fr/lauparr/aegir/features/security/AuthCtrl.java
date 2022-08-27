@@ -7,7 +7,13 @@ import fr.lauparr.aegir.utils.DaoUtils;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -32,12 +38,12 @@ public class AuthCtrl extends BaseController {
   }
 
   @GetMapping("/user_data")
-  public ResponseEntity<RestApiResponse<UserInfo>> getAuthUserData(final Principal principal) {
-    return this.ok(DaoUtils.convertToDto(this.authSrv.getUserData(principal.getName()), UserInfo.class));
+  public ResponseEntity<RestApiResponse<UserInfo_Security>> getAuthUserData(final Principal principal) {
+    return this.ok(DaoUtils.convertToDto(this.authSrv.getUserData(principal.getName()), UserInfo_Security.class));
   }
 
   @PutMapping("/user_data/{userId}")
-  public ResponseEntity<RestApiResponse<UserInfo>> putAuthUserData(@PathVariable("userId") Long userId, @RequestBody ParamsAuthUpdateUserData params) {
+  public ResponseEntity<RestApiResponse<UserInfo_Security>> putAuthUserData(@PathVariable("userId") Long userId, @RequestBody ParamsAuthUpdateUserData params) {
     this.authSrv.putUserData(userId, params);
     return this.ok();
   }

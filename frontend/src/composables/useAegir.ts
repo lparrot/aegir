@@ -1,10 +1,10 @@
-import { App, ComponentOptions, createApp, h, render, VNode } from "vue";
+import { App, createApp, h, render, VNode } from "vue";
 import Modal from "../components/shared/overlay/Modal.vue";
 
 let app: App = null;
 
 interface DialogCreateOptions {
-  component?: ComponentOptions,
+  component?: any,
   message?: string,
   showCancel?: boolean
   onOk?: (payload?) => any,
