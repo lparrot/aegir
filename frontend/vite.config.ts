@@ -1,7 +1,7 @@
+import vue from "@vitejs/plugin-vue";
 import { fileURLToPath, URL } from "node:url";
 
 import { defineConfig, loadEnv } from "vite";
-import vue from "@vitejs/plugin-vue";
 
 // https://vitejs.dev/config/
 
@@ -21,6 +21,7 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         "@": fileURLToPath(new URL("./src", import.meta.url)),
+        "@use": fileURLToPath(new URL("./src/composables", import.meta.url)),
         "back_types": fileURLToPath(new URL("./.generated/rest.ts", import.meta.url)),
       },
     },

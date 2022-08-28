@@ -46,23 +46,23 @@ import BaseInput from "@/components/shared/form/BaseInput.vue";
 import BaseTextarea from "@/components/shared/form/BaseTextarea.vue";
 import FieldGroup from "@/components/shared/form/FieldGroup.vue";
 import Modal from "@/components/shared/overlay/Modal.vue";
-import useDialog from "@/composables/useDialog";
+import useDialog from "@use/useDialog";
 import useVuelidate from "@vuelidate/core";
 import { email, required } from "@vuelidate/validators";
 import { ParamsUserEdit } from "back_types";
 import { ref } from "vue";
 
-interface Props {
-  user: any,
-}
-
-const props = withDefaults(defineProps<Props>(), {});
+const props = defineProps({
+  user: {
+    type: Object,
+  },
+});
 
 const emit = defineEmits([
   ...useDialog.emits,
 ]);
 
-const form = ref<ParamsUserEdit>();
+const form = ref<ParamsUserEdit>({});
 
 if (props.user == null) {
   form.value = {};
