@@ -33,7 +33,7 @@ const authStore = useAuthStore();
 const router = useRouter();
 
 /* DATA */
-const form = ref<ParamsSecurityLogin>();
+const form = ref<ParamsSecurityLogin>({});
 
 const rules = {
   username: { required },
