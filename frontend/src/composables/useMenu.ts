@@ -1,6 +1,4 @@
-import router, { checkAccess } from "@/router";
 import cloneDeep from "lodash/cloneDeep";
-import { ref } from "vue";
 
 const defaultMenu = ref([]);
 const isMenuLoaded = ref<boolean>(false);

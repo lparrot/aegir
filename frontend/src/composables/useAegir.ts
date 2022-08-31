@@ -1,4 +1,4 @@
-import { App, createApp, h, render, VNode } from "vue";
+import { App, render, VNode } from "vue";
 import Modal from "../components/shared/overlay/Modal.vue";
 
 let app: App = null;

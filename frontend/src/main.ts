@@ -1,9 +1,8 @@
 import pinia from "@/stores";
-import { createApp } from "vue";
 
 import App from "./App.vue";
-
 import "./assets/index.scss";
+
 import AegirPlugin from "./plugins/aegir";
 import router from "./router";
 

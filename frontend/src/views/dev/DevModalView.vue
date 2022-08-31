@@ -11,9 +11,7 @@
 </template>
 
 <script lang="ts" setup>
-import BaseButton from "@/components/shared/form/BaseButton.vue";
 import DialogTest from "@/components/dialogs/DialogTest.vue";
-import useAegir from "@/composables/useAegir";
 
 const { dialog } = useAegir();
 

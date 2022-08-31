@@ -21,11 +21,10 @@
 </template>
 
 <script lang="ts" setup>
+import type { FloatProps } from "@/types";
+import { Float } from "@headlessui-float/vue";
 import { Menu, MenuButton, MenuItems } from "@headlessui/vue";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/vue/solid";
-import { Float } from "@headlessui-float/vue";
-import type { FloatProps } from "@/types";
-import BaseButton from "@/components/shared/form/BaseButton.vue";
 
 interface Props {
   label?: string;

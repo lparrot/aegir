@@ -5,8 +5,6 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, getCurrentInstance, withDefaults } from "vue";
-
 interface Props {
   color?: string;
   hoverDarken?: boolean;

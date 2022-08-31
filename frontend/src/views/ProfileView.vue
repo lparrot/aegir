@@ -48,11 +48,8 @@
 </template>
 
 <script lang="ts" setup>
-import { api } from "@/api";
-import BaseButton from "@/components/shared/form/BaseButton.vue";
 import { BriefcaseIcon, CalendarIcon, CheckIcon, CurrencyDollarIcon, LinkIcon, LocationMarkerIcon, PencilIcon } from "@heroicons/vue/solid";
 import { UserInfo_Security } from "back_types";
-import { ref } from "vue";
 
 const user = ref<UserInfo_Security>(null);
 

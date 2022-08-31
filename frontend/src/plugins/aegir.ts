@@ -1,8 +1,5 @@
-import useAegir from "@/composables/useAegir";
-import { appMenu } from "@/router/routes";
-import useMenu from "@use/useMenu";
 import { useEventBus, UseEventBusReturn } from "@vueuse/core";
-import { App, DirectiveBinding, ref } from "vue";
+import { App, DirectiveBinding } from "vue";
 
 export default {
   install: (app: App, _options) => {

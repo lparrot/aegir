@@ -1,7 +1,3 @@
-import { defineStore } from "pinia";
-import { api } from "@/api";
-import useAppLocalStorage from "@/composables/useAppLocalStorage";
-
 interface StateInformations {
   user: { [index: string]: any };
 }

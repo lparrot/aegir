@@ -118,17 +118,8 @@
 </template>
 
 <script lang="ts" setup>
-import Dropdown from "@/components/shared/overlay/Dropdown.vue";
-import DropdownItem from "@/components/shared/overlay/DropdownItem.vue";
-import useAppLocalStorage from "@/composables/useAppLocalStorage";
-import { useAppStore } from "@/stores/app";
-import { useAuthStore } from "@/stores/auth";
 import { DotsVerticalIcon, LogoutIcon, MenuIcon, UserCircleIcon, UserIcon, XIcon } from "@heroicons/vue/solid";
-import useAegir from "@use/useAegir";
-import useMenu from "@use/useMenu";
 import { breakpointsTailwind, onClickOutside, useBreakpoints, useTitle } from "@vueuse/core";
-import { computed, reactive, ref, watch } from "vue";
-import { useRoute, useRouter } from "vue-router";
 
 interface Data {
   opened: boolean;

@@ -7,11 +7,7 @@
 </template>
 
 <script lang="ts" setup>
-import { api } from "@/api";
-import Datatable from "@/components/shared/data/Datatable.vue";
-import useAegir from "@/composables/useAegir";
 import map from "lodash/map";
-import { ref } from "vue";
 import DialogEditUser from "../../components/dialogs/DialogEditUser.vue";
 
 const { dialog } = useAegir();

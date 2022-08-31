@@ -1,5 +1,3 @@
-import { useAuthStore } from "@/stores/auth";
-
 export default function useSecurity() {
   const authStore = useAuthStore();
 

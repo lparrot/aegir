@@ -1,6 +1,3 @@
-import { getCurrentInstance, ref } from "vue";
-import getEmitsObject from "@/utils/get-emits-object";
-
 function useDialog() {
   const { emit, proxy } = getCurrentInstance();
 

@@ -50,10 +50,8 @@
 </template>
 
 <script lang="ts" setup>
-import BaseButton from "@/components/shared/form/BaseButton.vue";
 import { Dialog, DialogDescription, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from "@headlessui/vue";
 import { XIcon } from "@heroicons/vue/solid";
-import { ref } from "vue";
 
 interface Props {
   description?: string;

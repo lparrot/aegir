@@ -1,6 +1,3 @@
-import { api } from "@/api";
-import { defineStore } from "pinia";
-
 interface StateInformations {
   informations: { [index: string]: any };
 }

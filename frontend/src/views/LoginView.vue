@@ -18,15 +18,9 @@
 </template>
 
 <script lang="ts" setup>
-import BaseButton from "@/components/shared/form/BaseButton.vue";
-import BaseInput from "@/components/shared/form/BaseInput.vue";
-import FieldGroup from "@/components/shared/form/FieldGroup.vue";
-import { useAuthStore } from "@/stores/auth";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { ParamsSecurityLogin } from "back_types";
-import { ref } from "vue";
-import { useRouter } from "vue-router";
 
 /* COMPOSABLES */
 const authStore = useAuthStore();
