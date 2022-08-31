@@ -1,7 +1,7 @@
 <template>
   <div class="lg:flex lg:items-center lg:justify-between">
     <div class="flex-1 min-w-0">
-      <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:tracking-tight sm:truncate">Back End Developer</h2>
+      <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:tracking-tight sm:truncate">{{ user.userData?.fullname }}</h2>
       <div class="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
         <div class="mt-2 flex items-center text-sm text-gray-500">
           <BriefcaseIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"/>
@@ -48,5 +48,21 @@
 </template>
 
 <script lang="ts" setup>
+import { api } from "@/api";
+import BaseButton from "@/components/shared/form/BaseButton.vue";
 import { BriefcaseIcon, CalendarIcon, CheckIcon, CurrencyDollarIcon, LinkIcon, LocationMarkerIcon, PencilIcon } from "@heroicons/vue/solid";
-import BaseButton from "@/components/shared/form/BaseButton.vue";</script>
+import { UserInfo_Security } from "back_types";
+import { ref } from "vue";
+
+const user = ref<UserInfo_Security>(null);
+
+const fetchUser = async () => {
+  const { success, result } = await api.getAuthUserData();
+
+  if (success) {
+    user.value = result;
+  }
+};
+
+await fetchUser();
+</script>

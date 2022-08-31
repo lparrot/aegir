@@ -1,6 +1,7 @@
-import { createRouter, createWebHistory, RouteLocationNormalized } from "vue-router";
-import { useAuthStore } from "@/stores/auth";
 import routes from "@/router/routes";
+import { useAuthStore } from "@/stores/auth";
+import useSecurity from "@use/useSecurity";
+import { createRouter, createWebHistory, RouteLocationNormalized } from "vue-router";
 
 const PAGE_ACCESS_DENIED = { name: "errors-401" };
 
@@ -29,9 +30,10 @@ export const checkAccess = (route: RouteLocationNormalized) => {
     return false;
   }
 
-  const access: Array<string> | boolean | null = route.meta.access as any;
+  const access = route.meta.access;
 
   const authStore = useAuthStore();
+  const { isInRoles } = useSecurity();
 
   // Si aucune sécurité
   if (access == null || access === true) {
@@ -50,10 +52,7 @@ export const checkAccess = (route: RouteLocationNormalized) => {
       return false;
     }
 
-    if (!access.every(role => authStore.user.roles.indexOf(role) > -1)) {
-      // Si l'utilisateur ne possède pas au moins tous les rôles, accès refusé
-      return false;
-    }
+    return isInRoles(...access);
   }
 
   return true;

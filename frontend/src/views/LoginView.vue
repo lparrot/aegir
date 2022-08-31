@@ -50,7 +50,6 @@ const handleSubmit = async () => {
     const user = await authStore.login({ username: form.value.username, password: form.value.password });
 
     if (user != null) {
-      console.log("auth success ", user);
       await router.push({ name: "home" });
     }
   }

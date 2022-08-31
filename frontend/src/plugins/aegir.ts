@@ -1,12 +1,17 @@
 import useAegir from "@/composables/useAegir";
-import { App, DirectiveBinding, ref } from "vue";
+import { appMenu } from "@/router/routes";
+import useMenu from "@use/useMenu";
 import { useEventBus, UseEventBusReturn } from "@vueuse/core";
+import { App, DirectiveBinding, ref } from "vue";
 
 export default {
   install: (app: App, _options) => {
     const { init } = useAegir();
+    const { setMenuDefault } = useMenu();
 
     init(app);
+
+    setMenuDefault(appMenu);
 
     const bus_pool = ref<{ [index: string]: UseEventBusReturn<any, any> }>({});
 
@@ -41,8 +46,8 @@ export default {
     });
 
     app.config.errorHandler = (err: any, instance, info) => {
-      console.groupCollapsed(`%c[ERR:] ${err.message}`, "background: #FF0748; color: #FFF");
-      console.log(`%cinfo: ${info}`, "color: #FF0748");
+      console.groupCollapsed(`%c[ERR:] ${ err.message }`, "background: #FF0748; color: #FFF");
+      console.log(`%cinfo: ${ info }`, "color: #FF0748");
       console.error(err);
       console.groupEnd();
     };

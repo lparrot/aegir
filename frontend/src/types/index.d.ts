@@ -1,12 +1,14 @@
-import "pinia";
-import { Router } from "vue-router";
+import useSecurity from "@use/useSecurity";
 import { AxiosInstance, AxiosRequestConfig } from "axios";
-import "vue-router";
+import "pinia";
 import type { Ref } from "vue";
+import "vue-router";
+import { Router } from "vue-router";
 
 declare module "@vue/runtime-core" {
   interface ComponentCustomProperties {
     $axios: AxiosInstance;
+    $security: useSecurity;
     $log: (data: any) => any;
   }
 }

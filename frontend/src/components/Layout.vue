@@ -16,13 +16,17 @@
 
       <!-- menu -->
       <div class="scrollbar scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300">
-        <template v-for="menu in data.menuItems">
-          <div v-if="menu.type === 'heading'" class="font-thin py-2 text-sm text-gray-300 px-4">
-            {{ menu.label }}
-          </div>
+        <template v-for="(menuItem, menuItemIndex) in menu" :key="`menuitem-${menuItemIndex}`">
 
-          <RouterLink v-else #default="{navigate, href, isExactActive}" :to="menu.route" custom>
-            <a :class="{'bg-gray-500': isExactActive}" :href="href" class="block cursor-pointer my-1 py-1 px-6 hover:bg-gray-600 duration-150" @click="() => { navigate(); data.opened = false}">{{ menu.label }}</a>
+          <template v-if="menuItem.children != null">
+            <div class="font-thin py-2 text-sm text-gray-300 px-4">{{ menuItem.label }}</div>
+            <RouterLink v-for="(child, childIndex) in menuItem.children" :key="`childitem-${menuItemIndex}-${childIndex}`" #default="{navigate, href, isExactActive}" :to="child.route" custom>
+              <a :class="{'bg-gray-500': isExactActive}" :href="href" class="block cursor-pointer my-1 py-1 px-6 hover:bg-gray-600 duration-150" @click.prevent="() => { navigate(); data.opened = false}">{{ child.label }}</a>
+            </RouterLink>
+          </template>
+
+          <RouterLink v-else #default="{navigate, href, isExactActive}" :to="menuItem.route" custom>
+            <a :class="{'bg-gray-500': isExactActive}" :href="href" class="block cursor-pointer my-1 py-1 px-6 hover:bg-gray-600 duration-150" @click.prevent="() => { navigate(); data.opened = false}">{{ menuItem.label }}</a>
           </RouterLink>
         </template>
 
@@ -120,12 +124,13 @@ import useAppLocalStorage from "@/composables/useAppLocalStorage";
 import { useAppStore } from "@/stores/app";
 import { useAuthStore } from "@/stores/auth";
 import { DotsVerticalIcon, LogoutIcon, MenuIcon, UserCircleIcon, UserIcon, XIcon } from "@heroicons/vue/solid";
+import useAegir from "@use/useAegir";
+import useMenu from "@use/useMenu";
 import { breakpointsTailwind, onClickOutside, useBreakpoints, useTitle } from "@vueuse/core";
 import { computed, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 interface Data {
-  menuItems: Array<any>;
   opened: boolean;
   title: string;
 }
@@ -134,13 +139,14 @@ interface Data {
 const appStore = useAppStore();
 const authStore = useAuthStore();
 const { storageToken } = useAppLocalStorage();
+const { dialog } = useAegir();
 const route = useRoute();
 const router = useRouter();
 const breakpoints = useBreakpoints(breakpointsTailwind);
+const { menu, refreshMenu } = useMenu();
 
 /* DATA */
 const data = reactive<Data>({
-  menuItems: null,
   opened: false,
   title: null,
 });
@@ -158,18 +164,6 @@ const xxxl = breakpoints["2xl"];
 /* INIT */
 onClickOutside(drawer_sidebar, (_event) => data.opened = false);
 await appStore.getInformations();
-
-data.menuItems = [
-  { type: "heading", label: "Menu" },
-  { type: "item", label: "Home", route: { name: "home" } },
-  { type: "item", label: "Tasks", route: { name: "tasks" } },
-  { type: "heading", label: "Admin" },
-  { type: "item", label: "Utilisateurs connectés", route: { name: "admin-connected-users" } },
-  { type: "item", label: "API", route: { name: "admin-swagger" } },
-  { type: "heading", label: "DEV" },
-  { type: "item", label: "Datatable", route: { name: "dev-datatable" } },
-  { type: "item", label: "Modal", route: { name: "dev-modal" } },
-];
 
 /* COMPUTED */
 const isSidebarClosed = computed(() => {
@@ -214,6 +208,7 @@ watch(
     if (_token != null) {
       await authStore.getUser();
     }
+    refreshMenu();
   },
   { immediate: true },
 );
@@ -232,7 +227,13 @@ const toggle = () => {
 };
 
 const logout = async () => {
-  await authStore.logout();
-  await router.push({ name: "login" });
+  dialog.create({
+    title: "Deconnexion",
+    message: "Etes vous sûr de vouloir vous déconnecter ?",
+    async onOk() {
+      await authStore.logout();
+      await router.push({ name: "login" });
+    },
+  });
 };
 </script>

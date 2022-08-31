@@ -1,13 +1,13 @@
+import pinia from "@/stores";
 import { createApp } from "vue";
-import AegirPlugin from "./plugins/aegir";
 
 import App from "./App.vue";
-import router from "./router";
 
 import "./assets/index.scss";
-import pinia from "@/stores";
+import AegirPlugin from "./plugins/aegir";
+import router from "./router";
 
-const app = createApp(App);
+export const app = createApp(App);
 
 app.config.globalProperties.$log = (data: any) => {
   console.log(data);
