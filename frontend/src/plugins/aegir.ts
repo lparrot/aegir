@@ -1,19 +1,11 @@
-import { useAuthStore } from "@/stores/auth";
 import { useEventBus, UseEventBusReturn } from "@vueuse/core";
 import { App, DirectiveBinding } from "vue";
 
 export default {
   install: async (app: App, _options) => {
+    console.log("plugin start");
     const { init } = useAegir();
-    const authStore = useAuthStore();
-    const { setMenuDefault } = useMenu();
-
     init(app);
-
-    await authStore.getUser();
-    console.log("plugin auth");
-
-    setMenuDefault(appMenu);
 
     const bus_pool = ref<{ [index: string]: UseEventBusReturn<any, any> }>({});
 

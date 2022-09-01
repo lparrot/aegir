@@ -9,17 +9,19 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
-  if (to.meta.no_match) {
-    return next();
-  }
+export const initRouter = () => {
+  router.beforeEach((to, from, next) => {
+    if (to.meta.no_match) {
+      return next();
+    }
 
-  if (checkAccess(to)) {
-    return next();
-  }
-  console.log("401");
-  next(PAGE_ACCESS_DENIED);
-});
+    if (checkAccess(to)) {
+      return next();
+    }
+    console.log("401");
+    next(PAGE_ACCESS_DENIED);
+  });
+};
 
 export default router;
 
