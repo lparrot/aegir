@@ -1,7 +1,8 @@
 <template>
   <BaseButton @click="addNotification">Create notification</BaseButton>
 
-  <pre>{{ notifications }}</pre>
+
+  <ToastGroup></ToastGroup>
 </template>
 
 <script lang="ts" setup>

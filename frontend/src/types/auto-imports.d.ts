@@ -28,6 +28,7 @@ declare global {
   const getCurrentScope: typeof import("vue")["getCurrentScope"];
   const getEmitsObject: typeof import("../utils/get-emits-object")["default"];
   const h: typeof import("vue")["h"];
+  const initRouter: typeof import("../router/index")["initRouter"];
   const inject: typeof import("vue")["inject"];
   const isProxy: typeof import("vue")["isProxy"];
   const isReactive: typeof import("vue")["isReactive"];
