@@ -17,6 +17,7 @@ router.beforeEach((to, from, next) => {
   if (checkAccess(to)) {
     return next();
   }
+  console.log("401");
   next(PAGE_ACCESS_DENIED);
 });
 

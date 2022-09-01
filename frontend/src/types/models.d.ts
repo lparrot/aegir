@@ -14,4 +14,21 @@ declare global {
     fieldName?: string;
     transform?: (value: any) => any;
   }
+
+  export interface AppNotification {
+    id: string;
+    type: string;
+    title: string;
+    message: string;
+    autoClose: boolean;
+    duration: number;
+  }
+
+  export interface AppNotificationCreateOptions {
+    type?: string;
+    title?: string;
+    message?: string;
+    autoClose?: boolean;
+    duration?: number;
+  }
 }

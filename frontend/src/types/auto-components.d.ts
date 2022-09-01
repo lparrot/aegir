@@ -21,5 +21,7 @@ declare module "@vue/runtime-core" {
     Modal: typeof import("./../components/shared/overlay/Modal.vue")["default"];
     RouterLink: typeof import("vue-router")["RouterLink"];
     RouterView: typeof import("vue-router")["RouterView"];
+    Toast: typeof import("./../components/shared/overlay/Toast.vue")["default"];
+    ToastGroup: typeof import("./../components/shared/overlay/ToastGroup.vue")["default"];
   }
 }

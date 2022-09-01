@@ -34,13 +34,15 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async getUser() {
-      const { success, result } = await api.getAuthUser();
+      if (storageToken.value != null) {
+        const { success, result } = await api.getAuthUser();
 
-      if (success) {
-        this.user = result;
+        if (success) {
+          this.user = result;
+        }
+
+        return result;
       }
-
-      return result;
     },
   },
 });

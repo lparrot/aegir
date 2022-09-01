@@ -201,7 +201,6 @@ watch(
     }
     refreshMenu();
   },
-  { immediate: true },
 );
 
 watch(isMobile,

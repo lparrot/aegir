@@ -17,6 +17,7 @@ declare global {
   const createApp: typeof import("vue")["createApp"];
   const createChildApp: typeof import("../composables/useAegir")["createChildApp"];
   const createPinia: typeof import("pinia")["createPinia"];
+  const createUuid: typeof import("../utils/create-uuid")["default"];
   const customRef: typeof import("vue")["customRef"];
   const defineAsyncComponent: typeof import("vue")["defineAsyncComponent"];
   const defineComponent: typeof import("vue")["defineComponent"];
@@ -80,6 +81,7 @@ declare global {
   const useCssVars: typeof import("vue")["useCssVars"];
   const useDialog: typeof import("../composables/useDialog")["default"];
   const useMenu: typeof import("../composables/useMenu")["default"];
+  const useNotifications: typeof import("../composables/useNotifications")["default"];
   const useRoute: typeof import("vue-router")["useRoute"];
   const useRouter: typeof import("vue-router")["useRouter"];
   const useSecurity: typeof import("../composables/useSecurity")["default"];
