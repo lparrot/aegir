@@ -11,6 +11,7 @@ const addNotification = () => {
   toast.createToast({
     title: "Title of notification",
     message: "New notification !",
+    duration: 0,
   });
 };
 </script>

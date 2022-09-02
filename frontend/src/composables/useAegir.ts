@@ -1,10 +1,10 @@
 import DialogService from "@/services/dialog.service";
 import ToastService from "@/services/toast.service";
-import { App } from "vue";
+import { App, Ref } from "vue";
 
 let dialog: DialogService;
 let toast: ToastService;
-let notifications = ref<AppNotification[]>([]);
+let notifications: Ref<AppNotification[]> = ref<AppNotification[]>([]);
 
 export let app: App = null;
 

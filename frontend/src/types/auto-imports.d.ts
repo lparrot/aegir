@@ -84,7 +84,6 @@ declare global {
   const useCssVars: typeof import("vue")["useCssVars"];
   const useDialog: typeof import("../composables/useDialog")["default"];
   const useMenu: typeof import("../composables/useMenu")["default"];
-  const useNotifications: typeof import("../composables/useNotifications")["default"];
   const useRoute: typeof import("vue-router")["useRoute"];
   const useRouter: typeof import("vue-router")["useRouter"];
   const useSecurity: typeof import("../composables/useSecurity")["default"];
