@@ -53,6 +53,7 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         "@": fileURLToPath(new URL("./src", import.meta.url)),
+        "src": fileURLToPath(new URL("./src", import.meta.url)),
         "@use": fileURLToPath(new URL("./src/composables", import.meta.url)),
         "back_types": fileURLToPath(new URL("./.generated/rest.ts", import.meta.url)),
       },

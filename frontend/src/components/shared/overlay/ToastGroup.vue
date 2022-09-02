@@ -1,11 +1,13 @@
 <template>
-  <div class="flex flex-col min-w-lg gap-4">
-    <Toast v-for="notification in notifications" :key="notification.id" :notification="notification"></Toast>
+  <div class="absolute bottom-10 right-10 flex flex-col gap-4">
+
   </div>
 </template>
 
 <script lang="ts" setup>
-const { notifications } = useNotifications();
+defineProps({
+  placement: { type: String, default: "bottom-left" },
+});
 
-
+const { notifications } = useAegir();
 </script>

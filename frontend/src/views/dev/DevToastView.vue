@@ -1,17 +1,14 @@
 <template>
   <BaseButton @click="addNotification">Create notification</BaseButton>
 
-
-  <ToastGroup></ToastGroup>
+  {{ notifications?.length }}
 </template>
 
 <script lang="ts" setup>
-import useNotifications from "@use/useNotifications";
-
-const { notifications, createNotification } = useNotifications();
+const { toast, notifications } = useAegir();
 
 const addNotification = () => {
-  createNotification({
+  toast.createToast({
     title: "Title of notification",
     message: "New notification !",
   });

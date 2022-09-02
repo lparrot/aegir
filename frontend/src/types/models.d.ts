@@ -15,6 +15,23 @@ declare global {
     transform?: (value: any) => any;
   }
 
+  export interface DialogCreateOptions {
+    component?: any,
+    message?: string,
+    showCancel?: boolean
+    onOk?: (payload?) => any,
+    onCancel?: (payload?) => any,
+    onClose?: () => any
+    onHide?: () => any
+    props?: { [index: string]: any },
+    description?: string;
+    labelCancel?: string;
+    labelOk?: string;
+    modelValue?: boolean;
+    panelClasses?: string | string[];
+    title?: string;
+  }
+
   export interface AppNotification {
     id: string;
     type: string;

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!close" class="flex flex-col">
+  <div class="flex flex-col">
     <div class="flex justify-between">
       <div class="font-bold">{{ notification.title }}</div>
       <div class="cursor-pointer rounded-full p-1 hover:bg-primary-200" @click="onClose">
@@ -12,19 +12,21 @@
 
 <script lang="ts" setup>
 import { XIcon } from "@heroicons/vue/solid";
-import { PropType } from "vue";
-
-const close = ref(false);
+import { defineEmits, PropType } from "vue";
 
 const props = defineProps({
   notification: Object as PropType<AppNotification>,
 });
+
+const emits = defineEmits<{
+  (e: "close"): void
+}>();
 
 onBeforeUnmount(() => {
   console.log("unmounted");
 });
 
 const onClose = () => {
-  close.value = true;
+  emits("close");
 };
 </script>

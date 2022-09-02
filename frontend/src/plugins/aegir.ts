@@ -3,7 +3,6 @@ import { App, DirectiveBinding } from "vue";
 
 export default {
   install: async (app: App, _options) => {
-    console.log("plugin start");
     const { init } = useAegir();
     init(app);
 

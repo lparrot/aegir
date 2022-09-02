@@ -13,7 +13,6 @@ export const useAppStore = defineStore("app", {
 
   actions: {
     async onStartup() {
-      console.log("ok");
       const authStore = useAuthStore();
       await authStore.getUser();
       const { setMenuDefault } = useMenu();

@@ -1,4 +1,3 @@
-import createUuid from "@/utils/create-uuid";
 import { ref } from "vue";
 
 const notifications = ref<AppNotification[]>([]);

@@ -7,10 +7,8 @@ import "./assets/index.scss";
 import AegirPlugin from "./plugins/aegir";
 import router, { initRouter } from "./router";
 
-export let app;
-
 const main = async () => {
-  app = createApp(App);
+  const app = createApp(App);
 
   app.config.globalProperties.$log = (data: any) => {
     console.log(data);
