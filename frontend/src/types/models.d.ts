@@ -32,9 +32,11 @@ declare global {
     title?: string;
   }
 
+  export type AppNotificationType = "success" | "info" | "warn" | "danger"
+
   export interface AppNotification {
     id: string;
-    type: string;
+    type: AppNotificationType;
     title: string;
     message: string;
     autoClose: boolean;

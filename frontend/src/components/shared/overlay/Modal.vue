@@ -18,7 +18,7 @@
                   </div>
 
                   <div class="p-2 rounded-full hover:bg-primary-100 cursor-pointer duration-300" @click="close">
-                    <XIcon class="h-5 w-5"/>
+                    <XMarkIcon class="h-5 w-5"/>
                   </div>
                 </div>
               </DialogTitle>
@@ -51,7 +51,7 @@
 
 <script lang="ts" setup>
 import { Dialog, DialogDescription, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from "@headlessui/vue";
-import { XIcon } from "@heroicons/vue/solid";
+import { XMarkIcon } from "@heroicons/vue/24/solid";
 
 interface Props {
   description?: string;

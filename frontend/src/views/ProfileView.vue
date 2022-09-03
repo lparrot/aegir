@@ -8,7 +8,7 @@
           Full-time
         </div>
         <div class="mt-2 flex items-center text-sm text-gray-500">
-          <LocationMarkerIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"/>
+          <MapPinIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"/>
           Remote
         </div>
         <div class="mt-2 flex items-center text-sm text-gray-500">
@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts" setup>
-import { BriefcaseIcon, CalendarIcon, CheckIcon, CurrencyDollarIcon, LinkIcon, LocationMarkerIcon, PencilIcon } from "@heroicons/vue/solid";
+import { BriefcaseIcon, CalendarIcon, CheckIcon, CurrencyDollarIcon, LinkIcon, MapPinIcon, PencilIcon } from "@heroicons/vue/24/solid";
 import { UserInfo_Security } from "back_types";
 
 const user = ref<UserInfo_Security>(null);

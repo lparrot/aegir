@@ -31,7 +31,7 @@
 
 <script lang="ts" setup>
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-import { ChevronUpIcon } from "@heroicons/vue/solid";
+import { ChevronUpIcon } from "@heroicons/vue/24/solid";
 
 const env = import.meta.env;
 </script>

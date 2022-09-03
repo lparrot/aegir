@@ -24,7 +24,7 @@
 import type { FloatProps } from "@/types";
 import { Float } from "@headlessui-float/vue";
 import { Menu, MenuButton, MenuItems } from "@headlessui/vue";
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/vue/solid";
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/vue/24/solid";
 
 interface Props {
   label?: string;

@@ -10,7 +10,7 @@
           <div>v{{ appStore.informations.app.version }}</div>
         </RouterLink>
         <div class="p-1 rounded-full hover:bg-primary-600" @click="data.opened = false">
-          <XIcon v-show="!isSidebarClosed && isMobile" class="h-5 w-5 cursor-pointer"/>
+          <XMarkIcon v-show="!isSidebarClosed && isMobile" class="h-5 w-5 cursor-pointer"/>
         </div>
       </div>
 
@@ -68,7 +68,7 @@
         <!-- navbar left -->
         <div>
           <div v-if="isMobile" class="cursor-pointer rounded-full hover:bg-gray-600 duration-150 p-1" @click="toggle()">
-            <MenuIcon class="h-5 w-5"/>
+            <Bars3Icon class="h-5 w-5"/>
           </div>
         </div>
 
@@ -80,7 +80,7 @@
             <Dropdown>
               <template #button>
                 <div class="flex items-center gap-1 cursor-pointer rounded-full hover:bg-gray-600 duration-150 p-1">
-                  <DotsVerticalIcon class="h-4 w-4"/>
+                  <EllipsisVerticalIcon class="h-4 w-4"/>
                 </div>
               </template>
 
@@ -89,7 +89,7 @@
                 <span>Profil</span>
               </DropdownItem>
               <DropdownItem @click="logout">
-                <LogoutIcon class="h-5 w-5"/>
+                <ArrowLeftOnRectangleIcon class="h-5 w-5"/>
                 <span>Deconnexion</span>
               </DropdownItem>
             </Dropdown>
@@ -118,7 +118,7 @@
 </template>
 
 <script lang="ts" setup>
-import { DotsVerticalIcon, LogoutIcon, MenuIcon, UserCircleIcon, UserIcon, XIcon } from "@heroicons/vue/solid";
+import { ArrowLeftOnRectangleIcon, Bars3Icon, EllipsisVerticalIcon, UserCircleIcon, UserIcon, XMarkIcon } from "@heroicons/vue/24/solid";
 import { breakpointsTailwind, onClickOutside, useBreakpoints, useTitle } from "@vueuse/core";
 
 interface Data {
