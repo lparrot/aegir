@@ -16,7 +16,7 @@
         </div>
       </div>
 
-      <div v-if="notification.duration > 0" :style="{width: `${remaining}%`}" class="h-1.5 bg-secondary rounded-full">
+      <div v-if="notification.duration > 0" :class="notificationOptions.durationClass" :style="{width: `${remaining}%`}" class="h-1.5 rounded-full">
 
       </div>
 
@@ -61,7 +61,7 @@ onBeforeUnmount(() => {
   console.log("unmounted");
 });
 
-const notificationOptions: ComputedRef<{ class?: string, is?: any }> = computed(() => {
+const notificationOptions: ComputedRef<{ class?: string, durationClass?: string, is?: any }> = computed(() => {
   switch (props.notification.type) {
     case "success":
       return { class: "text-success", durationClass: "bg-success", is: CheckCircleIcon };
