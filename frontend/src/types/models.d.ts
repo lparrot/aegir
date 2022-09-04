@@ -50,4 +50,11 @@ declare global {
     autoClose?: boolean;
     duration?: number;
   }
+
+  export interface AppLoaderOptions {
+    icon?: any;
+    iconClass?: string;
+    message?: string;
+    messageClass?: string;
+  }
 }

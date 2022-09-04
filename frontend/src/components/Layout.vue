@@ -115,6 +115,9 @@
       </main>
     </div>
   </section>
+
+  <ToastGroup/>
+  <Loader/>
 </template>
 
 <script lang="ts" setup>
