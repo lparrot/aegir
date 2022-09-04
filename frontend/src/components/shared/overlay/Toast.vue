@@ -1,20 +1,22 @@
 <template>
-  <div v-if="show" class="flex w-[300px] px-5 py-4 border rounded-lg bg-white">
-    <div class="flex items-start w-full gap-2">
-      <div class="flex h-full">
-        <component :is="notificationOptions.is" :class="notificationOptions.class" class="h-5 w-5 text-success"></component>
-      </div>
-      <div class="flex flex-1 flex-col">
-        <div class="flex justify-between items-center">
-          <div class="font-bold">{{ notification.title }}</div>
-          <div class="cursor-pointer rounded-full p-1 -m-1 hover:bg-primary-200" @click="onClose">
-            <XMarkIcon class="h-5 w-5"/>
-          </div>
+  <Transition appear name="flip-in-hor-top">
+    <div v-if="show" class="flex w-[300px] px-5 py-4 border rounded-lg bg-white">
+      <div class="flex items-start w-full gap-2">
+        <div class="flex h-full">
+          <component :is="notificationOptions.is" :class="notificationOptions.class" class="h-5 w-5 text-success"></component>
         </div>
-        <div class="italic">{{ notification.message }}</div>
+        <div class="flex flex-1 flex-col">
+          <div class="flex justify-between items-center">
+            <div class="font-bold">{{ notification.title }}</div>
+            <div class="cursor-pointer rounded-full p-1 -m-1 hover:bg-primary-200" @click="onClose">
+              <XMarkIcon class="h-5 w-5"/>
+            </div>
+          </div>
+          <div class="italic">{{ notification.message }}</div>
+        </div>
       </div>
     </div>
-  </div>
+  </Transition>
 </template>
 
 <script lang="ts" setup>

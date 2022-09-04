@@ -130,7 +130,7 @@ interface Data {
 const appStore = useAppStore();
 const authStore = useAuthStore();
 const { storageToken } = useAppLocalStorage();
-const { dialog } = useAegir();
+const { dialog, toast } = useAegir();
 const route = useRoute();
 const router = useRouter();
 const breakpoints = useBreakpoints(breakpointsTailwind);
@@ -223,6 +223,11 @@ const logout = async () => {
     async onOk() {
       await authStore.logout();
       await router.push({ name: "login" });
+      toast.createToast({
+        message: "Vous êtes maintenant déconnecté",
+        title: "Deconnexion",
+        type: "success",
+      });
     },
   });
 };

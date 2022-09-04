@@ -44,7 +44,7 @@ declare global {
   }
 
   export interface AppNotificationCreateOptions {
-    type?: string;
+    type?: AppNotificationType;
     title?: string;
     message?: string;
     autoClose?: boolean;

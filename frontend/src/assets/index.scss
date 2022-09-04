@@ -3,7 +3,8 @@
 @tailwind screens;
 @tailwind utilities;
 
-@import 'components/button';
+@import "components/button";
+@import "components/animation";
 
 html, body {
   @apply h-full subpixel-antialiased text-sm;

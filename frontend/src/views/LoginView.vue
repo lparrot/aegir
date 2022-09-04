@@ -25,6 +25,7 @@ import { ParamsSecurityLogin } from "back_types";
 /* COMPOSABLES */
 const authStore = useAuthStore();
 const router = useRouter();
+const { toast } = useAegir();
 
 /* DATA */
 const form = ref<ParamsSecurityLogin>({});
@@ -45,6 +46,11 @@ const handleSubmit = async () => {
 
     if (user != null) {
       await router.push({ name: "home" });
+      toast.createToast({
+        message: `Vous êtes maintenant connecté sous : ${ form.value.username }`,
+        title: "Connexion",
+        type: "success",
+      });
     }
   }
 };
