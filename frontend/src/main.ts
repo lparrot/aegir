@@ -1,5 +1,4 @@
 import pinia from "@/stores";
-import { useAppStore } from "@/stores/app";
 
 import App from "./App.vue";
 import "./assets/index.scss";
@@ -23,8 +22,5 @@ const main = async () => {
 };
 
 main().then(async _root => {
-  const { onStartup } = useAppStore();
-  await onStartup();
-
   _root.mount("#app");
 });

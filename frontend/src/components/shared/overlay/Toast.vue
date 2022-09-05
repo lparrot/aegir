@@ -28,7 +28,7 @@
 import { CheckCircleIcon, ExclamationTriangleIcon, InformationCircleIcon, NoSymbolIcon } from "@heroicons/vue/24/outline";
 import { XMarkIcon } from "@heroicons/vue/24/solid";
 import { TransitionPresets, useTransition } from "@vueuse/core";
-import { ComputedRef, defineEmits, PropType } from "vue";
+import { ComputedRef, PropType } from "vue";
 
 const props = defineProps({
   notification: Object as PropType<AppNotification>,

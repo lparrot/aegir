@@ -9,7 +9,13 @@ const router = createRouter({
   routes,
 });
 
-router.beforeResolve((to, from, next) => {
+router.beforeResolve(async (to, from, next) => {
+  const appStore = useAppStore();
+
+  if (!appStore.started) {
+    await appStore.onStartup();
+  }
+
   if (to.meta.no_match) {
     return next();
   }
@@ -45,7 +51,7 @@ export const checkAccess = (route: RouteLocationNormalized) => {
 
   // Si 'access' est un array
   if (Array.isArray(access)) {
-    if (!authStore.isLoggedIn) {
+    if (authStore.user == null) {
       // Si l'utilisateur n'est pas connecté, accès refusé
       return false;
     }

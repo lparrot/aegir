@@ -4,7 +4,7 @@
       <caption v-if="caption">{{ caption }}</caption>
       <thead class="bg-gray-200">
       <tr>
-        <th v-for="field in fields" :key="`header-${field.key}`" class="py-3 px-3 text-left">
+        <th v-for="field in fields" :key="`header-${field.key}`" class="py-3 px-3 text-left" scope="col">
           <span v-if="field.label">{{ field.label }}</span>
         </th>
       </tr>
