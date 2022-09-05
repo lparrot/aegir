@@ -5,7 +5,7 @@ import App from "./App.vue";
 import "./assets/index.scss";
 
 import AegirPlugin from "./plugins/aegir";
-import router, { initRouter } from "./router";
+import router from "./router";
 
 const main = async () => {
   const app = createApp(App);
@@ -25,8 +25,6 @@ const main = async () => {
 main().then(async _root => {
   const { onStartup } = useAppStore();
   await onStartup();
-
-  initRouter();
 
   _root.mount("#app");
 });

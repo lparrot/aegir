@@ -25,12 +25,16 @@ const routes: RouteRecordRaw[] = [
           { path: "/toast", name: "dev-toast", component: () => import("@/views/dev/DevToastView.vue"), meta: { title: "DEV - Toast", access: [ "USER" ] } },
         ],
       },
-
       {
         path: "/errors", component: BlankView, children: [
-          { name: "errors-404", path: "/:catchAll(.*)*", component: () => import("@/views/errors/Error404View.vue"), meta: { no_match: true } },
+          { name: "errors-401", path: "/errors/access_denied", component: () => import("@/views/errors/Error401View.vue") },
         ],
       },
+    ],
+  },
+  {
+    path: "/errors", component: BlankView, children: [
+      { name: "errors-404", path: "/:catchAll(.*)*", component: () => import("@/views/errors/Error404View.vue"), meta: { no_match: true } },
     ],
   },
 ];

@@ -1,10 +1,10 @@
-import { HttpClient, RestApplicationClient, RestResponse } from "../../.generated/rest";
+import useAegir from "@/composables/useAegir";
+import useAppLocalStorage from "@/composables/useAppLocalStorage";
 
 import type { CustomAxiosInstance } from "@/types";
 import type { AxiosRequestConfig, AxiosResponse } from "axios";
 import Axios, { AxiosError } from "axios";
-import useAppLocalStorage from "@/composables/useAppLocalStorage";
-import useAegir from "@/composables/useAegir";
+import { HttpClient, RestApplicationClient, RestResponse } from "../../.generated/rest";
 
 const { storageToken } = useAppLocalStorage();
 
@@ -27,7 +27,7 @@ class AxiosHttpClient implements HttpClient {
 
     const config: AxiosRequestConfig = {};
     config.method = requestConfig.method as typeof config.method;
-    config.url = requestConfig.url;
+    config.url = (requestConfig.url?.startsWith("/") ? "" : "/") + requestConfig.url;
     config.params = requestConfig.queryParams;
     config.data = requestConfig.data;
     config.maxContentLength = Infinity;
@@ -66,7 +66,7 @@ for (const method of [ "request", "delete", "get", "head", "options", "post", "p
 
 api.httpClient.axios.interceptors.request.use((config) => {
   if (storageToken.value != null) {
-    config.headers.common["Authorization"] = `Bearer ${ storageToken.value }`;
+    config.headers.common["Authorization"] = `Bearer ${storageToken.value}`;
   }
 
   return config;

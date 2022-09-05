@@ -106,7 +106,7 @@
         </div>
       </nav>
 
-      <header class="flex py-6 px-4 text-3xl tracking-tight font-bold bg-white text-gray-900">
+      <header v-if="data.title != null" class="flex py-6 px-4 text-3xl tracking-tight font-bold bg-white text-gray-900">
         <h1>{{ data.title }}</h1>
       </header>
 
@@ -190,8 +190,8 @@ const breakpoint = computed(() => {
 watch(route,
   (_route) => {
     // Modification du titre dans l'onglet et récupération de la partie du titre pour affichage en titre de page
-    const title = useTitle(_route.meta.title, { titleTemplate: "%s | " + appStore.informations.app.title });
-    data.title = title.value;
+    useTitle(_route.meta.title, { titleTemplate: "%s | " + appStore.informations.app.title });
+    data.title = _route.meta.title;
   },
   { immediate: true },
 );
