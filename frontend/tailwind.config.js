@@ -1,4 +1,5 @@
-const theme = require("./tailwind/themes/default");
+const merge = require("lodash/merge");
+const defaultTheme = require("./tailwind/themes/default");
 
 /** @type {import("tailwindcss").Config} */
 module.exports = {
@@ -7,7 +8,13 @@ module.exports = {
     "./src/**/*.{vue,js,ts,jsx,tsx,scss}",
   ],
 
-  theme,
+  theme: merge({}, defaultTheme, {
+    extend: {
+      transitionProperty: {
+        "height": "height",
+      },
+    },
+  }),
 
   plugins: [
     require("@tailwindcss/forms"),

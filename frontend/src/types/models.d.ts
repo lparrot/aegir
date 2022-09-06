@@ -1,6 +1,11 @@
 import { RouteLocationRaw, RouteRecordNormalized } from "vue-router";
 
 declare global {
+  interface AppEventBus<T = any> {
+    type: string,
+    data?: T
+  }
+
   interface MenuItem {
     label: string;
     route?: RouteLocationRaw;
@@ -15,7 +20,7 @@ declare global {
     transform?: (value: any) => any;
   }
 
-  export interface DialogCreateOptions {
+  interface DialogCreateOptions {
     component?: any,
     message?: string,
     showCancel?: boolean
@@ -32,9 +37,9 @@ declare global {
     title?: string;
   }
 
-  export type AppNotificationType = "success" | "info" | "warn" | "danger"
+  type AppNotificationType = "success" | "info" | "warn" | "danger"
 
-  export interface AppNotification {
+  interface AppNotification {
     id: string;
     type: AppNotificationType;
     title: string;
@@ -43,7 +48,7 @@ declare global {
     duration: number;
   }
 
-  export interface AppNotificationCreateOptions {
+  interface AppNotificationCreateOptions {
     type?: AppNotificationType;
     title?: string;
     message?: string;
@@ -51,14 +56,14 @@ declare global {
     duration?: number;
   }
 
-  export interface AppLoaderOptions {
+  interface AppLoaderOptions {
     icon?: any;
     iconClass?: string;
     message?: string;
     messageClass?: string;
   }
 
-  export interface AppCommanderItem {
+  interface AppCommanderItem {
     type?: "route";
     icon?: any;
     label?: string;
