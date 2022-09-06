@@ -7,10 +7,13 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    Accordion: typeof import('./../components/shared/panel/Accordion.vue')['default']
+    AccordionItem: typeof import('./../components/shared/panel/AccordionItem.vue')['default']
     BaseButton: typeof import('./../components/shared/form/BaseButton.vue')['default']
     BaseInput: typeof import('./../components/shared/form/BaseInput.vue')['default']
     BaseTextarea: typeof import('./../components/shared/form/BaseTextarea.vue')['default']
     BlankView: typeof import('./../components/BlankView.vue')['default']
+    Commander: typeof import('./../components/Commander.vue')['default']
     Datatable: typeof import('./../components/shared/data/Datatable.vue')['default']
     DialogEditUser: typeof import('./../components/dialogs/DialogEditUser.vue')['default']
     DialogTest: typeof import('./../components/dialogs/DialogTest.vue')['default']

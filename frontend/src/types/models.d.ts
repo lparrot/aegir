@@ -1,4 +1,4 @@
-import { RouteLocationRaw } from "vue-router";
+import { RouteLocationRaw, RouteRecordNormalized } from "vue-router";
 
 declare global {
   interface MenuItem {
@@ -56,5 +56,13 @@ declare global {
     iconClass?: string;
     message?: string;
     messageClass?: string;
+  }
+
+  export interface AppCommanderItem {
+    type?: "route";
+    icon?: any;
+    label?: string;
+    action?: () => void;
+    route?: RouteRecordNormalized;
   }
 }

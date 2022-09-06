@@ -19,6 +19,7 @@ const routes: RouteRecordRaw[] = [
 
       {
         path: "/dev", component: BlankView, children: [
+          { path: "/accordion", name: "dev-accordion", component: () => import("@/views/dev/DevAccordionView.vue"), meta: { title: "DEV - Accordion", access: [ "USER" ] } },
           { path: "/datatable", name: "dev-datatable", component: () => import("@/views/dev/DevDatatableView.vue"), meta: { title: "DEV - Datatable", access: [ "USER" ] } },
           { path: "/loader", name: "dev-loader", component: () => import("@/views/dev/DevLoaderView.vue"), meta: { title: "DEV - Loader", access: [ "USER" ] } },
           { path: "/modal", name: "dev-modal", component: () => import("@/views/dev/DevModalView.vue"), meta: { title: "DEV - Modal", access: [ "USER" ] } },
@@ -54,6 +55,7 @@ export const appMenu: Array<MenuItem> = [
   },
   {
     label: "DEV", children: [
+      { label: "Accordion", route: { name: "dev-accordion" } },
       { label: "Datatable", route: { name: "dev-datatable" } },
       { label: "Loader", route: { name: "dev-loader" } },
       { label: "Modal", route: { name: "dev-modal" } },

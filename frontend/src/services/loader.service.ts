@@ -3,8 +3,8 @@ import { Ref } from "vue";
 
 const defaultLoaderOptions = {
   icon: ClockIcon,
-  iconClass: "h-16 w-16 text-primary",
-  messageClass: "text-2xl text-primary",
+  iconClass: "h-16 w-16 text-white",
+  messageClass: "text-2xl text-white",
   message: "Chargement ...",
 };
 

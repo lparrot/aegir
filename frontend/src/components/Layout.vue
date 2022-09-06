@@ -117,6 +117,7 @@
   </section>
 
   <ToastGroup/>
+  <Commander/>
   <Loader/>
 </template>
 
