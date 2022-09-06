@@ -2,7 +2,7 @@
   <TransitionRoot :show="isOpen" as="template" unmount>
     <Dialog as="div" class="relative z-10" @close="hide">
       <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0" enter-to="opacity-100" leave="duration-200 ease-in" leave-from="opacity-100" leave-to="opacity-0">
-        <div class="fixed inset-0 bg-black bg-opacity-25"/>
+        <div aria-hidden="true" class="fixed inset-0 bg-black/30 backdrop-blur"/>
       </TransitionChild>
 
       <div class="fixed inset-0 overflow-y-auto">
@@ -52,6 +52,7 @@
 <script lang="ts" setup>
 import { Dialog, DialogDescription, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from "@headlessui/vue";
 import { XMarkIcon } from "@heroicons/vue/24/solid";
+import { Ref } from "vue";
 
 interface Props {
   description?: string;
@@ -78,7 +79,7 @@ const emit = defineEmits<{
   (e: "hide"): void,
 }>();
 
-const isOpen = ref(props.modelValue);
+const isOpen: Ref<boolean> = ref(props.modelValue);
 
 const changeModelValue = (value) => {
   isOpen.value = value;
