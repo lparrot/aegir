@@ -22,6 +22,7 @@ declare global {
     label?: string;
     fieldName?: string;
     transform?: (value: any) => any;
+    preventClick?: boolean;
   }
 
   interface DialogCreateOptions {

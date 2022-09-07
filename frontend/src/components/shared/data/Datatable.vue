@@ -12,11 +12,13 @@
 
       <tbody class="bg-white">
       <template v-if="items != null && items.length">
-        <tr v-for="(item, itemIndex) in items" :key="`item-${get(item, idField)}`" :class="[{'hover:bg-primary-100 cursor-pointer': selectable}]" class="border-b border-b-primary-200" @click="onRowClick(item)">
+        <tr v-for="(item, itemIndex) in items" :key="`item-${get(item, idField)}`" :class="[{'hover:bg-primary-100 cursor-pointer': selectable, 'odd:bg-white even:bg-slate-50': striped}]" class="border-b border-b-primary-200" @click="onRowClick($event, item)">
           <td v-for="field in fields" :key="'field-' + field.key + '-'+itemIndex" class="py-2 px-3 whitespace-nowrap">
-            <slot :field="field" :item="item" :name="`cell(${field.key})`" :value="getValue(field, item)">
-              <span>{{ getValue(field, item) }}</span>
-            </slot>
+            <div :data-prevent-click="field.preventClick" class="item inline">
+              <slot :field="field" :item="item" :name="`cell(${field.key})`" :value="getValue(field, item)">
+                <span>{{ getValue(field, item) }}</span>
+              </slot>
+            </div>
           </td>
         </tr>
       </template>
@@ -37,6 +39,7 @@ interface Props {
   idField?: string
   items?: any[],
   selectable?: boolean
+  striped?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -45,8 +48,13 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{ (e: "row-click", item: any): void }>();
 
-const onRowClick = (item) => {
-  emit("row-click", item);
+const onRowClick = (event, item) => {
+  const element: HTMLElement = event.target.closest(".item");
+  if (element?.dataset?.preventClick) {
+    event.preventDefault();
+  } else {
+    emit("row-click", item);
+  }
 };
 
 const getValue = (field, item) => field.transform != null ? field.transform(get(item, field.fieldName ?? field.key)) : get(item, field.fieldName ?? field.key);
