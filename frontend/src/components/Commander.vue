@@ -55,12 +55,13 @@ watchDebounced(
     if (search.value != null && search.value.trim() !== "") {
       items.value.push(...router.getRoutes()
         .filter(route => route.meta.title?.toUpperCase().indexOf(search.value.toUpperCase()) > -1).map(route => {
-          return <AppCommanderItem> {
+          const item: AppCommanderItem = {
             type: "route",
             icon: LinkIcon,
             label: route.meta.title,
             route,
           };
+          return item;
         }));
     }
   }, { debounce: 500 });
