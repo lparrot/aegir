@@ -1,5 +1,9 @@
 <template>
   <Datatable :fields="fields" :items="items" selectable striped @row-click="onRowClick">
+    <template #cell(avatar)="{item}">
+      <img :src="`https://picsum.photos/60/60?random=${item.id}`" alt="avatar" class="rounded-full h-10 w-10">
+    </template>
+
     <template #cell(userDataEmail)="{value}">
       <div class="inline-flex items-center gap-2 hover:underline" @click="mailto(value)">
         <EnvelopeIcon class="h-5 w-5"/>
@@ -8,13 +12,14 @@
     </template>
 
     <template #cell(projects)="{value}">
-      <span class="hover:underline">{{ value.toUpperCase() }}</span>
+      <Badge v-if="checkStringNotEmpty(value)" :icon="CheckBadgeIcon" class="font-bold" color="yellow">{{ value.toUpperCase() }}</Badge>
     </template>
   </Datatable>
 </template>
 
 <script lang="ts" setup>
-import { EnvelopeIcon } from "@heroicons/vue/24/outline";
+import { checkStringNotEmpty } from "@/utils/string";
+import { CheckBadgeIcon, EnvelopeIcon } from "@heroicons/vue/24/outline";
 import map from "lodash/map";
 import DialogEditUser from "../../components/dialogs/DialogEditUser.vue";
 
@@ -30,6 +35,7 @@ const fetchUsers = async () => {
 await fetchUsers();
 
 const fields = ref<DatatableField[]>([
+  { key: "avatar" },
   { key: "username", label: "Nom d'utilisateur" },
   { key: "userDataEmail", label: "Email", preventClick: true },
   { key: "profileLabel", label: "Profil" },

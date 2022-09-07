@@ -9,6 +9,7 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     Accordion: typeof import('./../components/shared/panel/Accordion.vue')['default']
     AccordionGroup: typeof import('./../components/shared/panel/AccordionGroup.vue')['default']
+    Badge: typeof import('./../components/shared/panel/Badge.vue')['default']
     BaseButton: typeof import('./../components/shared/form/BaseButton.vue')['default']
     BaseInput: typeof import('./../components/shared/form/BaseInput.vue')['default']
     BaseTextarea: typeof import('./../components/shared/form/BaseTextarea.vue')['default']

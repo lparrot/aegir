@@ -1,0 +1,13 @@
+@import "../variables";
+
+.a-badge {
+  @apply inline-flex items-center gap-2 px-2 py-1 rounded-full;
+
+  @each $color in get-unique-items($colors, $variants) {
+    &--#{$color} {
+      @extend .a-badge;
+
+      @apply bg-#{$color}-200 text-#{$color}-600 ;
+    }
+  }
+}
