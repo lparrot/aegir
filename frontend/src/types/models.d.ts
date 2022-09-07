@@ -1,6 +1,10 @@
 import { RouteLocationRaw, RouteRecordNormalized } from "vue-router";
 
 declare global {
+  type TailwindColor = "slate" | "gray" | "zinc" | "neutral" | "stone" | "red" | "orange" | "amber" | "yellow" | "lime" | "green" | "emerald" | "teal" | "cyan" | "sky" | "blue" | "indigo" | "violet" | "purple" | "fuchsia" | "pink" | "rose"
+  type TailwindVariant = "primary" | "secondary" | "success" | "info" | "warn" | "danger"
+  type TailwindColorAndVariant = TailwindColor | TailwindVariant
+
   interface AppEventBus<T = any> {
     type: string,
     data?: T

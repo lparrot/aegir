@@ -1,15 +1,19 @@
 <template>
-  <div class="accordion">
-    <div class="flex cursor-pointer w-full justify-between border border-secondary-200 rounded-lg bg-secondary-100 px-4 py-2 text-left text-sm font-medium text-purple-900 hover:bg-secondary-200 focus:outline-none focus-visible:ring focus-visible:ring-secondary-500 focus-visible:ring-opacity-75" role="button" @click="onClickHeader">
-      <slot name="title">
-        <span>{{ title }}</span>
-      </slot>
-      <ChevronUpIcon :class="open ? 'rotate-180 transform' : ''" class="h-5 w-5 text-purple-500"/>
-    </div>
-    <TransitionRoot :show="open" as="template" enter="duration-300 ease-linear" enter-from="opacity-0" enter-to="opacity-100" leave="duration-300 ease-linear" leave-from="opacity-100" leave-to="opacity-0">
-      <slot></slot>
-    </TransitionRoot>
+  <div :class="['a-accordion--'+accordionColor, $attrs.class]" class="a-accordion" role="button" @click="onClickHeader">
+    <slot name="title">
+      <span>{{ title }}</span>
+    </slot>
+    <ChevronUpIcon :class="open ? 'rotate-180 transform' : ''" class="h-5 w-5 text-purple-500"/>
   </div>
+  <TransitionRoot :show="open" as="template"
+                  enter="transition ease-in-out duration-300 transform"
+                  enter-from="-translate-x-full"
+                  enter-to="translate-x-0"
+                  leave="transition ease-in-out duration-300 transform"
+                  leave-from="translate-x-0"
+                  leave-to="-translate-x-full">
+    <slot></slot>
+  </TransitionRoot>
 </template>
 
 <script lang="ts" setup>
@@ -17,8 +21,14 @@ import { TransitionRoot } from "@headlessui/vue";
 import { ChevronUpIcon } from "@heroicons/vue/24/outline";
 import { ComponentInternalInstance, getCurrentInstance, inject, Ref } from "vue";
 
-const props = defineProps({
-  title: { type: String, default: null },
+interface Props {
+  color?: TailwindColorAndVariant,
+  title?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  color: null,
+  title: null,
 });
 
 const emit = defineEmits<{
@@ -29,10 +39,18 @@ const emit = defineEmits<{
 const accordionGroup: ComponentInternalInstance = inject("accordion", null);
 const open: Ref<boolean> = ref(false);
 const index = ref(0);
+const accordionColor = ref(props.color);
 
 if (accordionGroup != null) {
+  if (props.color == null) {
+    accordionColor.value = accordionGroup.exposed.color;
+  }
   accordionGroup.exposed.accordions.value.push(getCurrentInstance());
   index.value = accordionGroup.exposed.accordions.value.length - 1;
+}
+
+if (accordionColor.value == null) {
+  accordionColor.value = "primary";
 }
 
 const onClickHeader = () => {

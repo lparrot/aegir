@@ -1,0 +1,13 @@
+@import "../variables";
+
+.a-accordion {
+  @apply flex cursor-pointer w-full justify-between border rounded-lg px-4 py-2 text-left text-sm font-medium focus:outline-none focus-visible:ring focus-visible:ring-opacity-75;
+
+  @each $color in get-unique-items($colors, $variants) {
+    &--#{$color} {
+      @extend .a-accordion;
+
+      @apply border-#{$color}-200 bg-#{$color}-100 text-#{$color}-900 hover:bg-#{$color}-200 focus-visible:ring-#{$color}-500;
+    }
+  }
+}
