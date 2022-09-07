@@ -1,7 +1,9 @@
 <template>
   <Datatable :fields="fields" :items="items" selectable striped @row-click="onRowClick">
-    <template #cell(avatar)="{item}">
-      <img :src="`https://picsum.photos/60/60?random=${item.id}`" alt="avatar" class="rounded-full h-10 w-10">
+    <template #cell(avatar)="{value}">
+      <div class="h-10 w-10">
+        <img :src="value" alt="avatar" class="rounded-full">
+      </div>
     </template>
 
     <template #cell(userDataEmail)="{value}">
@@ -35,7 +37,7 @@ const fetchUsers = async () => {
 await fetchUsers();
 
 const fields = ref<DatatableField[]>([
-  { key: "avatar" },
+  { key: "avatar", transform: (_value, item) => `https://picsum.photos/60/60?random=${item.id}` },
   { key: "username", label: "Nom d'utilisateur" },
   { key: "userDataEmail", label: "Email", preventClick: true },
   { key: "profileLabel", label: "Profil" },

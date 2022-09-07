@@ -21,7 +21,7 @@ declare global {
     key: string;
     label?: string;
     fieldName?: string;
-    transform?: (value: any) => any;
+    transform?: (value: any, item: any) => any;
     preventClick?: boolean;
   }
 
