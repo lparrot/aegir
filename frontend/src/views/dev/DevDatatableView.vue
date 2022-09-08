@@ -21,6 +21,8 @@
 
 <script lang="ts" setup>
 import { api } from "@/api";
+import Datatable from "@/components/shared/data/Datatable.vue";
+import Badge from "@/components/shared/panel/Badge.vue";
 import { checkStringNotEmpty } from "@/utils/string";
 import { CheckBadgeIcon, EnvelopeIcon } from "@heroicons/vue/24/outline";
 import useAegir from "@use/useAegir";

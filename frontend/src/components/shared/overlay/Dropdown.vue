@@ -21,6 +21,7 @@
 </template>
 
 <script lang="ts" setup>
+import BaseButton from "@/components/shared/form/BaseButton.vue";
 import type { FloatProps } from "@/types";
 import { Float } from "@headlessui-float/vue";
 import { Menu, MenuButton, MenuItems } from "@headlessui/vue";

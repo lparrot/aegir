@@ -52,6 +52,7 @@
 </template>
 
 <script lang="ts" setup>
+import BaseButton from "@/components/shared/form/BaseButton.vue";
 import { Dialog, DialogDescription, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from "@headlessui/vue";
 import { XMarkIcon } from "@heroicons/vue/24/solid";
 import { ref, Ref } from "vue";

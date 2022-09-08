@@ -49,6 +49,7 @@
 
 <script lang="ts" setup>
 import { api } from "@/api";
+import BaseButton from "@/components/shared/form/BaseButton.vue";
 import { BriefcaseIcon, CalendarIcon, CheckIcon, CurrencyDollarIcon, LinkIcon, MapPinIcon, PencilIcon } from "@heroicons/vue/24/solid";
 import { UserInfo_Security } from "back_types";
 import { ref } from "vue";

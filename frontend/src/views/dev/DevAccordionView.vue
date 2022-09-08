@@ -22,4 +22,5 @@
 
 <script lang="ts" setup>
 
+import Accordion from "@/components/shared/panel/Accordion.vue";
 import AccordionGroup from "@/components/shared/panel/AccordionGroup.vue";</script>

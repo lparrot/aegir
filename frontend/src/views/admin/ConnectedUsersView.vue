@@ -6,6 +6,7 @@
 
 <script lang="ts" setup>
 import { api } from "@/api";
+import Datatable from "@/components/shared/data/Datatable.vue";
 import { useAuthStore } from "@/stores/auth";
 import useAegir from "@use/useAegir";
 import useWebsocket from "@use/useWebsocket";

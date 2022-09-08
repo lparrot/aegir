@@ -9,6 +9,7 @@
 </template>
 
 <script lang="ts" setup>
+import Modal from "@/components/shared/overlay/Modal.vue";
 import { SignalSlashIcon } from "@heroicons/vue/24/outline";
 import useDialog from "@use/useDialog";
 

@@ -14,6 +14,9 @@
 </template>
 
 <script lang="ts" setup>
+import BaseButton from "@/components/shared/form/BaseButton.vue";
+import BaseInput from "@/components/shared/form/BaseInput.vue";
+import FieldGroup from "@/components/shared/form/FieldGroup.vue";
 import useAegir from "@use/useAegir";
 import { ref } from "vue";
 

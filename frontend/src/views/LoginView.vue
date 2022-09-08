@@ -18,6 +18,9 @@
 </template>
 
 <script lang="ts" setup>
+import BaseButton from "@/components/shared/form/BaseButton.vue";
+import BaseInput from "@/components/shared/form/BaseInput.vue";
+import FieldGroup from "@/components/shared/form/FieldGroup.vue";
 import { useAuthStore } from "@/stores/auth";
 import useAegir from "@use/useAegir";
 import useVuelidate from "@vuelidate/core";

@@ -8,6 +8,7 @@
 
 <script lang="ts" setup>
 
+import Toast from "@/components/shared/overlay/Toast.vue";
 import useAegir from "@use/useAegir";
 
 defineProps({

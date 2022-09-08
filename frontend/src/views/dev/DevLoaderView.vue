@@ -5,6 +5,7 @@
 </template>
 
 <script lang="ts" setup>
+import BaseButton from "@/components/shared/form/BaseButton.vue";
 import useAegir from "@use/useAegir";
 
 const { loader } = useAegir();
