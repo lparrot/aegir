@@ -1,5 +1,5 @@
 import Modal from "@/components/shared/overlay/Modal.vue";
-import { render, VNode } from "vue";
+import { render } from "vue";
 
 export default class DialogService {
   create(options: DialogCreateOptions) {
@@ -7,19 +7,18 @@ export default class DialogService {
       return;
     }
 
+    const { component, props, ...other } = options;
+
     let container = document.createElement("div");
     document.body.appendChild(container);
 
-    let instance: VNode;
+    let instance: any;
 
     if (options.component != null) {
-      instance = h(options.component, {
+      instance = h(component, {
         modelValue: true,
-        onOk: options.onOk,
-        onCancel: options.onCancel,
-        onClose: options.onClose,
-        onHide: options.onHide,
-        ...options.props,
+        ...other,
+        ...props,
       });
     } else {
       instance = h(Modal, {
@@ -38,7 +37,10 @@ export default class DialogService {
 
     render(instance, container);
 
-    return { instance, container };
+    return {
+      hide: instance.component?.proxy?.hide,
+      container,
+    };
   }
 }
 

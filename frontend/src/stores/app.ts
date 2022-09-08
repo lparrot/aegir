@@ -1,4 +1,5 @@
 import { useAuthStore } from "@/stores/auth";
+import useWebsocket from "@use/useWebsocket";
 
 interface StateInformations {
   started: boolean;
@@ -15,6 +16,12 @@ export const useAppStore = defineStore("app", {
 
   actions: {
     async onStartup() {
+      const socket = useWebsocket();
+
+      if (socket.client.value == null) {
+        socket.initialize();
+        await socket.connect();
+      }
       const authStore = useAuthStore();
       await authStore.getUser();
       const { setMenuDefault } = useMenu();

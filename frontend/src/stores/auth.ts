@@ -20,11 +20,9 @@ export const useAuthStore = defineStore("auth", {
       const { success, result } = await api.postAuthlogin(params);
 
       if (success) {
-        this.user = result.claims;
         storageToken.value = result.token;
         return result;
       }
-
       return null;
     },
 

@@ -2,6 +2,7 @@
 export {};
 declare global {
   const AxiosRestApplicationClient: typeof import("../api/index")["AxiosRestApplicationClient"];
+  const Bus: typeof import("../composables/useAppEventBus")["Bus"];
   const EffectScope: typeof import("vue")["EffectScope"];
   const STORAGE_CURRENT_ROUTE: typeof import("../composables/useAppLocalStorage")["STORAGE_CURRENT_ROUTE"];
   const STORAGE_SIDEBAR: typeof import("../composables/useAppLocalStorage")["STORAGE_SIDEBAR"];
@@ -13,6 +14,7 @@ declare global {
   const appMenu: typeof import("../router/routes")["appMenu"];
   const axios: typeof import("../api/index")["axios"];
   const checkAccess: typeof import("../router/index")["checkAccess"];
+  const checkStringNotEmpty: typeof import("../utils/string")["checkStringNotEmpty"];
   const computed: typeof import("vue")["computed"];
   const createApp: typeof import("vue")["createApp"];
   const createChildApp: typeof import("../utils/index")["createChildApp"];
@@ -28,6 +30,7 @@ declare global {
   const getCurrentInstance: typeof import("vue")["getCurrentInstance"];
   const getCurrentScope: typeof import("vue")["getCurrentScope"];
   const getEmitsObject: typeof import("../utils/index")["getEmitsObject"];
+  const getHeaders: typeof import("../composables/useWebsocket")["getHeaders"];
   const h: typeof import("vue")["h"];
   const inject: typeof import("vue")["inject"];
   const isProxy: typeof import("vue")["isProxy"];
@@ -56,6 +59,7 @@ declare global {
   const onUnmounted: typeof import("vue")["onUnmounted"];
   const onUpdated: typeof import("vue")["onUpdated"];
   const provide: typeof import("vue")["provide"];
+  const randomIntFromInterval: typeof import("../utils/math")["randomIntFromInterval"];
   const reactive: typeof import("vue")["reactive"];
   const readonly: typeof import("vue")["readonly"];
   const ref: typeof import("vue")["ref"];
@@ -76,6 +80,7 @@ declare global {
   const triggerRef: typeof import("vue")["triggerRef"];
   const unref: typeof import("vue")["unref"];
   const useAegir: typeof import("../composables/useAegir")["default"];
+  const useAppEventBus: typeof import("../composables/useAppEventBus")["default"];
   const useAppLocalStorage: typeof import("../composables/useAppLocalStorage")["default"];
   const useAppStore: typeof import("../stores/app")["useAppStore"];
   const useAttrs: typeof import("vue")["useAttrs"];
@@ -88,6 +93,7 @@ declare global {
   const useRouter: typeof import("vue-router")["useRouter"];
   const useSecurity: typeof import("../composables/useSecurity")["default"];
   const useSlots: typeof import("vue")["useSlots"];
+  const useWebsocket: typeof import("../composables/useWebsocket")["default"];
   const watch: typeof import("vue")["watch"];
   const watchEffect: typeof import("vue")["watchEffect"];
   const watchPostEffect: typeof import("vue")["watchPostEffect"];

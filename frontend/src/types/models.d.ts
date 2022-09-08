@@ -26,19 +26,21 @@ declare global {
   }
 
   interface DialogCreateOptions {
+    backdropDismiss?: boolean;
     component?: any,
-    message?: string,
-    showCancel?: boolean
-    onOk?: (payload?) => any,
-    onCancel?: (payload?) => any,
-    onClose?: () => any
-    onHide?: () => any
-    props?: { [index: string]: any },
     description?: string;
     labelCancel?: string;
     labelOk?: string;
+    message?: string,
     modelValue?: boolean;
+    onCancel?: (payload?) => any,
+    onClose?: () => any
+    onHide?: () => any
+    onOk?: (payload?) => any,
     panelClasses?: string | string[];
+    props?: { [index: string]: any },
+    showCancel?: boolean
+    showButtons?: boolean
     title?: string;
   }
 

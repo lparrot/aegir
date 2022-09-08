@@ -35,12 +35,14 @@
                 </p>
               </div>
 
-              <div class="mt-4 flex gap-1 justify-end">
-                <slot name="actions">
-                  <BaseButton v-if="showCancel" @click="cancel">{{ labelCancel }}</BaseButton>
-                  <BaseButton color="success" @click="ok">{{ labelOk }}</BaseButton>
-                </slot>
-              </div>
+              <template v-if="showButtons">
+                <div class="mt-4 flex gap-1 justify-end">
+                  <slot name="actions">
+                    <BaseButton v-if="showCancel" @click="cancel">{{ labelCancel }}</BaseButton>
+                    <BaseButton color="success" @click="ok">{{ labelOk }}</BaseButton>
+                  </slot>
+                </div>
+              </template>
             </DialogPanel>
           </TransitionChild>
         </div>
@@ -55,19 +57,23 @@ import { XMarkIcon } from "@heroicons/vue/24/solid";
 import { Ref } from "vue";
 
 interface Props {
+  backdropDismiss?: boolean
   description?: string;
   labelCancel?: string;
   labelOk?: string;
   modelValue?: boolean;
   panelClasses?: string | string[];
+  showButtons?: boolean,
   showCancel?: boolean;
   title?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  backdropDismiss: true,
   labelOk: "Ok",
   labelCancel: "Annuler",
   panelClasses: "w-1/2",
+  showButtons: true,
   showCancel: true,
 });
 
@@ -90,9 +96,11 @@ const show = () => {
   changeModelValue(true);
 };
 
-const hide = () => {
-  changeModelValue(false);
-  emit("hide");
+const hide = (event?) => {
+  if (event !== false || props.backdropDismiss) {
+    changeModelValue(false);
+    emit("hide");
+  }
 };
 
 const ok = () => {

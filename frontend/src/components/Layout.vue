@@ -123,6 +123,7 @@
 
 <script lang="ts" setup>
 import { ArrowLeftOnRectangleIcon, Bars3Icon, EllipsisVerticalIcon, UserCircleIcon, UserIcon, XMarkIcon } from "@heroicons/vue/24/solid";
+import useWebsocket, { getHeaders } from "@use/useWebsocket";
 import { breakpointsTailwind, onClickOutside, useBreakpoints, useTitle } from "@vueuse/core";
 
 interface Data {
@@ -139,6 +140,7 @@ const route = useRoute();
 const router = useRouter();
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const { menu, refreshMenu } = useMenu();
+const socket = useWebsocket();
 
 /* DATA */
 const data = reactive<Data>({
@@ -202,6 +204,7 @@ watch(
   async (_token) => {
     if (_token != null) {
       await authStore.getUser();
+      socket.client.value.connectHeaders = getHeaders();
     }
     refreshMenu();
   },

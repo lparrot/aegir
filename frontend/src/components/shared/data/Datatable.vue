@@ -5,7 +5,9 @@
       <thead class="bg-gray-200">
       <tr>
         <th v-for="field in fields" :key="`header-${field.key}`" class="py-3 px-3 text-left" scope="col">
-          <span v-if="field.label">{{ field.label }}</span>
+          <slot :name="`header(${field.key})`">
+            <span v-if="field.label">{{ field.label }}</span>
+          </slot>
         </th>
       </tr>
       </thead>

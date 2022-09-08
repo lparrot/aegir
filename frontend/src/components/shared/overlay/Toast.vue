@@ -57,10 +57,6 @@ if (props.notification?.duration > 0) {
   }, props.notification?.duration);
 }
 
-onBeforeUnmount(() => {
-  console.log("unmounted");
-});
-
 const notificationOptions: ComputedRef<{ class?: string, durationClass?: string, is?: any }> = computed(() => {
   switch (props.notification.type) {
     case "success":

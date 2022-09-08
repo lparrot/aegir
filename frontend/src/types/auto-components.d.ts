@@ -16,6 +16,7 @@ declare module '@vue/runtime-core' {
     BlankView: typeof import('./../components/BlankView.vue')['default']
     Commander: typeof import('./../components/Commander.vue')['default']
     Datatable: typeof import('./../components/shared/data/Datatable.vue')['default']
+    DialogApplicationClosed: typeof import('./../components/dialogs/DialogApplicationClosed.vue')['default']
     DialogEditUser: typeof import('./../components/dialogs/DialogEditUser.vue')['default']
     DialogTest: typeof import('./../components/dialogs/DialogTest.vue')['default']
     Dropdown: typeof import('./../components/shared/overlay/Dropdown.vue')['default']

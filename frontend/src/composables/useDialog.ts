@@ -20,22 +20,18 @@ function useDialog() {
 
   const onDialogOk = (payload?) => {
     emit("ok", payload);
-    hide();
   };
 
   const onDialogCancel = (payload?) => {
     emit("cancel", payload);
-    hide();
   };
 
   const onDialogHide = () => {
     emit("hide");
-    hide();
   };
 
   const onDialogClose = () => {
     emit("close");
-    hide();
   };
 
   Object.assign(proxy, { show, hide, close });
