@@ -1,5 +1,5 @@
 import { ClockIcon } from "@heroicons/vue/24/outline";
-import { Ref } from "vue";
+import { ref, Ref } from "vue";
 
 const defaultLoaderOptions = {
   icon: ClockIcon,

@@ -122,9 +122,16 @@
 </template>
 
 <script lang="ts" setup>
+import { useAppStore } from "@/stores/app";
+import { useAuthStore } from "@/stores/auth";
 import { ArrowLeftOnRectangleIcon, Bars3Icon, EllipsisVerticalIcon, UserCircleIcon, UserIcon, XMarkIcon } from "@heroicons/vue/24/solid";
+import useAegir from "@use/useAegir";
+import useAppLocalStorage from "@use/useAppLocalStorage";
+import useMenu from "@use/useMenu";
 import useWebsocket, { getHeaders } from "@use/useWebsocket";
 import { breakpointsTailwind, onClickOutside, useBreakpoints, useTitle } from "@vueuse/core";
+import { computed, reactive, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 interface Data {
   opened: boolean;

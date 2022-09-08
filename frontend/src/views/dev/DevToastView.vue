@@ -14,6 +14,9 @@
 </template>
 
 <script lang="ts" setup>
+import useAegir from "@use/useAegir";
+import { ref } from "vue";
+
 const { toast, notifications } = useAegir();
 
 const duration = ref<number>(5000);

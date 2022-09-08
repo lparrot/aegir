@@ -1,9 +1,10 @@
 import { useAuthStore } from "@/stores/auth";
+import useAegir from "@use/useAegir";
 import { Bus } from "@use/useAppEventBus";
 import useWebsocket from "@use/useWebsocket";
 import { useEventBus, UseEventBusReturn } from "@vueuse/core";
 import { EnumWebsocketMessageType, WebsocketTypedMessage } from "back_types";
-import { App, DirectiveBinding, watch } from "vue";
+import { App, DirectiveBinding, ref, watch } from "vue";
 
 export default {
   install: async (app: App, _options) => {
@@ -21,7 +22,7 @@ export default {
           case EnumWebsocketMessageType.CONNECT:
           case EnumWebsocketMessageType.DISCONNECT:
             toast.createToast({
-              message: `${message.type}: ${message.data?.user}`,
+              message: `${ message.type }: ${ message.data?.user }`,
               type: "info",
             });
             break;
@@ -94,8 +95,8 @@ export default {
     });
 
     app.config.errorHandler = (err: any, instance, info) => {
-      console.groupCollapsed(`%c[ERR:] ${err.message}`, "background: #FF0748; color: #FFF");
-      console.log(`%cinfo: ${info}`, "color: #FF0748");
+      console.groupCollapsed(`%c[ERR:] ${ err.message }`, "background: #FF0748; color: #FFF");
+      console.log(`%cinfo: ${ info }`, "color: #FF0748");
       console.error(err);
       console.groupEnd();
     };

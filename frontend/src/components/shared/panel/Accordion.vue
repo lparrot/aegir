@@ -5,13 +5,7 @@
     </slot>
     <ChevronUpIcon :class="open ? 'rotate-180 transform' : ''" class="h-5 w-5 text-purple-500"/>
   </div>
-  <TransitionRoot :show="open" as="template"
-                  enter="transition ease-in-out duration-300 transform"
-                  enter-from="-translate-x-full"
-                  enter-to="translate-x-0"
-                  leave="transition ease-in-out duration-300 transform"
-                  leave-from="translate-x-0"
-                  leave-to="-translate-x-full">
+  <TransitionRoot :show="open" as="template" enter="transition ease-in-out duration-300 transform" enter-from="-translate-x-full" enter-to="translate-x-0" leave="transition ease-in-out duration-300 transform" leave-from="translate-x-0" leave-to="-translate-x-full">
     <slot></slot>
   </TransitionRoot>
 </template>
@@ -19,7 +13,7 @@
 <script lang="ts" setup>
 import { TransitionRoot } from "@headlessui/vue";
 import { ChevronUpIcon } from "@heroicons/vue/24/outline";
-import { ComponentInternalInstance, getCurrentInstance, inject, Ref } from "vue";
+import { ComponentInternalInstance, getCurrentInstance, inject, ref, Ref } from "vue";
 
 interface Props {
   color?: TailwindColorAndVariant,

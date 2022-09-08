@@ -54,7 +54,7 @@
 <script lang="ts" setup>
 import { Dialog, DialogDescription, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from "@headlessui/vue";
 import { XMarkIcon } from "@heroicons/vue/24/solid";
-import { Ref } from "vue";
+import { ref, Ref } from "vue";
 
 interface Props {
   backdropDismiss?: boolean

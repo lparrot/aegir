@@ -12,6 +12,7 @@
 
 <script lang="ts" setup>
 import { MenuItem } from "@headlessui/vue";
+import { computed, getCurrentInstance } from "vue";
 import type { RouteLocationRaw, RouterLinkProps } from "vue-router";
 
 interface Props extends Partial<RouterLinkProps> {

@@ -1,3 +1,6 @@
+import { app } from "@use/useAegir";
+import { createApp } from "vue";
+
 export function getEmitsObject(emitsArray) {
   const emitsObject = {};
 

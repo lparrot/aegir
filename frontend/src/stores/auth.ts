@@ -1,3 +1,7 @@
+import { api } from "@/api";
+import useAppLocalStorage from "@use/useAppLocalStorage";
+import { defineStore } from "pinia";
+
 interface StateInformations {
   user: { [index: string]: any };
 }

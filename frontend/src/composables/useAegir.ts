@@ -1,7 +1,7 @@
 import DialogService from "@/services/dialog.service";
 import LoaderService from "@/services/loader.service";
 import ToastService from "@/services/toast.service";
-import { App, Ref } from "vue";
+import { App, ref, Ref } from "vue";
 
 let dialog: DialogService;
 let toast: ToastService;

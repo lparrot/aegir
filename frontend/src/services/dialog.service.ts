@@ -1,5 +1,6 @@
 import Modal from "@/components/shared/overlay/Modal.vue";
-import { render } from "vue";
+import { app } from "@use/useAegir";
+import { h, render } from "vue";
 
 export default class DialogService {
   create(options: DialogCreateOptions) {

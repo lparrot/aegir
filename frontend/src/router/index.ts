@@ -1,4 +1,7 @@
 import routes from "@/router/routes";
+import { useAppStore } from "@/stores/app";
+import { useAuthStore } from "@/stores/auth";
+import useSecurity from "@use/useSecurity";
 import { createRouter, createWebHistory, RouteLocationNormalized } from "vue-router";
 
 const PAGE_ACCESS_DENIED = { name: "errors-401" };

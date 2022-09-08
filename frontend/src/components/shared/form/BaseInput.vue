@@ -4,6 +4,7 @@
 
 <script lang="ts" setup>
 import { useVModel } from "@vueuse/core";
+import { computed, getCurrentInstance } from "vue";
 
 interface Props {
   id?: string;

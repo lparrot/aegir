@@ -8,6 +8,8 @@
 
 <script lang="ts" setup>
 
+import useAegir from "@use/useAegir";
+
 defineProps({
   placement: { type: String, default: "bottom-left" },
 });

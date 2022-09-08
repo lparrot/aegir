@@ -12,6 +12,7 @@
 
 <script lang="ts" setup>
 import DialogTest from "@/components/dialogs/DialogTest.vue";
+import useAegir from "@use/useAegir";
 
 const { dialog } = useAegir();
 

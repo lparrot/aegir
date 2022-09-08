@@ -33,7 +33,7 @@
 import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions, TransitionChild, TransitionRoot } from "@headlessui/vue";
 import { LinkIcon } from "@heroicons/vue/24/outline";
 import { onClickOutside, useMagicKeys, watchDebounced } from "@vueuse/core";
-import { nextTick, Ref } from "vue";
+import { nextTick, ref, Ref, watch } from "vue";
 import { useRouter } from "vue-router";
 
 const keys = useMagicKeys();

@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ComponentInternalInstance, getCurrentInstance, provide, Ref } from "vue";
+import { ComponentInternalInstance, getCurrentInstance, provide, ref, Ref } from "vue";
 
 interface Props {
   color: TailwindColorAndVariant,

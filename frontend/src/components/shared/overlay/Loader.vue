@@ -11,6 +11,8 @@
 </template>
 
 <script lang="ts" setup>
+import useAegir from "@use/useAegir";
+
 const { loader } = useAegir();
 const { show, options } = loader;
 </script>

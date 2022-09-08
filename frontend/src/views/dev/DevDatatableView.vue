@@ -20,9 +20,12 @@
 </template>
 
 <script lang="ts" setup>
+import { api } from "@/api";
 import { checkStringNotEmpty } from "@/utils/string";
 import { CheckBadgeIcon, EnvelopeIcon } from "@heroicons/vue/24/outline";
+import useAegir from "@use/useAegir";
 import map from "lodash/map";
+import { ref } from "vue";
 import DialogEditUser from "../../components/dialogs/DialogEditUser.vue";
 
 const { dialog } = useAegir();
@@ -37,11 +40,11 @@ const fetchUsers = async () => {
 await fetchUsers();
 
 const fields = ref<DatatableField[]>([
-  { key: "avatar", transform: (_value, item) => `https://picsum.photos/60/60?random=${item.id}` },
+  { key: "avatar", transform: (_value, item) => `https://picsum.photos/60/60?random=${ item.id }` },
   { key: "username", label: "Nom d'utilisateur" },
   { key: "userDataEmail", label: "Email", preventClick: true },
   { key: "profileLabel", label: "Profil" },
-  { key: "projects", label: "Projet", fieldName: "projects", transform: value => map(value, o => o.name).join(", "), preventClick: true },
+  { key: "projects", label: "Projet", field: "projects", transform: value => map(value, o => o.name).join(", "), preventClick: true },
 ]);
 
 const onRowClick = (user) => {

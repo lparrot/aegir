@@ -1,4 +1,5 @@
 import pinia from "@/stores";
+import { createApp } from "vue";
 
 import App from "./App.vue";
 import "./assets/index.scss";

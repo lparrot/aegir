@@ -1,7 +1,10 @@
 import { Client, StompHeaders, StompSubscription } from "@stomp/stompjs";
+import useAegir from "@use/useAegir";
+import useAppLocalStorage from "@use/useAppLocalStorage";
 import { until } from "@vueuse/core";
 import SockJS from "sockjs-client/dist/sockjs";
 import DialogApplicationClosed from "src/components/dialogs/DialogApplicationClosed.vue";
+import { ref } from "vue";
 
 const client = ref<Client>(null);
 const dialogInstance = ref();

@@ -18,9 +18,13 @@
 </template>
 
 <script lang="ts" setup>
+import { useAuthStore } from "@/stores/auth";
+import useAegir from "@use/useAegir";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { ParamsSecurityLogin } from "back_types";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 /* COMPOSABLES */
 const authStore = useAuthStore();
