@@ -59,5 +59,5 @@ const onRowClick = (event, item) => {
   }
 };
 
-const getValue = (field, item) => field.transform != null ? field.transform(get(item, field.fieldName ?? field.key), item) : get(item, field.fieldName ?? field.key);
+const getValue = (field, item) => field.transform != null ? field.transform(get(item, field.field ?? field.key), item) : get(item, field.field ?? field.key);
 </script>

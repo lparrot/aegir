@@ -20,7 +20,7 @@ declare global {
   interface DatatableField {
     key: string;
     label?: string;
-    fieldName?: string;
+    field?: string;
     transform?: (value: any, item: any) => any;
     preventClick?: boolean;
   }
