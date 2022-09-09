@@ -5,9 +5,13 @@
 
     <aside ref="drawer_sidebar" :class="{'-translate-x-full': isSidebarClosed, 'translate-x-0': !isSidebarClosed, 'fixed': isMobile}" class="flex flex-col flex-shrink-0 bg-primary-800 w-72 text-white transition-all duration-150 ease-in h-screen">
       <div class="flex justify-between items-center h-12 py-4 px-4">
-        <RouterLink is="div" :to="{name: 'home'}" class="cursor-pointer hover:bg-gray-600 px-2 -mx-2 py-1 -my-1 rounded flex gap-3 items-baseline">
-          <div class="text-xl">{{ appStore.informations.app.title }}</div>
-          <div>v{{ appStore.informations.app.version }}</div>
+        <RouterLink is="div" :to="{name: 'home'}" class="cursor-pointer hover:bg-gray-600 px-2 -mx-2 py-1 -my-1 rounded flex gap-3 items-center">
+          <img alt="logo" class="h-8 w-8" src="/logo.png">
+
+          <div class="flex items-baseline gap-3">
+            <div class="text-xl">{{ appStore.informations.app.title }}</div>
+            <div>v{{ appStore.informations.app.version }}</div>
+          </div>
         </RouterLink>
         <div class="p-1 rounded-full hover:bg-primary-600" @click="data.opened = false">
           <XMarkIcon v-show="!isSidebarClosed && isMobile" class="h-5 w-5 cursor-pointer"/>
