@@ -99,8 +99,6 @@
                   </div>
                 </div>
               </div>
-
-              <img alt="" src="/solutions.jpg"/>
             </PopoverPanel>
           </Float>
         </Popover>
