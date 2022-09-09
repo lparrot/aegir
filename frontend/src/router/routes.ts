@@ -3,13 +3,12 @@ import type { RouteRecordRaw } from "vue-router";
 import BlankView from "../components/BlankView.vue";
 
 const routes: RouteRecordRaw[] = [
+  { path: "/login", name: "login", component: () => import("@/views/LoginView.vue"), meta: { title: "Connexion" } },
   {
     path: "/", component: Layout, children: [
       { path: "/", name: "home", component: () => import("@/views/HomeView.vue"), meta: { title: "Accueil" } },
-      { path: "/login", name: "login", component: () => import("@/views/LoginView.vue"), meta: { title: "Connexion" } },
       { path: "/profile", name: "profile", component: () => import("@/views/ProfileView.vue"), meta: { title: "Profil utilisateur", access: [] } },
       { path: "/tasks", name: "tasks", component: () => import("@/views/TasksView.vue"), meta: { title: "Tâches", access: [ "USER" ] } },
-
       {
         path: "/admin", component: BlankView, children: [
           { path: "/connected_users", name: "admin-connected-users", component: () => import("@/views/admin/ConnectedUsersView.vue"), meta: { title: "Utilisateurs connectés", access: [ "ADMIN" ] } },

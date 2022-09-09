@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-4 gap-3">
+  <div class="grid grid-cols-1 md:!grid-cols-2 lg:!grid-cols-4 gap-3">
     <BaseButton @click="addNotification('success')">Create success notification</BaseButton>
     <BaseButton @click="addNotification('info')">Create info notification</BaseButton>
     <BaseButton @click="addNotification('warn')">Create warn notification</BaseButton>
