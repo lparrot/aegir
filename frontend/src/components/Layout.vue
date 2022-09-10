@@ -39,7 +39,7 @@
                   <span class="text-lg">Connecté sous {{ authStore.user?.sub }}</span>
                 </div>
 
-                <div class="grid grid-cols-3 gap-6 p-4">
+                <div class="grid grid-cols-1 md:!grid-cols-2 lg:!grid-cols-3 gap-6 p-4 max-h-[500px] overflow-y-auto scrollbar scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300">
                   <div class="flex flex-col gap-3">
                     <div class="px-3 py-2 ml-6 text-primary-400">
                       Compte
@@ -118,7 +118,7 @@
         <h1>{{ data.title }}</h1>
       </header>
 
-      <main class="flex flex-col px-8 py-4 scrollbar scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300 h-full w-full text-gray-900">
+      <main class="flex flex-col px-8 py-4 h-full w-full text-gray-900">
         <RouterView/>
       </main>
     </div>
