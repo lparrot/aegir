@@ -20,8 +20,19 @@ export default defineConfig(({ mode }) => {
     plugins: [
       vue(),
       VitePWA({
-        injectRegister: "auto",
-        includeAssets: [ "favicon.ico" ],
+        base: "/",
+        strategies: "generateSW",
+        includeManifestIcons: true,
+        injectRegister: "inline",
+        includeAssets: [ "favicon.ico", "logo.png", "logo_144.png" ],
+        registerType: "autoUpdate",
+        workbox: {
+          sourcemap: true,
+          globPatterns: [ "**/*.{js,ts,css,html,ico,png,svg}" ],
+          additionalManifestEntries: [
+            { url: "/index.html", revision: Date.now().toString() },
+          ],
+        },
         manifest: {
           name: "Aegir",
           short_name: "Aegir",
@@ -31,21 +42,25 @@ export default defineConfig(({ mode }) => {
             {
               src: "favicon.ico",
               sizes: "32x32",
-              purpose: "maskable",
               type: "image/png",
             },
             {
               src: "logo.png",
               sizes: "68x68",
-              purpose: "maskable",
+              type: "image/png",
+            },
+            {
+              src: "logo_144.png",
+              sizes: "144x144",
               type: "image/png",
             },
           ],
         },
         devOptions: {
           enabled: true,
+          type: "classic",
+          navigateFallback: "index.html",
         },
-        registerType: "autoUpdate",
       }),
       Components({
         dts: "./src/types/auto-components.d.ts",
