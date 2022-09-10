@@ -1,5 +1,5 @@
 <template>
-  <section class="flex w-full">
+  <section class="flex min-h-screen w-full">
     <aside class="flex flex-nowrap flex-col justify-between items-center bg-primary-700 min-w-[60px] py-2 text-primary-200">
       <div class="flex flex-col items-center gap-6 mx-4">
         <RouterLink :to="{name: 'home'}">
@@ -118,7 +118,7 @@
         <h1>{{ data.title }}</h1>
       </header>
 
-      <main class="flex flex-col px-8 py-4 h-full w-full text-gray-900">
+      <main class="flex flex-col flex-grow px-8 py-4 h-full w-full text-gray-900">
         <RouterView/>
       </main>
     </div>
