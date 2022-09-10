@@ -1,4 +1,5 @@
 ### Application ###
+frontend/dev-dist
 application-*.properties
 .env
 .generated
