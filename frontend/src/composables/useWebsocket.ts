@@ -26,6 +26,7 @@ export default function useWebsocket() {
   const initialize = () => {
     client.value = new Client({
       connectHeaders: getHeaders(),
+      reconnectDelay: 10000,
       debug: msg => {
         console.log(msg);
       },
