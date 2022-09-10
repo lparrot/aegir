@@ -6,7 +6,6 @@ import IconsResolver from "unplugin-icons/resolver";
 import Icons from "unplugin-icons/vite";
 import Components from "unplugin-vue-components/vite";
 import { defineConfig, loadEnv } from "vite";
-import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 
@@ -19,49 +18,6 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [
       vue(),
-      VitePWA({
-        base: "/",
-        strategies: "generateSW",
-        includeManifestIcons: true,
-        injectRegister: "inline",
-        includeAssets: [ "favicon.ico", "logo.png", "logo_144.png" ],
-        registerType: "autoUpdate",
-        workbox: {
-          sourcemap: true,
-          globPatterns: [ "**/*.{js,ts,css,html,ico,png,svg}" ],
-          additionalManifestEntries: [
-            { url: "/index.html", revision: Date.now().toString() },
-          ],
-        },
-        manifest: {
-          name: "Aegir",
-          short_name: "Aegir",
-          description: "Aegir",
-          theme_color: "#ffffff",
-          icons: [
-            {
-              src: "favicon.ico",
-              sizes: "32x32",
-              type: "image/png",
-            },
-            {
-              src: "logo.png",
-              sizes: "68x68",
-              type: "image/png",
-            },
-            {
-              src: "logo_144.png",
-              sizes: "144x144",
-              type: "image/png",
-            },
-          ],
-        },
-        devOptions: {
-          enabled: true,
-          type: "classic",
-          navigateFallback: "index.html",
-        },
-      }),
       Components({
         dts: "./src/types/auto-components.d.ts",
         dirs: [ "src/components" ],
