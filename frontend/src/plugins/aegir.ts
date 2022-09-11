@@ -17,6 +17,8 @@ export default {
     const { toast } = useAegir();
 
     Bus.$on("login", async () => {
+      await socket.initialize();
+
       await socket.subscribe("/topic/session", async (message: WebsocketTypedMessage) => {
         switch (message.type) {
           case EnumWebsocketMessageType.CONNECT:
@@ -47,7 +49,7 @@ export default {
     });
 
     Bus.$on("logout", () => {
-      socket.unsubscribe("app-session");
+      socket.unsubscribe("user-session");
     });
 
     watch(

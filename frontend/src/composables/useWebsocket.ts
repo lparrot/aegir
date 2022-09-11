@@ -82,7 +82,7 @@ export default function useWebsocket() {
 
       return client.value.subscribe(topic, async (message) => {
         callback(JSON.parse(message.body));
-      }, { ...headers, ...getHeaders() });
+      }, { ...headers });
     }
   };
 

@@ -25,7 +25,8 @@ export const useAuthStore = defineStore("auth", {
 
       if (success) {
         storageToken.value = result.token;
-        return result;
+        await this.getUser();
+        return this.user;
       }
       return null;
     },

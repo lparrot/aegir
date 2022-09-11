@@ -66,21 +66,22 @@ for (const method of [ "request", "delete", "get", "head", "options", "post", "p
 
 api.httpClient.axios.interceptors.request.use((config) => {
   if (storageToken.value != null) {
-    config.headers.common["Authorization"] = `Bearer ${storageToken.value}`;
+    config.headers.common["Authorization"] = `Bearer ${ storageToken.value }`;
   }
 
   return config;
 });
 
 api.httpClient.axios.interceptors.response.use((response) => {
-  const { dialog } = useAegir();
+  const { toast } = useAegir();
 
   const data = response.data;
 
   if (data?.type === "message") {
-    dialog.create({
+    toast.createToast({
       title: "Erreur",
       message: data.message,
+      type: "danger",
     });
   }
 

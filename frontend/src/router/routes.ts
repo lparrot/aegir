@@ -44,28 +44,4 @@ const routes: RouteRecordRaw[] = [
   },
 ];
 
-export const appMenu: Array<MenuItem> = [
-  {
-    label: "Menu", children: [
-      { label: "Home", route: { name: "home" } },
-      { label: "Tasks", route: { name: "tasks" } },
-    ],
-  },
-  {
-    label: "Admin", children: [
-      { label: "Utilisateurs connectés", route: { name: "admin-connected-users" } },
-      { label: "API", route: { name: "admin-swagger" } },
-    ],
-  },
-  {
-    label: "DEV", children: [
-      { label: "Accordion", route: { name: "dev-accordion" } },
-      { label: "Datatable", route: { name: "dev-datatable" } },
-      { label: "Loader", route: { name: "dev-loader" } },
-      { label: "Modal", route: { name: "dev-modal" } },
-      { label: "Toast", route: { name: "dev-toast" } },
-    ],
-  },
-];
-
 export default routes;

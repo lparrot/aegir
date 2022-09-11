@@ -30,11 +30,9 @@ import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { ParamsSecurityLogin } from "back_types";
 import { ref } from "vue";
-import { useRouter } from "vue-router";
 
 /* COMPOSABLES */
 const authStore = useAuthStore();
-const router = useRouter();
 const { toast } = useAegir();
 
 /* DATA */
@@ -55,7 +53,8 @@ const handleSubmit = async () => {
     const user = await authStore.login({ username: form.value.username, password: form.value.password });
 
     if (user != null) {
-      await router.push({ name: "home" });
+      await router.push({ name: "tasks" });
+
       toast.createToast({
         message: `Vous êtes maintenant connecté sous : ${ form.value.username }`,
         title: "Connexion",

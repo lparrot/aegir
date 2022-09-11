@@ -12,7 +12,7 @@ const router = createRouter({
   routes,
 });
 
-router.beforeResolve(async (to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const appStore = useAppStore();
   const authStore = useAuthStore();
 
@@ -26,22 +26,21 @@ router.beforeResolve(async (to, from, next) => {
     return next();
   }
 
-  if (authStore.user != null) {
-    // Si utilisateur connecté
-    if (to.meta.landing_page) {
-      // Si page layout landing, redirection vers page de tâches
+  if (to.meta.landing_page) {
+    if (authStore.user != null) {
       return next({ name: "tasks" });
-    }
-
-    if (checkAccess(to)) {
-      // Si autorisé à afficher la page
+    } else {
       return next();
     }
-  } else {
-    // Si utilisateur déconnecté
-    if (!to.meta.landing_page) {
-      return next({ name: "login" });
-    }
+  }
+
+  if (authStore.user == null) {
+    return next({ name: "login" });
+  }
+
+  if (checkAccess(to)) {
+    // Si autorisé à afficher la page
+    return next();
   }
 
   // Sinon accès refusé

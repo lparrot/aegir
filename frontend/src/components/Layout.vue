@@ -2,7 +2,7 @@
   <section class="flex min-h-screen w-full">
     <aside class="flex flex-nowrap flex-col justify-between items-center bg-primary-700 min-w-[60px] py-2 text-primary-200">
       <div class="flex flex-col items-center gap-6 mx-4">
-        <RouterLink :to="{name: 'home'}">
+        <RouterLink :to="{name: 'tasks'}">
           <img alt="logo" class="h-8 w-8 mb-2" src="/logo.png">
         </RouterLink>
 
@@ -118,22 +118,17 @@
     </div>
   </section>
 
-  <ToastGroup/>
   <Commander/>
-  <Loader/>
 </template>
 
 <script lang="ts" setup>
 import Commander from "@/components/Commander.vue";
-import Loader from "@/components/shared/overlay/Loader.vue";
-import ToastGroup from "@/components/shared/overlay/ToastGroup.vue";
 import { useAppStore } from "@/stores/app";
 import { useAuthStore } from "@/stores/auth";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/vue";
 import useAegir from "@use/useAegir";
 import useAppLocalStorage from "@use/useAppLocalStorage";
-import useMenu from "@use/useMenu";
-import useWebsocket, { getHeaders } from "@use/useWebsocket";
+import useWebsocket from "@use/useWebsocket";
 import { breakpointsTailwind, useBreakpoints, useTitle } from "@vueuse/core";
 import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -146,7 +141,6 @@ const { dialog, toast } = useAegir();
 const route = useRoute();
 const router = useRouter();
 const breakpoints = useBreakpoints(breakpointsTailwind);
-const { menu, refreshMenu } = useMenu();
 const socket = useWebsocket();
 const title = ref(null);
 
@@ -168,17 +162,6 @@ watch(route,
     title.value = _route.meta.title;
   },
   { immediate: true },
-);
-
-watch(
-  storageToken,
-  async (_token) => {
-    if (_token != null) {
-      await authStore.getUser();
-      socket.client.value.connectHeaders = getHeaders();
-    }
-    refreshMenu();
-  },
 );
 
 /* METHODS */

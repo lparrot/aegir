@@ -59,7 +59,7 @@ public class WebsocketConfig implements WebSocketMessageBrokerConfigurer {
 
         final StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 
-        if (accessor != null && StompCommand.CONNECT.equals(accessor.getCommand())) {
+        if (accessor != null && (StompCommand.CONNECT.equals(accessor.getCommand()))) {
           final String jwtToken = accessor.getFirstNativeHeader(WebsocketConfig.this.headerName);
           if (StringUtils.isNotBlank(jwtToken)) {
             final User user = AutowireHelper.getBean(TokenSrv.class).getUser(jwtToken);

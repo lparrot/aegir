@@ -9,7 +9,7 @@
         Application de management d'équipe et d'application dans le domaine informatique.
       </div>
       <div class="flex gap-2 mt-6">
-        <BaseButton class="text-xl !font-light" color="secondary">
+        <BaseButton class="text-xl !font-light" color="secondary" @click="router.push({name: 'tasks'})">
           Démarrer
         </BaseButton>
         <BaseButton class="text-xl !font-light">
@@ -86,7 +86,7 @@
         </dl>
       </div>
     </div>
-    
+
     <hr/>
 
     <!-- Testimonials -->

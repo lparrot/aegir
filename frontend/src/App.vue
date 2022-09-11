@@ -1,6 +1,10 @@
 <template>
   <Suspense>
-    <RouterView/>
+    <div>
+      <RouterView/>
+      <ToastGroup/>
+      <Loader/>
+    </div>
 
     <template #fallback>
       <div>Chargement ...</div>
