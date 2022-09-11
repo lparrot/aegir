@@ -42,6 +42,7 @@ declare module "vue-router" {
     access?: Array<string> | boolean;
     no_match?: boolean;
     title?: string;
+    with_workspaces?: boolean;
   }
 }
 
