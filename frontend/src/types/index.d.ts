@@ -40,6 +40,7 @@ interface CustomAxiosInstance extends AxiosInstance {
 declare module "vue-router" {
   interface RouteMeta {
     access?: Array<string> | boolean;
+    landing_page?: boolean;
     no_match?: boolean;
     title?: string;
     with_workspaces?: boolean;

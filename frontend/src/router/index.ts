@@ -17,22 +17,34 @@ router.beforeResolve(async (to, from, next) => {
   const authStore = useAuthStore();
 
   if (!appStore.started) {
+    // Si connexion
     await appStore.onStartup();
   }
 
   if (to.meta.no_match) {
+    // Si erreur 404
     return next();
   }
 
-  if (checkAccess(to)) {
-    return next();
+  if (authStore.user != null) {
+    // Si utilisateur connecté
+    if (to.meta.landing_page) {
+      // Si page layout landing, redirection vers page de tâches
+      return next({ name: "tasks" });
+    }
+
+    if (checkAccess(to)) {
+      // Si autorisé à afficher la page
+      return next();
+    }
+  } else {
+    // Si utilisateur déconnecté
+    if (!to.meta.landing_page) {
+      return next({ name: "login" });
+    }
   }
 
-  // Middleware utilisateur connecté
-  if (authStore.user == null) {
-    return next({ name: "login" });
-  }
-  
+  // Sinon accès refusé
   next(PAGE_ACCESS_DENIED);
 });
 
