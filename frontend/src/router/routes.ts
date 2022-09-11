@@ -5,8 +5,8 @@ import LayoutSimple from "../components/LayoutSimple.vue";
 
 const routes: RouteRecordRaw[] = [
   {
-    path: "/", name: "Home", component: LayoutSimple, children: [
-      { path: "/home", name: "home", component: () => import("@/views/HomeView.vue") },
+    path: "/", component: LayoutSimple, children: [
+      { path: "/", name: "home", component: () => import("@/views/HomeView.vue") },
       { path: "/login", name: "login", component: () => import("@/views/LoginView.vue") },
     ],
   },
