@@ -14,6 +14,7 @@ const router = createRouter({
 
 router.beforeResolve(async (to, from, next) => {
   const appStore = useAppStore();
+  const authStore = useAuthStore();
 
   if (!appStore.started) {
     await appStore.onStartup();
@@ -26,6 +27,12 @@ router.beforeResolve(async (to, from, next) => {
   if (checkAccess(to)) {
     return next();
   }
+
+  // Middleware utilisateur connecté
+  if (authStore.user == null) {
+    return next({ name: "login" });
+  }
+  
   next(PAGE_ACCESS_DENIED);
 });
 

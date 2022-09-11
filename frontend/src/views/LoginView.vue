@@ -1,13 +1,9 @@
 <template>
-  <section class="flex items-center gap-2 border-y border-primary-200 bg-primary-100 p-3">
-    <img alt="logo" class="h-12 w-12" src="/logo.png">
-    <span class="font-bold text-4xl">Aegir</span>
-  </section>
-  <section class="flex flex-col items-center py-8">
+  <section class="flex flex-col items-center">
     <div class="text-5xl font-bold mb-2">Connexion</div>
     <div class="text-primary-400 mb-8">Veuillez vous connecter pour accéder à votre espace de travail</div>
 
-    <form class="grid lg:w-1/2 gap-4" @submit.prevent="handleSubmit">
+    <form class="grid w-full md:!w-1/2 gap-4" @submit.prevent="handleSubmit">
 
       <FieldGroup #default="{error}" :validation-field="v$.username" label="Nom d'utilisateur:">
         <BaseInput v-model="v$.username.$model" :error="error" autocomplete/>

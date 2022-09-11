@@ -1,12 +1,17 @@
 import Layout from "@/components/Layout.vue";
 import type { RouteRecordRaw } from "vue-router";
 import BlankView from "../components/BlankView.vue";
+import LayoutSimple from "../components/LayoutSimple.vue";
 
 const routes: RouteRecordRaw[] = [
-  { path: "/login", name: "login", component: () => import("@/views/LoginView.vue"), meta: { title: "Connexion" } },
+  {
+    path: "/", name: "Home", component: LayoutSimple, children: [
+      { path: "/home", name: "home", component: () => import("@/views/HomeView.vue") },
+      { path: "/login", name: "login", component: () => import("@/views/LoginView.vue") },
+    ],
+  },
   {
     path: "/", component: Layout, children: [
-      { path: "/", name: "home", component: () => import("@/views/HomeView.vue"), meta: { title: "Accueil" } },
       { path: "/profile", name: "profile", component: () => import("@/views/ProfileView.vue"), meta: { title: "Profil utilisateur", access: [] } },
       { path: "/tasks", name: "tasks", component: () => import("@/views/TasksView.vue"), meta: { title: "Tâches", access: [ "USER" ], with_workspaces: true } },
       {
