@@ -16,6 +16,7 @@ FROM adoptopenjdk/openjdk8:alpine
 ENV NODE_ENV production
 
 LABEL com.centurylinklabs.watchtower.enable="true"
+LABEL com.centurylinklabs.watchtower.stop-signal="SIGHUP"
 
 WORKDIR /app
 
