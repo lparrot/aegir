@@ -42,8 +42,7 @@ export default function useWebsocket() {
 
       client.value.onConnect = receipt => {
         if (dialogInstance.value != null) {
-          dialogInstance.value.hide();
-          dialogInstance.value = null;
+          window.location.reload();
         }
         isConnected.value = true;
         resolve(receipt);
