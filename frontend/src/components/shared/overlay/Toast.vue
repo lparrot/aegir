@@ -3,7 +3,7 @@
     <div v-if="show" class="flex flex-col gap-3 w-[300px] px-5 py-4 border rounded-lg bg-white">
       <div class="flex items-start w-full gap-2">
         <div class="flex h-full">
-          <component :is="notificationOptions.is" :class="notificationOptions.class" class="h-5 w-5 text-success"></component>
+          <component :is="notificationOptions.is" :class="notificationOptions.class" class="h-5 w-5"></component>
         </div>
         <div class="flex flex-1 flex-col">
           <div class="flex justify-between items-center">

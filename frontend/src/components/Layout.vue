@@ -107,7 +107,7 @@
 
     <WorkspaceTasksSidebar/>
 
-    <div class="flex flex-col text-white h-screen w-full">
+    <div class="flex flex-col text-white h-screen w-full scrollbar scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300">
       <header v-if="title != null" class="flex px-8 py-4 text-3xl tracking-tight font-bold text-gray-900">
         <h1>{{ title }}</h1>
       </header>
