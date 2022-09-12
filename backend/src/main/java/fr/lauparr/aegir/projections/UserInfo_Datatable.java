@@ -1,11 +1,10 @@
-package fr.lauparr.aegir.features.user;
+package fr.lauparr.aegir.projections;
 
-import fr.lauparr.aegir.features.project.ProjectInfo;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 
-public interface UserInfo {
+public interface UserInfo_Datatable {
   Long getId();
 
   String getUsername();
@@ -16,8 +15,8 @@ public interface UserInfo {
   @Value("#{target.profile?.label}")
   String getProfileLabel();
 
-  @Value("#{target.projects}")
-  List<ProjectInfo> getProjects();
+  @Value("#{target.workspaces}")
+  List<WorkspaceInfo_Simple> getWorkspaces();
 
   @Value("#{target.userData?.id}")
   Long getUserDataId();

@@ -13,18 +13,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Cacheable;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,13 +44,9 @@ public class Task {
   private TaskStatus status;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JsonBackReference("project_item_task")
-  @JoinColumn(foreignKey = @ForeignKey(name = "FK_task_project_item_view"))
-  private ProjectItem view;
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(foreignKey = @ForeignKey(name = "FK_task_project"))
-  private Project project;
+  @JsonBackReference("board_task")
+  @JoinColumn(foreignKey = @ForeignKey(name = "FK_task_board"))
+  private Board board;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(foreignKey = @ForeignKey(name = "FK_task_assigned"))

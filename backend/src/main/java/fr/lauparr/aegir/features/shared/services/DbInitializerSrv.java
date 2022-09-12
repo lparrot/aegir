@@ -2,14 +2,13 @@ package fr.lauparr.aegir.features.shared.services;
 
 import com.github.javafaker.Faker;
 import fr.lauparr.aegir.entities.*;
-import fr.lauparr.aegir.entities.repositories.ProfileRepository;
-import fr.lauparr.aegir.entities.repositories.ProjectRepository;
-import fr.lauparr.aegir.entities.repositories.UserDataRepository;
-import fr.lauparr.aegir.entities.repositories.UserRepository;
-import fr.lauparr.aegir.enums.EnumProjectItemType;
 import fr.lauparr.aegir.features.security.AuthSrv;
 import fr.lauparr.aegir.features.security.ParamsSecurityCreateAccount;
 import fr.lauparr.aegir.features.websockets.WebsocketSrv;
+import fr.lauparr.aegir.repositories.ProfileRepository;
+import fr.lauparr.aegir.repositories.UserDataRepository;
+import fr.lauparr.aegir.repositories.UserRepository;
+import fr.lauparr.aegir.repositories.WorkspaceRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -38,7 +37,7 @@ public class DbInitializerSrv {
   @Autowired
   private WebsocketSrv websocketSrv;
   @Autowired
-  private ProjectRepository projectRepository;
+  private WorkspaceRepository workspaceRepository;
 
   @Transactional
   public void initialize() {
@@ -65,61 +64,58 @@ public class DbInitializerSrv {
 
       authenticate(root);
 
-      TaskStatus statutsSoleilTachesTodo = new TaskStatus().setName("To Do").setColor("green");
-      TaskStatus statutsSoleilTachesInProgress = new TaskStatus().setName("In Progress").setColor("blue");
+      TaskStatus statutsSoleilTodo = new TaskStatus().setName("To Do").setColor("green");
+      TaskStatus statutsSoleilInProgress = new TaskStatus().setName("In Progress").setColor("blue");
+      TaskStatus statutsSoleilToTest = new TaskStatus().setName("To Test").setColor("orange");
 
-      TaskStatus statutsSoleilBugsTodo = new TaskStatus().setName("To Do").setColor("green");
-      TaskStatus statutsSoleilBugsInProgress = new TaskStatus().setName("In Progress").setColor("blue");
-      TaskStatus statutsSoleilBugsToTest = new TaskStatus().setName("To Test").setColor("orange");
+      TaskStatus statutsCcsTodo = new TaskStatus().setName("To Do").setColor("green");
+      TaskStatus statutsCcsInProgress = new TaskStatus().setName("In Progress").setColor("blue");
+      TaskStatus statutsCcsToTest = new TaskStatus().setName("To Test").setColor("orange");
 
-      TaskStatus statutsCcsProdTodo = new TaskStatus().setName("To Do").setColor("green");
-      TaskStatus statutsCcsProdInProgress = new TaskStatus().setName("In Progress").setColor("blue");
+      final Workspace workspaceSoleil = new Workspace().setName("Soleil");
+      final Workspace workspaceCcs = new Workspace().setName("CCS");
 
-      TaskStatus statutsCcsDevTodo = new TaskStatus().setName("To Do").setColor("green");
-      TaskStatus statutsCcsDevInProgress = new TaskStatus().setName("In Progress").setColor("blue");
-      TaskStatus statutsCcsDevToTest = new TaskStatus().setName("To Test").setColor("orange");
+      workspaceSoleil
+        .addFolder(new Folder().setName("VABF").setWorkspace(workspaceSoleil)
+          .addBoard(new Board().setName("Module solde"))
+          .addBoard(new Board().setName("Module dossier formation"))
+        )
+        .addFolder(new Folder().setName("DEV").setWorkspace(workspaceSoleil)
+          .addBoard(new Board().setName("Bugs")
+          )
+        )
+        .addStatus(statutsSoleilTodo)
+        .addStatus(statutsSoleilInProgress)
+        .addStatus(statutsSoleilToTest);
 
-      final Project project_SOLEIL = new Project().setName("Soleil")
-        .addProjectItem(new ProjectItem().setType(EnumProjectItemType.WORKSPACE).setName("Taches")
-          .addStatus(statutsSoleilTachesTodo)
-          .addStatus(statutsSoleilTachesInProgress)
-          .addChild(new ProjectItem().setType(EnumProjectItemType.FOLDER).setName("VABF")
-            .addChild(new ProjectItem().setType(EnumProjectItemType.VIEW).setName("Module solde"))
-            .addChild(new ProjectItem().setType(EnumProjectItemType.VIEW).setName("Module dossier formation")))
-          .addChild(new ProjectItem().setType(EnumProjectItemType.VIEW).setName("DEV")))
-
-        .addProjectItem(new ProjectItem().setType(EnumProjectItemType.WORKSPACE).setName("Bugs")
-          .addStatus(statutsSoleilBugsTodo)
-          .addStatus(statutsSoleilBugsInProgress)
-          .addStatus(statutsSoleilBugsToTest)
-        );
-
-      final Project project_CCS = new Project().setName("CCS")
-        .addProjectItem(new ProjectItem().setType(EnumProjectItemType.WORKSPACE).setName("PROD")
-          .addStatus(statutsCcsProdTodo)
-          .addStatus(statutsCcsProdInProgress)
-          .addChild(new ProjectItem().setType(EnumProjectItemType.VIEW).setName("Bugs")
-            .addTask(new Task().setName("Corriger le problème de mot de passe lors de la connexion").setStatus(statutsCcsProdInProgress).addComment(new TaskComment().setContent("Correction en cours ...")))
-            .addTask(new Task().setName("Modifier le libellé du bouton de création d'un profil").setStatus(statutsCcsProdTodo).setAssigned(root).setAssignedAt(LocalDateTime.now()).addComment(new TaskComment().setContent("Modification mineure, n'est pas prioritaire")))))
-
-        .addProjectItem(new ProjectItem().setType(EnumProjectItemType.WORKSPACE).setName("DEV")
-          .addStatus(statutsCcsDevTodo)
-          .addStatus(statutsCcsDevInProgress)
-          .addStatus(statutsCcsDevToTest)
-          .addChild(new ProjectItem().setType(EnumProjectItemType.VIEW).setName("Bugs")
-            .addTask(new Task().setName("Corriger le commentaire sur la méthode getUserByTaskId()").setStatus(statutsCcsDevInProgress)))
-          .addChild(new ProjectItem().setType(EnumProjectItemType.VIEW).setName("Evolutions")
-            .addTask(new Task().setName("Création de l'écran d'administration des profils").setAssigned(root).setAssignedAt(LocalDateTime.now()).setStatus(statutsCcsDevTodo))
-            .addTask(new Task().setName("Création de l'écran de tableau de bord").setStatus(statutsCcsDevTodo)
+      workspaceCcs
+        .addFolder(new Folder().setName("PROD").setWorkspace(workspaceCcs)
+          .addBoard(new Board().setName("Bugs")
+            .addTask(new Task().setName("Corriger le problème de mot de passe lors de la connexion").setStatus(statutsCcsInProgress).addComment(new TaskComment().setContent("Correction en cours ...")))
+            .addTask(new Task().setName("Modifier le libellé du bouton de création d'un profil").setStatus(statutsCcsTodo).setAssigned(root).setAssignedAt(LocalDateTime.now()).addComment(new TaskComment().setContent("Modification mineure, n'est pas prioritaire")))
+          )
+        )
+        .addFolder(new Folder().setName("DEV").setWorkspace(workspaceCcs)
+          .addBoard(new Board().setName("Bugs")
+            .addTask(new Task().setName("Corriger le commentaire sur la méthode getUserByTaskId()").setStatus(statutsCcsInProgress))
+          )
+          .addBoard(new Board().setName("Evolutions")
+            .addTask(new Task().setName("Création de l'écran d'administration des profils").setAssigned(root).setAssignedAt(LocalDateTime.now()).setStatus(statutsCcsTodo))
+            .addTask(new Task().setName("Création de l'écran de tableau de bord").setStatus(statutsCcsTodo)
               .addComment(new TaskComment().setContent("Attention, doit être réalisé par une équipe encadrée par un lead dev"))
-            )));
+            )
+          )
+        )
+        .addStatus(statutsCcsTodo)
+        .addStatus(statutsCcsInProgress)
+        .addStatus(statutsCcsToTest);
 
-      projectRepository.saveAll(Arrays.asList(project_SOLEIL, project_CCS));
+      workspaceRepository.saveAll(Arrays.asList(workspaceSoleil, workspaceCcs));
 
-      root.addProject(project_SOLEIL).addProject(project_CCS);
+      root.addWorkspace(workspaceSoleil).addWorkspace(workspaceCcs);
 
-      project_SOLEIL.addMember(new ProjectMember().setUser(root).setRole(Role.ADMIN));
-      project_CCS.addMember(new ProjectMember().setUser(root).setRole(Role.ADMIN));
+      workspaceSoleil.addMember(new Member().setUser(root).setRole(Role.ADMIN));
+      workspaceCcs.addMember(new Member().setUser(root).setRole(Role.ADMIN));
 
       userRepository.save(root);
 
@@ -146,8 +142,8 @@ public class DbInitializerSrv {
             .setPassword("123"))
           .setProfile(adminProfile);
 
-        project_SOLEIL.addMember(new ProjectMember().setUser(randomUser).setRole(Role.ADMIN));
-        project_CCS.addMember(new ProjectMember().setUser(randomUser).setRole(Role.ADMIN));
+        workspaceSoleil.addMember(new Member().setUser(randomUser).setRole(Role.ADMIN));
+        workspaceCcs.addMember(new Member().setUser(randomUser).setRole(Role.ADMIN));
 
         userRepository.save(randomUser);
       }

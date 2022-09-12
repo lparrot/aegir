@@ -1,11 +1,11 @@
 import Layout from "@/components/Layout.vue";
+import LayoutLandscape from "src/components/LayoutLandscape.vue";
 import type { RouteRecordRaw } from "vue-router";
 import BlankView from "../components/BlankView.vue";
-import LayoutSimple from "../components/LayoutSimple.vue";
 
 const routes: RouteRecordRaw[] = [
   {
-    path: "/", component: LayoutSimple, children: [
+    path: "/", component: LayoutLandscape, children: [
       { path: "/", name: "home", component: () => import("@/views/HomeView.vue"), meta: { landing_page: true } },
       { path: "/login", name: "login", component: () => import("@/views/LoginView.vue"), meta: { landing_page: true } },
     ],

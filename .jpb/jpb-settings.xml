@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="JpaPluginProjectSettings" dtoNamePatternRegexp="(?&lt;entity&gt;.*)Dto((_?)(.*))">
+  <component name="JpaPluginProjectSettings" dtoNamePatternRegexp="(?&lt;entity&gt;.*)Dto((_?)(.*))" projectionNamePatternRegexp="(?&lt;entity&gt;.*)(?:Info|Prj|Projection|VO|Vo|View|Request|Browse)((_?)(.*))">
     <option name="entityNameTemplate"/>
     <option name="useLazyOnToOneAssociations" value="true"/>
     <option name="scaffoldingLanguage"/>

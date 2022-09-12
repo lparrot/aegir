@@ -1,11 +1,11 @@
-package fr.lauparr.aegir.features.task;
+package fr.lauparr.aegir.projections;
 
 import fr.lauparr.aegir.enums.EnumProjectItemType;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface TaskInfo {
+public interface TaskInfo_Simple {
   Long getId();
 
   String getName();

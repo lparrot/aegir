@@ -31,7 +31,7 @@ public class UserData {
 
   private String about;
 
-  @OneToOne(mappedBy = "userData", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+  @OneToOne(mappedBy = "userData", cascade = {CascadeType.ALL})
   @PrimaryKeyJoinColumn
   private User user;
 

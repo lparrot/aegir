@@ -1,5 +1,5 @@
 <template>
-  <Datatable :fields="fields" :items="items" selectable striped @row-click="onRowClick">
+  <Datatable :fields="fields" :items="items" class="max-h-full" selectable striped @row-click="onRowClick">
     <template #cell(avatar)="{value}">
       <div class="h-10 w-10">
         <img :src="value" alt="avatar" class="rounded-full">
@@ -13,7 +13,7 @@
       </div>
     </template>
 
-    <template #cell(projects)="{value}">
+    <template #cell(workspaces)="{value}">
       <Badge v-if="checkStringNotEmpty(value)" :icon="CheckBadgeIcon" class="font-bold" color="yellow">{{ value.toUpperCase() }}</Badge>
     </template>
   </Datatable>
@@ -23,7 +23,6 @@
 import { api } from "@/api";
 import Datatable from "@/components/shared/data/Datatable.vue";
 import Badge from "@/components/shared/panel/Badge.vue";
-import { checkStringNotEmpty } from "@/utils/string";
 import { CheckBadgeIcon, EnvelopeIcon } from "@heroicons/vue/24/outline";
 import useAegir from "@use/useAegir";
 import map from "lodash/map";
@@ -42,11 +41,11 @@ const fetchUsers = async () => {
 await fetchUsers();
 
 const fields = ref<DatatableField[]>([
-  { key: "avatar", transform: (_value, item) => `https://picsum.photos/60/60?random=${ item.id }` },
+  { key: "avatar", transform: (_value, item) => `https://picsum.photos/60/60?random=${item.id}` },
   { key: "username", label: "Nom d'utilisateur" },
   { key: "userDataEmail", label: "Email", preventClick: true },
   { key: "profileLabel", label: "Profil" },
-  { key: "projects", label: "Projet", field: "projects", transform: value => map(value, o => o.name).join(", "), preventClick: true },
+  { key: "workspaces", label: "Workspaces", field: "workspaces", transform: value => map(value, o => o.name).join(", "), preventClick: true },
 ]);
 
 const onRowClick = (user) => {

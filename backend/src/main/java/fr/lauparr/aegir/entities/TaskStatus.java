@@ -1,6 +1,5 @@
 package fr.lauparr.aegir.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -23,9 +22,8 @@ public class TaskStatus implements Serializable {
 
   private String color;
 
-  @JsonBackReference("project_item_statuses")
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(foreignKey = @ForeignKey(name = "FK_task_status_workspace"))
-  private ProjectItem workspace;
+  private Workspace workspace;
 
 }

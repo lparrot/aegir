@@ -23,10 +23,6 @@ public class Widget {
 
   private String name;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(foreignKey = @ForeignKey(name = "FK_widget_project"))
-  private Project project;
-
   @CreatedBy
   @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY)

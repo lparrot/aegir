@@ -1,4 +1,4 @@
-package fr.lauparr.aegir.entities.repositories;
+package fr.lauparr.aegir.repositories;
 
 import fr.lauparr.aegir.entities.Widget;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

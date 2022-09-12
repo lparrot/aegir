@@ -23,10 +23,6 @@ public class Notification {
 
   private String name;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(foreignKey = @ForeignKey(name = "FK_notification_project"))
-  private Project project;
-
   @CreatedBy
   @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY)

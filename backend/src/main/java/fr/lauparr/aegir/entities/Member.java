@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Setter
 @Embeddable
 @Accessors(chain = true)
-public class ProjectMember {
+public class Member {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(foreignKey = @ForeignKey(name = "FK_project_member_user"))

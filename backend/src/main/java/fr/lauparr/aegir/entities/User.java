@@ -13,19 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Cacheable;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.PostPersist;
-import javax.persistence.PostUpdate;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -56,21 +44,14 @@ public class User implements UserDetails {
   @JoinColumn(name = "id", foreignKey = @ForeignKey(name = "FK_user_user_data"))
   private UserData userData;
 
-  @JsonManagedReference("user_project")
+  @JsonManagedReference("user_workspace")
   @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
   @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-  private List<Project> projects = new ArrayList<>();
+  private List<Workspace> workspaces = new ArrayList<>();
 
-  @PostPersist
-  @PostUpdate
-  public void postSave() {
-    projects.forEach(project -> {
-      project.setUser(this);
-    });
-  }
-
-  public User addProject(Project project) {
-    this.projects.add(project);
+  public User addWorkspace(Workspace workspace) {
+    workspace.setUser(this);
+    this.workspaces.add(workspace);
     return this;
   }
 

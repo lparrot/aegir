@@ -107,12 +107,12 @@
 
     <WorkspaceTasksSidebar/>
 
-    <div class="flex flex-col text-white h-screen w-full scrollbar scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300">
+    <div class="flex flex-col text-white h-screen w-full">
       <header v-if="title != null" class="flex px-8 py-4 text-3xl tracking-tight font-bold text-gray-900">
         <h1>{{ title }}</h1>
       </header>
 
-      <main class="flex flex-col flex-grow px-8 py-4 h-full w-full text-gray-900">
+      <main class="flex flex-col max-h-full flex-grow px-8 py-4 h-full w-full text-gray-900 scrollbar scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300">
         <RouterView/>
       </main>
     </div>
