@@ -3,6 +3,7 @@ package fr.lauparr.aegir.features.workspace;
 import fr.lauparr.aegir.controllers.base.BaseController;
 import fr.lauparr.aegir.dto.api.RestApiResponse;
 import fr.lauparr.aegir.projections.WorkspaceInfo_Children;
+import fr.lauparr.aegir.projections.WorkspaceInfo_Simple;
 import fr.lauparr.aegir.utils.DaoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,12 @@ public class WorkspaceCtrl extends BaseController {
   private WorkspaceSrv service;
 
   @GetMapping("current_user")
-  public ResponseEntity<RestApiResponse<List<WorkspaceInfo_Children>>> getWorkspacesByCurrentUser() {
+  public ResponseEntity<RestApiResponse<List<WorkspaceInfo_Simple>>> getWorkspacesByCurrentUser() {
+    return this.ok(DaoUtils.convertToListDto(this.service.getUserWorkspaces(), WorkspaceInfo_Simple.class));
+  }
+
+  @GetMapping("current_user/children")
+  public ResponseEntity<RestApiResponse<List<WorkspaceInfo_Children>>> getWorkspacesWithChildrenByCurrentUser() {
     return this.ok(DaoUtils.convertToListDto(this.service.getUserWorkspaces(), WorkspaceInfo_Children.class));
   }
 
