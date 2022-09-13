@@ -5,18 +5,13 @@ import fr.lauparr.aegir.utils.DateTimeUtils;
 
 import java.time.LocalDateTime;
 
-public interface TaskInfo_Simple {
+public interface TaskCommentInfo_Simple {
   Long getId();
 
-  String getName();
-
-  String getDescription();
+  String getContent();
 
   @JsonFormat(pattern = DateTimeUtils.PATTERN_DATE_TIME)
   LocalDateTime getCreatedAt();
 
-  @JsonFormat(pattern = DateTimeUtils.PATTERN_DATE_TIME)
-  LocalDateTime getAssignedAt();
-
-  UserInfo_Datatable getAssigned();
+  UserInfo_Simple getUser();
 }
