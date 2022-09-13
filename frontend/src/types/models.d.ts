@@ -44,6 +44,16 @@ declare global {
     title?: string;
   }
 
+  interface AppTreeItem {
+    children?: AppTreeItem[];
+    icon?: any;
+    label: string;
+    opened?: boolean;
+    selectable?: boolean;
+    type?: string;
+    value: any;
+  }
+
   type AppNotificationType = "success" | "info" | "warn" | "danger"
 
   interface AppNotification {

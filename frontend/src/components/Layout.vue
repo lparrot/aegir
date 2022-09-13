@@ -80,6 +80,10 @@
                       <mdi-format-quote-close-outline/>
                       <span>Toast</span>
                     </RouterLink>
+                    <RouterLink :to="{name: 'dev-tree'}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-primary-100" @click="close">
+                      <mdi-file-tree-outline/>
+                      <span>Tree</span>
+                    </RouterLink>
                   </div>
                 </div>
               </div>
@@ -127,31 +131,21 @@ import { useAppStore } from "@/stores/app";
 import { useAuthStore } from "@/stores/auth";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/vue";
 import useAegir from "@use/useAegir";
-import useAppLocalStorage from "@use/useAppLocalStorage";
-import useWebsocket from "@use/useWebsocket";
-import { breakpointsTailwind, useBreakpoints, useTitle } from "@vueuse/core";
+import { useTitle } from "@vueuse/core";
 import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 /* COMPOSABLES */
 const appStore = useAppStore();
 const authStore = useAuthStore();
-const { storageToken } = useAppLocalStorage();
 const { dialog, toast } = useAegir();
 const route = useRoute();
 const router = useRouter();
-const breakpoints = useBreakpoints(breakpointsTailwind);
-const socket = useWebsocket();
 const title = ref(null);
-
-const drawer_sidebar = ref(null);
-const isMobile = breakpoints.smaller("lg");
 
 
 /* INIT */
 await appStore.getInformations();
-
-/* COMPUTED */
 
 
 /* HOOKS */

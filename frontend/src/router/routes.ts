@@ -28,6 +28,7 @@ const routes: RouteRecordRaw[] = [
           { path: "/loader", name: "dev-loader", component: () => import("@/views/dev/DevLoaderView.vue"), meta: { title: "DEV - Loader", access: [ "USER" ] } },
           { path: "/modal", name: "dev-modal", component: () => import("@/views/dev/DevModalView.vue"), meta: { title: "DEV - Modal", access: [ "USER" ] } },
           { path: "/toast", name: "dev-toast", component: () => import("@/views/dev/DevToastView.vue"), meta: { title: "DEV - Toast", access: [ "USER" ] } },
+          { path: "/tree", name: "dev-tree", component: () => import("@/views/dev/DevTreeView.vue"), meta: { title: "DEV - Tree", access: [ "USER" ] } },
         ],
       },
       {

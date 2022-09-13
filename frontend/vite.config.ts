@@ -53,7 +53,7 @@ export default defineConfig(({ mode }) => {
           "vue",
           "vue-router",
           "pinia",
-          { "@heroicons/vue": [] },
+          "@vueuse/core",
         ],
       }),
       Icons({

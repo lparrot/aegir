@@ -29,7 +29,8 @@
     "importsNotUsedAsValues": "preserve",
     "allowJs": true,
     "types": [
-      "node"
+      "node",
+      "unplugin-icons/types/vue"
     ]
   },
   "references": [
