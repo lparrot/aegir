@@ -13,7 +13,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: "/", component: Layout, children: [
       { path: "/profile", name: "profile", component: () => import("@/views/ProfileView.vue"), meta: { title: "Profil utilisateur", access: [] } },
-      { path: "/tasks", name: "tasks", component: () => import("@/views/TasksView.vue"), meta: { title: "Tâches", access: [ "USER" ], with_workspaces: true } },
+      { path: "/tasks", name: "tasks", component: () => import("@/views/tasks/TasksView.vue"), meta: { title: "Tâches", access: [ "USER" ], with_workspaces: true, hideTitle: true } },
       {
         path: "/admin", component: BlankView, children: [
           { path: "/connected_users", name: "admin-connected-users", component: () => import("@/views/admin/ConnectedUsersView.vue"), meta: { title: "Utilisateurs connectés", access: [ "ADMIN" ] } },

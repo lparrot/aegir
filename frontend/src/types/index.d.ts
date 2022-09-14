@@ -43,6 +43,7 @@ declare module "vue-router" {
     landing_page?: boolean;
     no_match?: boolean;
     title?: string;
+    hideTitle?: boolean;
     with_workspaces?: boolean;
   }
 }

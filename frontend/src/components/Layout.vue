@@ -112,7 +112,7 @@
     <WorkspaceTasksSidebar/>
 
     <div class="flex flex-col text-white h-screen w-full scrollbar scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300">
-      <header v-if="title != null" class="flex px-8 py-4 text-3xl tracking-tight font-bold text-gray-900">
+      <header v-if="!hideTitle && title != null" class="flex px-8 py-4 text-3xl tracking-tight font-bold text-gray-900">
         <h1>{{ title }}</h1>
       </header>
 
@@ -142,6 +142,7 @@ const { dialog, toast } = useAegir();
 const route = useRoute();
 const router = useRouter();
 const title = ref(null);
+const hideTitle = ref(false);
 
 
 /* INIT */
@@ -154,6 +155,7 @@ watch(route,
     // Modification du titre dans l'onglet et récupération de la partie du titre pour affichage en titre de page
     useTitle(_route.meta.title, { titleTemplate: "%s | " + appStore.informations.app.title });
     title.value = _route.meta.title;
+    hideTitle.value = _route.meta.hideTitle;
   },
   { immediate: true },
 );

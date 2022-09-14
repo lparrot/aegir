@@ -1,7 +1,17 @@
 package fr.lauparr.aegir.features.shared.services;
 
 import com.github.javafaker.Faker;
-import fr.lauparr.aegir.entities.*;
+import fr.lauparr.aegir.entities.Board;
+import fr.lauparr.aegir.entities.Folder;
+import fr.lauparr.aegir.entities.Member;
+import fr.lauparr.aegir.entities.Profile;
+import fr.lauparr.aegir.entities.Role;
+import fr.lauparr.aegir.entities.Task;
+import fr.lauparr.aegir.entities.TaskComment;
+import fr.lauparr.aegir.entities.TaskStatus;
+import fr.lauparr.aegir.entities.User;
+import fr.lauparr.aegir.entities.UserData;
+import fr.lauparr.aegir.entities.Workspace;
 import fr.lauparr.aegir.features.security.AuthSrv;
 import fr.lauparr.aegir.features.security.ParamsSecurityCreateAccount;
 import fr.lauparr.aegir.features.websockets.WebsocketSrv;
@@ -77,12 +87,11 @@ public class DbInitializerSrv {
 
       workspaceSoleil
         .addFolder(new Folder().setName("VABF").setWorkspace(workspaceSoleil)
-          .addBoard(new Board().setName("Module solde"))
-          .addBoard(new Board().setName("Module dossier formation"))
+          .addBoard(new Board().setName("Module solde").setDescription("Validation d'aptitude au bon fonctionnement du module solde"))
+          .addBoard(new Board().setName("Module dossier formation").setDescription("Validation d'aptitude au bon fonctionnement du module dossier formation"))
         )
         .addFolder(new Folder().setName("DEV").setWorkspace(workspaceSoleil)
-          .addBoard(new Board().setName("Bugs")
-          )
+          .addBoard(new Board().setName("Bugs").setDescription("Bugs en développement"))
         )
         .addStatus(statutsSoleilTodo)
         .addStatus(statutsSoleilInProgress)
@@ -90,16 +99,16 @@ public class DbInitializerSrv {
 
       workspaceCcs
         .addFolder(new Folder().setName("PROD").setWorkspace(workspaceCcs)
-          .addBoard(new Board().setName("Bugs")
+          .addBoard(new Board().setName("Bugs").setDescription("Bugs en production")
             .addTask(new Task().setName("Corriger le problème de mot de passe lors de la connexion").setStatus(statutsCcsInProgress).addComment(new TaskComment().setContent("Correction en cours ...")))
             .addTask(new Task().setName("Modifier le libellé du bouton de création d'un profil").setStatus(statutsCcsTodo).setAssigned(root).setAssignedAt(LocalDateTime.now()).addComment(new TaskComment().setContent("Modification mineure, n'est pas prioritaire")))
           )
         )
         .addFolder(new Folder().setName("DEV").setWorkspace(workspaceCcs)
-          .addBoard(new Board().setName("Bugs")
+          .addBoard(new Board().setName("Bugs").setDescription("Bugs en développement")
             .addTask(new Task().setName("Corriger le commentaire sur la méthode getUserByTaskId()").setStatus(statutsCcsInProgress))
           )
-          .addBoard(new Board().setName("Evolutions")
+          .addBoard(new Board().setName("Evolutions").setDescription("Evolutions prévues")
             .addTask(new Task().setName("Création de l'écran d'administration des profils").setAssigned(root).setAssignedAt(LocalDateTime.now()).setStatus(statutsCcsTodo))
             .addTask(new Task().setName("Création de l'écran de tableau de bord").setStatus(statutsCcsTodo)
               .addComment(new TaskComment().setContent("Attention, doit être réalisé par une équipe encadrée par un lead dev"))

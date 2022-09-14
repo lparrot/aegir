@@ -10,6 +10,14 @@ declare global {
     data?: T
   }
 
+  interface AppTaskColumn {
+    id: string;
+    header?: string;
+    headerClass?: string;
+    headerStyle?: any;
+    component: any;
+  }
+
   interface MenuItem {
     label: string;
     route?: RouteLocationRaw;

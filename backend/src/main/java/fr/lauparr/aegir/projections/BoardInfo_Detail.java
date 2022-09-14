@@ -7,5 +7,7 @@ public interface BoardInfo_Detail {
 
   String getName();
 
+  String getDescription();
+
   List<TaskInfo_Detail> getTasks();
 }
