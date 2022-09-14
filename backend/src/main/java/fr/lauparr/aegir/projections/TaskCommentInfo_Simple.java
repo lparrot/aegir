@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import fr.lauparr.aegir.utils.DateTimeUtils;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public interface TaskCommentInfo_Simple {
   Long getId();
@@ -13,5 +14,5 @@ public interface TaskCommentInfo_Simple {
   @JsonFormat(pattern = DateTimeUtils.PATTERN_DATE_TIME)
   LocalDateTime getCreatedAt();
 
-  UserInfo_Simple getUser();
+  Optional<UserInfo_Simple> getUser();
 }

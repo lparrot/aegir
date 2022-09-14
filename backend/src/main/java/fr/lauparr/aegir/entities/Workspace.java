@@ -10,15 +10,12 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Getter
 @Setter
 @Entity
-@Cacheable
 @Accessors(chain = true)
 @EntityListeners(AuditingEntityListener.class)
 public class Workspace {
@@ -37,18 +34,21 @@ public class Workspace {
   private User user;
 
   @ElementCollection
-  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
   @CollectionTable(name = "workspace_member", joinColumns = @JoinColumn(name = "workspace_id"), foreignKey = @ForeignKey(name = "FK_member_workspace"))
   private List<Member> members = new ArrayList<>();
 
+  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
   @OneToMany(mappedBy = "workspace", cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-  private List<Board> boards = new ArrayList<>();
+  private Set<Board> boards = new HashSet<>();
 
+  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
   @OneToMany(mappedBy = "workspace", cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-  private List<Folder> folders = new ArrayList<>();
+  private Set<Folder> folders = new HashSet<>();
 
+  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
   @OneToMany(mappedBy = "workspace", cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-  private List<TaskStatus> statuses = new ArrayList<>();
+  private Set<TaskStatus> statuses = new HashSet<>();
 
   public List<Board> getBoardsNotInFolder() {
     return this.boards.stream().filter(board -> Objects.isNull(board.getFolder())).collect(Collectors.toList());

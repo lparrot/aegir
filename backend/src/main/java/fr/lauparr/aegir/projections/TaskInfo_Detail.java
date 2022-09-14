@@ -5,6 +5,7 @@ import fr.lauparr.aegir.utils.DateTimeUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface TaskInfo_Detail {
   Long getId();
@@ -19,11 +20,11 @@ public interface TaskInfo_Detail {
   @JsonFormat(pattern = DateTimeUtils.PATTERN_DATE_TIME)
   LocalDateTime getAssignedAt();
 
-  TaskStatusInfo_Simple getStatus();
+  Optional<TaskStatusInfo_Simple> getStatus();
 
-  UserInfo_Simple getAssigned();
+  Optional<UserInfo_Simple> getAssigned();
 
-  UserInfo_Simple getUser();
+  Optional<UserInfo_Simple> getUser();
 
   List<TaskCommentInfo_Simple> getComments();
 }

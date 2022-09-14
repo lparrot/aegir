@@ -5,17 +5,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
 @Entity
-@Cacheable
 @Accessors(chain = true)
 @EntityListeners(AuditingEntityListener.class)
 public class Board {
@@ -41,8 +41,9 @@ public class Board {
   @JoinColumn(foreignKey = @ForeignKey(name = "FK_board_folder"))
   private Folder folder;
 
+  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
   @OneToMany(mappedBy = "board", orphanRemoval = true, cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-  private List<Task> tasks = new ArrayList<>();
+  private Set<Task> tasks = new HashSet<>();
 
   public Board addTask(Task task) {
     task.setBoard(this);

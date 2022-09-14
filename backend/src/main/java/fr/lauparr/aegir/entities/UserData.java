@@ -9,7 +9,6 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@Cacheable
 @Accessors(chain = true)
 public class UserData {
 

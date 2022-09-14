@@ -7,7 +7,7 @@ import io.jsonwebtoken.Jwts;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.hibernate.annotations.Cache;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -15,14 +15,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
 
 @Getter
 @Setter
 @Entity
-@Cacheable
 @Accessors(chain = true)
 public class User implements UserDetails {
 
@@ -45,9 +45,9 @@ public class User implements UserDetails {
   private UserData userData;
 
   @JsonManagedReference("user_workspace")
-  @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
   @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-  private List<Workspace> workspaces = new ArrayList<>();
+  private Set<Workspace> workspaces = new HashSet<>();
 
   public User addWorkspace(Workspace workspace) {
     workspace.setUser(this);
@@ -88,5 +88,9 @@ public class User implements UserDetails {
   @Override
   public boolean isEnabled() {
     return true;
+  }
+
+  public void setUsername(String username) {
+    this.username = StringUtils.lowerCase(username, Locale.FRENCH);
   }
 }

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -15,13 +14,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
 @Entity
-@Cacheable
 @Accessors(chain = true)
 @EntityListeners(AuditingEntityListener.class)
 public class Task {
@@ -60,9 +58,9 @@ public class Task {
 
   @JsonIgnore
   @OnDelete(action = OnDeleteAction.CASCADE)
-  @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
   @OneToMany(mappedBy = "task", orphanRemoval = true, cascade = CascadeType.ALL)
-  private List<TaskComment> comments = new ArrayList<>();
+  private Set<TaskComment> comments = new HashSet<>();
 
   public Task addComment(TaskComment comment) {
     comment.setTask(this);
