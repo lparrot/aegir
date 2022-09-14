@@ -90,7 +90,8 @@ public class User implements UserDetails {
     return true;
   }
 
-  public void setUsername(String username) {
+  public User setUsername(String username) {
     this.username = StringUtils.lowerCase(username, Locale.FRENCH);
+    return this;
   }
 }
