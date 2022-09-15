@@ -9,8 +9,6 @@
       <Task :task="task"></Task>
     </template>
   </TaskGroup>
-
-  <!--  <pre class="text-xs">{{ boardDetail }}</pre>-->
 </template>
 
 <script lang="ts" setup>
@@ -21,13 +19,18 @@ import { Ref } from "vue";
 const { storageSidebar } = useAppLocalStorage();
 const boardDetail: Ref<BoardInfo_Detail> = ref(null);
 
+const fetchBoardById = async (id) => {
+  const { result } = await api.getBoardById(id);
+  boardDetail.value = result;
+};
+
+await fetchBoardById(storageSidebar.value.board_selected);
+
 watch(
   () => storageSidebar.value.board_selected,
   async (selected) => {
     if (selected != null) {
-      const { result } = await api.getBoardById(selected);
-      boardDetail.value = result;
+      await fetchBoardById(selected);
     }
-  },
-  { immediate: true });
+  });
 </script>

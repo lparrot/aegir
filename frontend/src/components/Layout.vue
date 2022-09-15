@@ -129,6 +129,7 @@
 import Commander from "@/components/Commander.vue";
 import { useAppStore } from "@/stores/app";
 import { useAuthStore } from "@/stores/auth";
+import { Float } from "@headlessui-float/vue";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/vue";
 import useAegir from "@use/useAegir";
 import { useTitle } from "@vueuse/core";
