@@ -19,7 +19,7 @@
 
       <div class="grid grid-cols-1 text-primary-600 mt-4 gap-3">
         <Popover #default="{open}" class="inline-block">
-          <Float :offset="6" enter="transition ease-out duration-100" enter-from="transform opacity-0 scale-95" enter-to="transform opacity-100 scale-100" flip leave="transition ease-in duration-75" leave-from="transform opacity-100 scale-100" leave-to="transform opacity-0 scale-95" placement="right-start" portal>
+          <Float :offset="6" :placement="isMobile ? '' : 'right-start'" enter="transition ease-out duration-100" enter-from="transform opacity-0 scale-95" enter-to="transform opacity-100 scale-100" flip leave="transition ease-in duration-75" leave-from="transform opacity-100 scale-100" leave-to="transform opacity-0 scale-95" portal>
             <PopoverButton as="template">
               <div class="flex w-full items-center gap-2 cursor-pointer -m-1 p-1 rounded hover:bg-primary-300">
                 <mdi-plus class="h-5 w-5"/>
@@ -77,14 +77,18 @@ import { computed, Ref, watch } from "vue";
 
 const route = useRoute();
 const breakpoints = useBreakpoints(breakpointsTailwind);
-const isMobile = breakpoints.smaller("lg");
+const isMobile = breakpoints.smaller("md");
 const opened = ref(false);
 const { storageSidebar } = useAppLocalStorage();
 const workspaces = ref([]);
 const selectedWorkspace: Ref<WorkspaceInfo_Children> = ref(null);
 const drawer_sidebar = ref();
 
-onClickOutside(drawer_sidebar, () => opened.value = false);
+onClickOutside(drawer_sidebar, () => {
+  if (isMobile.value) {
+    opened.value = false;
+  }
+});
 
 const fetchWorkspaces = async () => {
   const { result } = await api.getWorkspacesByCurrentUser();
