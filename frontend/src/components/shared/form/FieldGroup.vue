@@ -1,9 +1,3 @@
-<script lang="ts">
-export default {
-  name: "FieldGroup",
-};
-</script>
-
 <template>
   <div class="field-group">
     <label v-if="label != null" :for="idLabel" class="block text-sm font-medium text-gray-700">{{ label }}</label>

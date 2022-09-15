@@ -1,9 +1,3 @@
-<script lang="ts">
-export default {
-  name: "Dropdown",
-};
-</script>
-
 <template>
   <Menu #default="{open}" as="div" class="relative inline-block text-left">
     <Float enter="transition ease-out duration-100" enter-from="transform opacity-0 scale-95" enter-to="transform opacity-100 scale-100" flip leave="transition ease-in duration-75" leave-from="transform opacity-100 scale-100" leave-to="transform opacity-0 scale-95" portal v-bind="portalOptions">

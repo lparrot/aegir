@@ -1,9 +1,3 @@
-<script lang="ts">
-export default {
-  name: "Select",
-};
-</script>
-
 <template>
   <Listbox v-model="model">
     <div class="relative">

@@ -1,9 +1,3 @@
-<script lang="ts">
-export default {
-  name: "DialogTest",
-};
-</script>
-
 <template>
   <Modal ref="dialogRef" description="Description concernant la modale de test" panel-classes="w-full h-full" title="Modale de test" @ok="onOk">
     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi corporis esse exercitationem fugit ipsam, iusto neque officiis quas voluptatum! Aspernatur, cum delectus doloribus eos magni minima nam obcaecati qui vero!

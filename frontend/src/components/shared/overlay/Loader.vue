@@ -1,9 +1,3 @@
-<script lang="ts">
-export default {
-  name: "Loader",
-};
-</script>
-
 <template>
   <Teleport to="body">
     <template v-if="show">

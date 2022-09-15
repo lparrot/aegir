@@ -18,9 +18,3 @@ const emit = defineEmits<{
 
 const taskModel: Ref<TaskInfo_Detail> = useVModel(props, "task", emit);
 </script>
-
-<script lang="ts">
-export default {
-  name: "TaskColumnStatus",
-};
-</script>

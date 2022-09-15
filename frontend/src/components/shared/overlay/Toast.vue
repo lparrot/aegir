@@ -1,9 +1,3 @@
-<script lang="ts">
-export default {
-  name: "Toast",
-};
-</script>
-
 <template>
   <Transition appear name="flip-in-hor-top">
     <div v-if="show" class="flex flex-col gap-3 w-[300px] px-5 py-4 border rounded-lg bg-white">

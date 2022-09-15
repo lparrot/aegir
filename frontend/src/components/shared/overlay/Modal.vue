@@ -1,9 +1,3 @@
-<script lang="ts">
-export default {
-  name: "Modal",
-};
-</script>
-
 <template>
   <TransitionRoot :show="isOpen" as="template" unmount>
     <Dialog as="div" class="relative z-10" @close="hide">

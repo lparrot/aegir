@@ -1,10 +1,3 @@
-<script lang="ts">
-export default {
-  name: "BaseInput",
-};
-</script>
-
-
 <template>
   <input :id="id" v-model="data" :class="[errorClasses]" :placeholder="placeholder" class="shadow-sm block w-full sm:text-sm border rounded-md h-10" type="text">
 </template>

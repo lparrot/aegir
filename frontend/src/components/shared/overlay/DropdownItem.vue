@@ -1,9 +1,3 @@
-<script lang="ts">
-export default {
-  name: "DropdownItem",
-};
-</script>
-
 <template>
   <RouterLink v-if="isRouter" #default="{navigate}" :to="to" custom>
     <MenuItem :as="tag" class="dropdown-item" v-bind="$attrs" @click="navigate">

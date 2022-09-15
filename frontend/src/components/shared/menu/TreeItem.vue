@@ -1,9 +1,3 @@
-<script lang="ts">
-export default {
-  name: "TreeItem",
-};
-</script>
-
 <template>
   <div v-show="show">
     <div :class="{'bg-primary-300': selected}" class="flex items-center gap-2 -m-1 p-1 cursor-pointer rounded hover:bg-primary-300" @click="onItemClick">

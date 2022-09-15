@@ -1,9 +1,3 @@
-<script lang="ts">
-export default {
-  name: "BaseTextarea",
-};
-</script>
-
 <template>
   <textarea :id="id" v-model="data" :class="[errorClasses]" class="shadow-sm mt-1 block w-full sm:text-sm border rounded-md" v-bind="$attrs"></textarea>
 </template>

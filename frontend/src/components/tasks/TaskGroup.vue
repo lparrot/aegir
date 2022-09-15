@@ -20,9 +20,3 @@ import { useTaskColumns } from "@use/useTaskColumns";
 
 const { columns } = useTaskColumns();
 </script>
-
-<script lang="ts">
-export default {
-  name: "TaskGroup",
-};
-</script>

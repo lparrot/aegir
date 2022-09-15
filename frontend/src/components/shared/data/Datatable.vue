@@ -1,10 +1,3 @@
-<script lang="ts">
-export default {
-  name: "Datatable",
-};
-</script>
-
-
 <template>
   <div class="shadow border-b border-primary-200 sm:rounded-lg min-w-full overflow-auto">
     <table class="table-auto min-w-full divide-y divide-gray-200">

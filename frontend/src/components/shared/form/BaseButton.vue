@@ -1,9 +1,3 @@
-<script lang="ts">
-export default {
-  name: "BaseButton",
-};
-</script>
-
 <template>
   <component :is="tag" :class="[`a-btn--${color}`, {'a-btn-outlined': outlined}]">
     <slot></slot>

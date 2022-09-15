@@ -1,9 +1,3 @@
-<script lang="ts">
-export default {
-  name: "DialogApplicationClosed",
-};
-</script>
-
 <template>
   <Modal ref="dialogRef" :backdrop-dismiss="false" panel-classes="w-11/12 lg:!w-5/12">
     <div class="flex items-center justify-center h-40">

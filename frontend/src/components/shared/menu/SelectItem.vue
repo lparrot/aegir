@@ -1,9 +1,3 @@
-<script lang="ts">
-export default {
-  name: "SelectItem",
-};
-</script>
-
 <template>
   <ListboxOption #default="{ active, selected }" :value="value" as="template">
     <li :class="[active ? 'bg-secondary-100 text-secondary-900' : 'text-gray-900','relative cursor-pointer select-none py-2 pl-10 pr-4']">

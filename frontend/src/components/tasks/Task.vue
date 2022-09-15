@@ -18,9 +18,3 @@ const props = defineProps({
 
 const { columns } = useTaskColumns();
 </script>
-
-<script lang="ts">
-export default {
-  name: "Task",
-};
-</script>
