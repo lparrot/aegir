@@ -75,3 +75,9 @@ const onClose = () => {
   emits("close");
 };
 </script>
+
+<script lang="ts">
+export default {
+  name: "Toast",
+};
+</script>

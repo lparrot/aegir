@@ -61,3 +61,9 @@ const onRowClick = (event, item) => {
 
 const getValue = (field, item) => field.transform != null ? field.transform(get(item, field.field ?? field.key), item) : get(item, field.field ?? field.key);
 </script>
+
+<script lang="ts">
+export default {
+  name: "Datatable",
+};
+</script>

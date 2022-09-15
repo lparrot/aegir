@@ -19,3 +19,9 @@ const emit = defineEmits([
 
 const { dialogRef } = useDialog();
 </script>
+
+<script lang="ts">
+export default {
+  name: "DialogApplicationClosed",
+};
+</script>

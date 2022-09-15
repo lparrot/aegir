@@ -16,3 +16,9 @@ import useAegir from "@use/useAegir";
 const { loader } = useAegir();
 const { show, options } = loader;
 </script>
+
+<script lang="ts">
+export default {
+  name: "Loader",
+};
+</script>

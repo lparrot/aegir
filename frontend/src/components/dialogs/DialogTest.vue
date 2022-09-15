@@ -31,3 +31,9 @@ const onOk = () => {
   });
 };
 </script>
+
+<script lang="ts">
+export default {
+  name: "DialogTest",
+};
+</script>

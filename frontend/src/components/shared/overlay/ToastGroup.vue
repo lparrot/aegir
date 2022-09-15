@@ -21,3 +21,9 @@ const remove = (notification) => {
   notifications.value = notifications.value.filter(n => n.id !== notification.id);
 };
 </script>
+
+<script lang="ts">
+export default {
+  name: "ToastGroup",
+};
+</script>

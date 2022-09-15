@@ -67,7 +67,7 @@
 </template>
 
 <script lang="ts" setup>
-import DialogNewView from "@/components/dialogs/DialogNewView.vue";
+import DialogNewBoard from "@/components/dialogs/DialogNewBoard.vue";
 import Select from "@/components/shared/menu/Select.vue";
 import SelectItem from "@/components/shared/menu/SelectItem.vue";
 import { Float } from "@headlessui-float/vue";
@@ -82,7 +82,6 @@ const { dialog } = useAegir();
 const route = useRoute();
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const isMobile = breakpoints.smaller("md");
-const opened = ref(false);
 const { storageSidebar } = useAppLocalStorage();
 const workspaces = ref([]);
 const selectedWorkspace: Ref<WorkspaceInfo_Children> = ref(null);
@@ -90,7 +89,7 @@ const drawer_sidebar = ref();
 
 onClickOutside(drawer_sidebar, () => {
   if (isMobile.value) {
-    opened.value = false;
+    storageSidebar.value.opened = false;
   }
 });
 
@@ -135,15 +134,19 @@ const workspaceItems = computed(() => {
 await fetchWorkspaces();
 
 const isSidebarClosed = computed(() => {
-  return !opened.value;
+  return !storageSidebar.value.opened;
 });
 
 const showDialogNewView = close => {
   if (storageSidebar.value.workspace_selected != null) {
     dialog.create({
-      component: DialogNewView,
+      component: DialogNewBoard,
       props: {
-        boardId: storageSidebar.value.workspace_selected,
+        workspaceId: storageSidebar.value.workspace_selected,
+      },
+      async onOk() {
+        const { result } = await api.getWorkspaceById(storageSidebar.value.workspace_selected);
+        selectedWorkspace.value = result;
       },
     });
     close();
@@ -163,12 +166,12 @@ watch(() => storageSidebar.value.workspace_selected,
 watch(isMobile,
   (_isMobile) => {
     if (_isMobile) {
-      opened.value = false;
+      storageSidebar.value.opened = false;
     }
   },
 );
 
 const toggle = () => {
-  opened.value = !opened.value;
+  storageSidebar.value.opened = !storageSidebar.value.opened;
 };
 </script>

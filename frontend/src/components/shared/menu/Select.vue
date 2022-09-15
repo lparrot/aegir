@@ -40,3 +40,9 @@ const emit = defineEmits<{
 
 const model = useVModel(props, "modelValue", emit);
 </script>
+
+<script lang="ts">
+export default {
+  name: "Select",
+};
+</script>

@@ -126,3 +126,9 @@ defineExpose({
   ...props,
 });
 </script>
+
+<script lang="ts">
+export default {
+  name: "Modal",
+};
+</script>

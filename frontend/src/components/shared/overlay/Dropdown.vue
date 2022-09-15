@@ -34,3 +34,9 @@ interface Props {
 
 withDefaults(defineProps<Props>(), {});
 </script>
+
+<script lang="ts">
+export default {
+  name: "Dropdown",
+};
+</script>

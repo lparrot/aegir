@@ -5,7 +5,7 @@ export const STORAGE_SIDEBAR = "aegir.sidebar";
 export const STORAGE_CURRENT_ROUTE = "aegir.current_route";
 
 const storageToken = useLocalStorage(STORAGE_TOKEN, null);
-const storageSidebar = useLocalStorage(STORAGE_SIDEBAR, { workspace_selected: null, board_selected: null });
+const storageSidebar = useLocalStorage(STORAGE_SIDEBAR, { opened: false, workspace_selected: null, board_selected: null });
 const storageCurrentRoute = useLocalStorage(STORAGE_CURRENT_ROUTE, null);
 
 export default function useAppLocalStorage() {

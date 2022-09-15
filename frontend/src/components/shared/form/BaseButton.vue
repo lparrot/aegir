@@ -27,3 +27,9 @@ const buttonAttrs = computed(() => {
   return attrs;
 });
 </script>
+
+<script lang="ts">
+export default {
+  name: "BaseButton",
+};
+</script>

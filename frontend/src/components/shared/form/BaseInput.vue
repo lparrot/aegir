@@ -32,3 +32,9 @@ const errorClasses = computed(() => {
   }
 });
 </script>
+
+<script lang="ts">
+export default {
+  name: "BaseInput",
+};
+</script>

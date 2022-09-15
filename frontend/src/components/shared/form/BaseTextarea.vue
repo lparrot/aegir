@@ -1,5 +1,5 @@
 <template>
-  <textarea :id="id" v-model="data" :class="[errorClasses]" :placeholder="placeholder" class="shadow-sm mt-1 block w-full sm:text-sm border rounded-md"></textarea>
+  <textarea :id="id" v-model="data" :class="[errorClasses]" class="shadow-sm mt-1 block w-full sm:text-sm border rounded-md" v-bind="$attrs"></textarea>
 </template>
 
 <script lang="ts" setup>
@@ -9,7 +9,6 @@ import { computed, getCurrentInstance } from "vue";
 interface Props {
   id?: string;
   modelValue?: any;
-  placeholder?: string;
   error?: boolean;
 }
 
@@ -31,4 +30,10 @@ const errorClasses = computed(() => {
     return "focus:ring-primary-800 focus:border-primary-800 border-primary-300";
   }
 });
+</script>
+
+<script lang="ts">
+export default {
+  name: "BaseTextarea",
+};
 </script>

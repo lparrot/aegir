@@ -31,6 +31,12 @@ const isRouter = computed(() => {
 });
 </script>
 
+<script lang="ts">
+export default {
+  name: "DropdownItem",
+};
+</script>
+
 <style lang="scss">
 .dropdown-item {
   @apply flex gap-2 cursor-pointer hover:bg-primary-100 text-gray-700 block px-4 py-2 text-sm;

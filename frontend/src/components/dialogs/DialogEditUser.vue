@@ -108,3 +108,9 @@ const onOk = async () => {
   }
 };
 </script>
+
+<script lang="ts">
+export default {
+  name: "DialogEditUser",
+};
+</script>

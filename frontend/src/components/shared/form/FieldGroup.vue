@@ -52,3 +52,9 @@ const error = computed(() => {
   return props.validationField!.$invalid;
 });
 </script>
+
+<script lang="ts">
+export default {
+  name: "FieldGroup",
+};
+</script>

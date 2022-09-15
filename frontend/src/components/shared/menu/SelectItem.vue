@@ -21,3 +21,9 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {});
 </script>
+
+<script lang="ts">
+export default {
+  name: "SelectItem",
+};
+</script>
