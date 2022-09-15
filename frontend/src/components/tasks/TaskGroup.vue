@@ -1,11 +1,17 @@
 <template>
-  <div class="flex flex-col gap-1">
-    <div class="flex items-center shadow-md bg-primary-50 py-2 px-2">
-      <div v-for="column in columns" :key="column.id" :class="column.headerClass" :style="column.headerStyle" class="flex justify-center h-5 text-primary-400">
-        {{ column.header }}
-      </div>
-    </div>
-    <slot></slot>
+  <div class="overflow-auto rounded shadow-md">
+    <table class="table-auto min-w-full">
+      <caption></caption>
+      <thead>
+      <tr class="h-8 bg-primary-200 text-primary-600">
+        <th v-for="column in columns" :key="column.id" :class="column.headerClass" :style="{width: column.componentWidth}" scope="col">{{ column.header }}</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <slot></slot>
+      </tbody>
+    </table>
   </div>
 </template>
 

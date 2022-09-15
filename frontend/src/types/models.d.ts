@@ -14,7 +14,8 @@ declare global {
     id: string;
     header?: string;
     headerClass?: string;
-    headerStyle?: any;
+    rowClass?: string;
+    componentWidth?: string;
     component: any;
   }
 

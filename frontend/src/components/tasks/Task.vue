@@ -1,9 +1,11 @@
 <template>
-  <div class="flex shadow-md bg-primary-50 py-2 px-2">
-    <div v-for="column in columns" :key="column.id" :class="column.headerClass" :style="column.headerStyle" class="flex items-center h-full">
-      <component :is="column.component" :task="taskModel"></component>
-    </div>
-  </div>
+  <tr class="bg-primary-50">
+    <td v-for="column in columns" :key="column.id" class="h-0">
+      <div :class="column.rowClass" :style="{width: column.componentWidth}" class="flex h-full">
+        <component :is="column.component" :task="taskModel" class="flex items-center"></component>
+      </div>
+    </td>
+  </tr>
 </template>
 
 <script lang="ts" setup>

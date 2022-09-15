@@ -1,5 +1,5 @@
 <template>
-  <div :style="{backgroundColor: taskModel.status?.color}" class="flex justify-center items-center w-full h-full text-white cursor-pointer hover:brightness-90">
+  <div :style="{backgroundColor: taskModel.status?.color}" class="flex w-full justify-center text-white cursor-pointer hover:brightness-90">
     <div class="font-bold">{{ taskModel.status?.name }}</div>
   </div>
 </template>
