@@ -1,3 +1,10 @@
+<script lang="ts">
+export default {
+  name: "BaseInput",
+};
+</script>
+
+
 <template>
   <input :id="id" v-model="data" :class="[errorClasses]" :placeholder="placeholder" class="shadow-sm block w-full sm:text-sm border rounded-md h-10" type="text">
 </template>
@@ -31,10 +38,4 @@ const errorClasses = computed(() => {
     return "focus:ring-primary-800 focus:border-primary-800 border-primary-300";
   }
 });
-</script>
-
-<script lang="ts">
-export default {
-  name: "BaseInput",
-};
 </script>

@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+  name: "Accordion",
+};
+</script>
+
 <template>
   <div :class="['a-accordion--'+accordionColor, $attrs.class]" class="a-accordion" role="button" @click="onClickHeader">
     <slot name="title">

@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+  name: "ToastGroup",
+};
+</script>
+
 <template>
   <Teleport to="body">
     <div class="fixed bottom-0 right-0 flex flex-col gap-4 m-10">
@@ -19,11 +25,5 @@ const { notifications } = useAegir();
 
 const remove = (notification) => {
   notifications.value = notifications.value.filter(n => n.id !== notification.id);
-};
-</script>
-
-<script lang="ts">
-export default {
-  name: "ToastGroup",
 };
 </script>

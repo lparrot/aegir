@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+  name: "Tree",
+};
+</script>
+
 <template>
   <div class="grid grid-cols-1 text-primary-600 gap-3">
     <TreeItem :item="items" :root="true" :show="showRoot">
@@ -32,10 +38,4 @@ provide("tree", {
   items: tree_items,
   model,
 });
-</script>
-
-<script lang="ts">
-export default {
-  name: "Tree",
-};
 </script>

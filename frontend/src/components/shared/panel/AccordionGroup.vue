@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+  name: "AccordionGroup",
+};
+</script>
+
 <template>
   <div class="accordion-group">
     <slot></slot>

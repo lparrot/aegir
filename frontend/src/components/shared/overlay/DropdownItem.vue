@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+  name: "DropdownItem",
+};
+</script>
+
 <template>
   <RouterLink v-if="isRouter" #default="{navigate}" :to="to" custom>
     <MenuItem :as="tag" class="dropdown-item" v-bind="$attrs" @click="navigate">
@@ -29,12 +35,6 @@ const vue = getCurrentInstance();
 const isRouter = computed(() => {
   return props.to != null;
 });
-</script>
-
-<script lang="ts">
-export default {
-  name: "DropdownItem",
-};
 </script>
 
 <style lang="scss">

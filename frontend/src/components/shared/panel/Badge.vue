@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+  name: "Badge",
+};
+</script>
+
 <template>
   <div :class="[`a-badge--${color}`]" class="a-badge">
     <component :is="icon" v-if="icon" class="h-5 w-5"></component>

@@ -1,3 +1,10 @@
+<script lang="ts">
+export default {
+  name: "Datatable",
+};
+</script>
+
+
 <template>
   <div class="shadow border-b border-primary-200 sm:rounded-lg min-w-full overflow-auto">
     <table class="table-auto min-w-full divide-y divide-gray-200">
@@ -60,10 +67,4 @@ const onRowClick = (event, item) => {
 };
 
 const getValue = (field, item) => field.transform != null ? field.transform(get(item, field.field ?? field.key), item) : get(item, field.field ?? field.key);
-</script>
-
-<script lang="ts">
-export default {
-  name: "Datatable",
-};
 </script>

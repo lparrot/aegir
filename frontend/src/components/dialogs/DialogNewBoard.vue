@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+  name: "DialogNewBoard",
+};
+</script>
+
 <template>
   <Modal ref="dialogRef" label-ok="Créer" panel-classes="w-full md:!w-6/12" title="Tableau" @ok="onOk">
     <div class="grid grid-cols-1 gap-4">
@@ -37,11 +43,5 @@ const onOk = async () => {
   if (success) {
     onDialogOk();
   }
-};
-</script>
-
-<script lang="ts">
-export default {
-  name: "DialogNewBoard",
 };
 </script>

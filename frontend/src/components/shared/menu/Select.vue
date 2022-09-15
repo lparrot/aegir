@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+  name: "Select",
+};
+</script>
+
 <template>
   <Listbox v-model="model">
     <div class="relative">
@@ -39,10 +45,4 @@ const emit = defineEmits<{
 }>();
 
 const model = useVModel(props, "modelValue", emit);
-</script>
-
-<script lang="ts">
-export default {
-  name: "Select",
-};
 </script>

@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+  name: "BaseTextarea",
+};
+</script>
+
 <template>
   <textarea :id="id" v-model="data" :class="[errorClasses]" class="shadow-sm mt-1 block w-full sm:text-sm border rounded-md" v-bind="$attrs"></textarea>
 </template>
@@ -30,10 +36,4 @@ const errorClasses = computed(() => {
     return "focus:ring-primary-800 focus:border-primary-800 border-primary-300";
   }
 });
-</script>
-
-<script lang="ts">
-export default {
-  name: "BaseTextarea",
-};
 </script>

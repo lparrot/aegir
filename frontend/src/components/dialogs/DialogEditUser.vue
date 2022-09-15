@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+  name: "DialogEditUser",
+};
+</script>
+
 <template>
   <Modal ref="dialogRef" panel-classes="w-full lg:!w-10/12" @ok="onOk">
     <template #title>
@@ -106,11 +112,5 @@ const onOk = async () => {
       onDialogOk();
     }
   }
-};
-</script>
-
-<script lang="ts">
-export default {
-  name: "DialogEditUser",
 };
 </script>

@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+  name: "Loader",
+};
+</script>
+
 <template>
   <Teleport to="body">
     <template v-if="show">
@@ -15,10 +21,4 @@ import useAegir from "@use/useAegir";
 
 const { loader } = useAegir();
 const { show, options } = loader;
-</script>
-
-<script lang="ts">
-export default {
-  name: "Loader",
-};
 </script>
