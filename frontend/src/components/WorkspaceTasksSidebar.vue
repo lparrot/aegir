@@ -17,54 +17,57 @@
         <SelectItem v-for="workspace in workspaces" :key="workspace.id" :label="workspace.name" :value="workspace.id"/>
       </Select>
 
-      <div class="grid grid-cols-1 text-primary-600 mt-4 gap-3">
-        <Popover #default="{open}" class="inline-block">
-          <Float :offset="6" :placement="isMobile ? '' : 'right-start'" enter="transition ease-out duration-100" enter-from="transform opacity-0 scale-95" enter-to="transform opacity-100 scale-100" flip leave="transition ease-in duration-75" leave-from="transform opacity-100 scale-100" leave-to="transform opacity-0 scale-95" portal>
-            <PopoverButton as="template">
-              <div class="flex w-full items-center gap-2 cursor-pointer -m-1 p-1 rounded hover:bg-primary-300">
-                <mdi-plus class="h-5 w-5"/>
-                Ajouter
-              </div>
-            </PopoverButton>
+      <template v-if="storageSidebar.workspace_selected != null">
+        <div class="grid grid-cols-1 text-primary-600 mt-4 gap-3">
+          <Popover #default="{open}" class="inline-block">
+            <Float :offset="6" :placement="isMobile ? '' : 'right-start'" enter="transition ease-out duration-100" enter-from="transform opacity-0 scale-95" enter-to="transform opacity-100 scale-100" flip leave="transition ease-in duration-75" leave-from="transform opacity-100 scale-100" leave-to="transform opacity-0 scale-95" portal>
+              <PopoverButton as="template">
+                <div class="flex w-full items-center gap-2 cursor-pointer -m-1 p-1 rounded hover:bg-primary-300">
+                  <mdi-plus class="h-5 w-5"/>
+                  Ajouter
+                </div>
+              </PopoverButton>
 
-            <PopoverPanel #default="{close}">
-              <div class="rounded bg-white text-primary-500 border border-primary-200 shadow-3xl">
-                <div class="grid grid-cols-1 gap-3 p-4 min-w-[250px] max-h-[450px] overflow-y-auto scrollbar scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300">
-                  <div class="flex gap-3 text-primary-600 cursor-pointer px-2 py-1 -mx-2 -my-1 rounded hover:bg-primary-200" @click="close">
-                    <mdi-application-outline class="h-5 w-5"></mdi-application-outline>
-                    <div>Nouveau tableau</div>
-                  </div>
-                  <div class="flex gap-3 text-primary-600 cursor-pointer px-2 py-1 -mx-2 -my-1 rounded hover:bg-primary-200" @click="close">
-                    <mdi-folder-outline class="h-5 w-5"></mdi-folder-outline>
-                    <div>Nouveau dossier</div>
+              <PopoverPanel #default="{close}">
+                <div class="rounded bg-white text-primary-500 border border-primary-200 shadow-3xl">
+                  <div class="grid grid-cols-1 gap-3 p-4 min-w-[250px] max-h-[450px] overflow-y-auto scrollbar scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300">
+                    <div class="flex gap-3 text-primary-600 cursor-pointer px-2 py-1 -mx-2 -my-1 rounded hover:bg-primary-200" @click="showDialogNewView(); close">
+                      <mdi-application-outline class="h-5 w-5"></mdi-application-outline>
+                      <div>Nouveau tableau</div>
+                    </div>
+                    <div class="flex gap-3 text-primary-600 cursor-pointer px-2 py-1 -mx-2 -my-1 rounded hover:bg-primary-200" @click="close">
+                      <mdi-folder-outline class="h-5 w-5"></mdi-folder-outline>
+                      <div>Nouveau dossier</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </PopoverPanel>
-          </Float>
-        </Popover>
-        <div class="flex items-center gap-2 cursor-pointer -m-1 p-1 rounded hover:bg-primary-300">
-          <mdi-filter-outline class="h-5 w-5"/>
-          Filtre
+              </PopoverPanel>
+            </Float>
+          </Popover>
+          <div class="flex items-center gap-2 cursor-pointer -m-1 p-1 rounded hover:bg-primary-300">
+            <mdi-filter-outline class="h-5 w-5"/>
+            Filtre
+          </div>
+          <div class="flex items-center gap-2 cursor-pointer -m-1 p-1 rounded hover:bg-primary-300">
+            <mdi-search class="h-5 w-5"/>
+            Recherche
+          </div>
         </div>
-        <div class="flex items-center gap-2 cursor-pointer -m-1 p-1 rounded hover:bg-primary-300">
-          <mdi-search class="h-5 w-5"/>
-          Recherche
-        </div>
-      </div>
 
-      <hr class="border border-t-primary-400 my-4"/>
+        <hr class="border border-t-primary-400 my-4"/>
 
-      <Tree v-model="storageSidebar.board_selected" :items="workspaceItems" :show-root="false">
-        <template #icon(board)>
-          <mdi-application-outline class="h-5 w-5"/>
-        </template>
-      </Tree>
+        <Tree v-model="storageSidebar.board_selected" :items="workspaceItems" :show-root="false">
+          <template #icon(board)>
+            <mdi-application-outline class="h-5 w-5"/>
+          </template>
+        </Tree>
+      </template>
     </div>
   </aside>
 </template>
 
 <script lang="ts" setup>
+import DialogNewView from "@/components/dialogs/DialogNewView.vue";
 import Select from "@/components/shared/menu/Select.vue";
 import SelectItem from "@/components/shared/menu/SelectItem.vue";
 import { Float } from "@headlessui-float/vue";
@@ -75,6 +78,7 @@ import { breakpointsTailwind } from "@vueuse/core";
 import { WorkspaceInfo_Children } from "back_types";
 import { computed, Ref, watch } from "vue";
 
+const { dialog } = useAegir();
 const route = useRoute();
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const isMobile = breakpoints.smaller("md");
@@ -133,6 +137,17 @@ await fetchWorkspaces();
 const isSidebarClosed = computed(() => {
   return !opened.value;
 });
+
+const showDialogNewView = () => {
+  if (storageSidebar.value.workspace_selected != null) {
+    dialog.create({
+      component: DialogNewView,
+      props: {
+        boardId: storageSidebar.value.workspace_selected,
+      },
+    });
+  }
+};
 
 watch(() => storageSidebar.value.workspace_selected,
   async (value: number) => {
