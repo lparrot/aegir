@@ -1,11 +1,8 @@
 <template>
-  <Modal ref="dialogRef" label-ok="Créer" panel-classes="w-full md:!w-6/12" title="Tableau" @ok="onOk">
+  <Modal ref="dialogRef" panel-classes="w-full md:!w-6/12" title="Tableau" @ok="onOk">
     <div class="grid grid-cols-1 gap-4">
-      <FieldGroup label="Nom du tableau" required>
-        <BaseInput v-model="form.name" placeholder="Nouveau tableau"></BaseInput>
-      </FieldGroup>
-      <FieldGroup label="Description du tableau" required>
-        <BaseTextarea v-model="form.description" placeholder="Ce tableau permet ..." rows="6"></BaseTextarea>
+      <FieldGroup label="Nom du dossier" required>
+        <BaseInput v-model="form.name" placeholder="Nouveau dossier"></BaseInput>
       </FieldGroup>
     </div>
   </Modal>
@@ -32,7 +29,7 @@ const form = reactive({
 });
 
 const onOk = async () => {
-  const { success } = await api.createBoard(props.workspaceId, { name: form.name, description: form.description });
+  const { success } = await api.createFolder(props.workspaceId, { name: form.name });
 
   if (success) {
     onDialogOk();

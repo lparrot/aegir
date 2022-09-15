@@ -31,11 +31,11 @@
               <PopoverPanel #default="{close}">
                 <div class="rounded bg-white text-primary-500 border border-primary-200 shadow-3xl">
                   <div class="grid grid-cols-1 gap-3 p-4 min-w-[250px] max-h-[450px] overflow-y-auto scrollbar scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300">
-                    <div class="flex gap-3 text-primary-600 cursor-pointer px-2 py-1 -mx-2 -my-1 rounded hover:bg-primary-200" @click="showDialogNewView(close)">
+                    <div class="flex gap-3 text-primary-600 cursor-pointer px-2 py-1 -mx-2 -my-1 rounded hover:bg-primary-200" @click="showDialogNewBoard(close)">
                       <mdi-application-outline class="h-5 w-5"></mdi-application-outline>
                       <div>Nouveau tableau</div>
                     </div>
-                    <div class="flex gap-3 text-primary-600 cursor-pointer px-2 py-1 -mx-2 -my-1 rounded hover:bg-primary-200" @click="close">
+                    <div class="flex gap-3 text-primary-600 cursor-pointer px-2 py-1 -mx-2 -my-1 rounded hover:bg-primary-200" @click="showDialogNewFolder(close)">
                       <mdi-folder-outline class="h-5 w-5"></mdi-folder-outline>
                       <div>Nouveau dossier</div>
                     </div>
@@ -68,6 +68,7 @@
 
 <script lang="ts" setup>
 import DialogNewBoard from "@/components/dialogs/DialogNewBoard.vue";
+import DialogNewFolder from "@/components/dialogs/DialogNewFolder.vue";
 import Select from "@/components/shared/menu/Select.vue";
 import SelectItem from "@/components/shared/menu/SelectItem.vue";
 import { Float } from "@headlessui-float/vue";
@@ -96,6 +97,11 @@ onClickOutside(drawer_sidebar, () => {
 const fetchWorkspaces = async () => {
   const { result } = await api.getWorkspacesByCurrentUser();
   workspaces.value = result;
+};
+
+const fetchWorkspaceDetail = async () => {
+  const { result } = await api.getWorkspaceById(storageSidebar.value.workspace_selected);
+  selectedWorkspace.value = result;
 };
 
 const selectedWorkspaceName = computed(() => {
@@ -137,7 +143,7 @@ const isSidebarClosed = computed(() => {
   return !storageSidebar.value.opened;
 });
 
-const showDialogNewView = close => {
+const showDialogNewBoard = close => {
   if (storageSidebar.value.workspace_selected != null) {
     dialog.create({
       component: DialogNewBoard,
@@ -145,8 +151,22 @@ const showDialogNewView = close => {
         workspaceId: storageSidebar.value.workspace_selected,
       },
       async onOk() {
-        const { result } = await api.getWorkspaceById(storageSidebar.value.workspace_selected);
-        selectedWorkspace.value = result;
+        await fetchWorkspaceDetail();
+      },
+    });
+    close();
+  }
+};
+
+const showDialogNewFolder = close => {
+  if (storageSidebar.value.workspace_selected != null) {
+    dialog.create({
+      component: DialogNewFolder,
+      props: {
+        workspaceId: storageSidebar.value.workspace_selected,
+      },
+      async onOk() {
+        await fetchWorkspaceDetail();
       },
     });
     close();
