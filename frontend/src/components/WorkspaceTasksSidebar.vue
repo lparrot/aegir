@@ -20,7 +20,7 @@
       <template v-if="storageSidebar.workspace_selected != null">
         <div class="grid grid-cols-1 text-primary-600 mt-4 gap-3">
           <Popover #default="{open}" class="inline-block">
-            <Float :offset="6" :placement="isMobile ? null : 'right-start'" enter="transition ease-out duration-100" enter-from="transform opacity-0 scale-95" enter-to="transform opacity-100 scale-100" flip leave="transition ease-in duration-75" leave-from="transform opacity-100 scale-100" leave-to="transform opacity-0 scale-95" portal>
+            <Float :offset="6" :placement="isMobile ? 'bottom-start' : 'right-start'" enter="transition ease-out duration-100" enter-from="transform opacity-0 scale-95" enter-to="transform opacity-100 scale-100" flip leave="transition ease-in duration-75" leave-from="transform opacity-100 scale-100" leave-to="transform opacity-0 scale-95" portal>
               <PopoverButton as="template">
                 <div class="flex w-full items-center gap-2 cursor-pointer -m-1 p-1 rounded hover:bg-primary-300">
                   <mdi-plus class="h-5 w-5"/>
