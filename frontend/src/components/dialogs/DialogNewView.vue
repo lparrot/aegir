@@ -19,7 +19,9 @@ const emit = defineEmits([
   ...useDialog.emits,
 ]);
 
-const form = reactive({});
+const form = reactive({
+  name: null,
+});
 
 const { dialogRef, onDialogOk, onDialogCancel, onDialogHide, onDialogClose } = useDialog();
 

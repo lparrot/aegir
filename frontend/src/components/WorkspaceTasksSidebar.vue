@@ -20,7 +20,7 @@
       <template v-if="storageSidebar.workspace_selected != null">
         <div class="grid grid-cols-1 text-primary-600 mt-4 gap-3">
           <Popover #default="{open}" class="inline-block">
-            <Float :offset="6" :placement="isMobile ? '' : 'right-start'" enter="transition ease-out duration-100" enter-from="transform opacity-0 scale-95" enter-to="transform opacity-100 scale-100" flip leave="transition ease-in duration-75" leave-from="transform opacity-100 scale-100" leave-to="transform opacity-0 scale-95" portal>
+            <Float :offset="6" :placement="isMobile ? null : 'right-start'" enter="transition ease-out duration-100" enter-from="transform opacity-0 scale-95" enter-to="transform opacity-100 scale-100" flip leave="transition ease-in duration-75" leave-from="transform opacity-100 scale-100" leave-to="transform opacity-0 scale-95" portal>
               <PopoverButton as="template">
                 <div class="flex w-full items-center gap-2 cursor-pointer -m-1 p-1 rounded hover:bg-primary-300">
                   <mdi-plus class="h-5 w-5"/>
@@ -31,7 +31,7 @@
               <PopoverPanel #default="{close}">
                 <div class="rounded bg-white text-primary-500 border border-primary-200 shadow-3xl">
                   <div class="grid grid-cols-1 gap-3 p-4 min-w-[250px] max-h-[450px] overflow-y-auto scrollbar scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300">
-                    <div class="flex gap-3 text-primary-600 cursor-pointer px-2 py-1 -mx-2 -my-1 rounded hover:bg-primary-200" @click="showDialogNewView(); close">
+                    <div class="flex gap-3 text-primary-600 cursor-pointer px-2 py-1 -mx-2 -my-1 rounded hover:bg-primary-200" @click="showDialogNewView(close)">
                       <mdi-application-outline class="h-5 w-5"></mdi-application-outline>
                       <div>Nouveau tableau</div>
                     </div>
@@ -138,7 +138,7 @@ const isSidebarClosed = computed(() => {
   return !opened.value;
 });
 
-const showDialogNewView = () => {
+const showDialogNewView = close => {
   if (storageSidebar.value.workspace_selected != null) {
     dialog.create({
       component: DialogNewView,
@@ -146,6 +146,7 @@ const showDialogNewView = () => {
         boardId: storageSidebar.value.workspace_selected,
       },
     });
+    close();
   }
 };
 
