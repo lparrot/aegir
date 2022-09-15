@@ -1,14 +1,20 @@
 <template>
-  <div class="task-view">
-    <div class="text-3xl font-bold">{{ boardDetail.name }}</div>
-    <div class="text-lg text-primary-400">{{ boardDetail.description }}</div>
-  </div>
+  <template v-if="boardDetail">
+    <div class="task-view">
+      <div class="text-3xl font-bold">{{ boardDetail.name }}</div>
+      <div class="text-lg text-primary-400">{{ boardDetail.description }}</div>
+    </div>
 
-  <TaskGroup class="mt-4">
-    <template v-for="task in boardDetail.tasks" :key="task.id">
-      <Task :task="task"></Task>
-    </template>
-  </TaskGroup>
+    <TaskGroup class="mt-4">
+      <template v-for="task in boardDetail.tasks" :key="task.id">
+        <Task :task="task"></Task>
+      </template>
+    </TaskGroup>
+  </template>
+
+  <template v-else>
+    <div>Selectionnez un tableau dans la barre de recherche...</div>
+  </template>
 </template>
 
 <script lang="ts" setup>
@@ -20,8 +26,10 @@ const { storageSidebar } = useAppLocalStorage();
 const boardDetail: Ref<BoardInfo_Detail> = ref(null);
 
 const fetchBoardById = async (id) => {
-  const { result } = await api.getBoardById(id);
-  boardDetail.value = result;
+  if (id != null) {
+    const { result } = await api.getBoardById(id);
+    boardDetail.value = result;
+  }
 };
 
 await fetchBoardById(storageSidebar.value.board_selected);
