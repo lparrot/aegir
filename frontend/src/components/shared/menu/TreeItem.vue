@@ -1,6 +1,6 @@
 <template>
   <div v-show="show">
-    <div :class="{'bg-primary-300': selected}" class="flex items-center gap-2 -m-1 p-1 cursor-pointer rounded hover:bg-primary-300" @click="onItemClick">
+    <div :class="{'bg-primary-300': selected}" class="flex items-center gap-2 -m-1 p-1 cursor-pointer rounded hover:bg-primary-300" @click="onItemClick" @mouseleave="hover = false" @mouseover="hover = true">
       <template v-if="item.children?.length">
         <mdi-menu-down v-if="modelOpened" class="h-5 w-5"/>
         <mdi-menu-right v-else class="h-5 w-5"/>
@@ -8,15 +8,17 @@
       <template v-else-if="item.children != null && !item.children.length">
         <mdi-menu-right class="text-primary-400 h-5 w-5"/>
       </template>
-      <div class="flex items-center gap-2">
-        <slot v-if="item.type && $slots[`type(${item.type})`] != null" :name="`type(${item.type})`"></slot>
-        <template v-else>
+
+      <slot v-if="item.type && $slots[`type(${item.type})`] != null" :hover="hover" :item="item" :name="`type(${item.type})`" :select="select" :toggle="toggle"></slot>
+
+      <template v-else>
+        <div class="flex items-center gap-2">
           <slot :name="`icon(${item.type})`">
             <component :is="item.icon" class="h-5 w-5"/>
           </slot>
           <div class="truncate">{{ item.label }}</div>
-        </template>
-      </div>
+        </div>
+      </template>
     </div>
   </div>
 
@@ -34,7 +36,7 @@
 <script lang="ts" setup>
 import { useVModel } from "@vueuse/core";
 import isEqual from "lodash/isEqual";
-import { getCurrentInstance, PropType } from "vue";
+import { ComponentInternalInstance, getCurrentInstance, PropType } from "vue";
 
 const props = defineProps({
   item: { type: Object as PropType<AppTreeItem> },
@@ -50,10 +52,10 @@ const emit = defineEmits<{
 
 const modelOpened = useVModel(props, "opened", emit, { defaultValue: props.item.opened, passive: true });
 
+const parent = inject<any>("parent", null);
 const tree = inject<any>("tree", null);
 provide("tree", tree);
 
-const parent = inject<any>("parent", null);
 provide("parent", {
   openAscendant() {
     modelOpened.value = true;
@@ -63,7 +65,10 @@ provide("parent", {
   },
 });
 
-tree.items.value.push(getCurrentInstance());
+let currentInstance: ComponentInternalInstance = getCurrentInstance();
+tree.items.value.push(currentInstance);
+
+const hover = ref(false);
 
 const selected = computed(() => {
   if (tree.model.value == null) {
@@ -78,11 +83,21 @@ const selected = computed(() => {
   return equal;
 });
 
+const toggle = () => {
+  modelOpened.value = !modelOpened.value;
+};
+
+const select = () => {
+  tree.model.value = props.item.value;
+};
+
 const onItemClick = () => {
-  if (props.item.children != null) {
-    modelOpened.value = !modelOpened.value;
-  } else {
-    tree.model.value = props.item.value;
+  if (currentInstance.slots[`type(${props.item?.type})`] == null) {
+    if (props.item.children != null) {
+      toggle();
+    } else {
+      select();
+    }
   }
 };
 </script>

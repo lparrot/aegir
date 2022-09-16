@@ -2,24 +2,16 @@ package fr.lauparr.aegir.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import fr.lauparr.aegir.entities.abstracts.SoftDeletableEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,7 +20,8 @@ import java.util.Set;
 @Entity
 @Accessors(chain = true)
 @EntityListeners(AuditingEntityListener.class)
-public class Board {
+@Where(clause = SoftDeletableEntity.SOFT_DELETED_CLAUSE)
+public class Board extends SoftDeletableEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

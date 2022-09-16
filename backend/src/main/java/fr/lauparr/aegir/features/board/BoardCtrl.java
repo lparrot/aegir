@@ -5,12 +5,7 @@ import fr.lauparr.aegir.dto.api.RestApiResponse;
 import fr.lauparr.aegir.projections.BoardInfo_Detail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/boards")
@@ -34,6 +29,12 @@ public class BoardCtrl extends BaseController {
   @PostMapping("/{workspaceId}/folder")
   public ResponseEntity<RestApiResponse<Void>> createFolder(@PathVariable("workspaceId") Long workspaceId, @RequestBody ParamsCreateFolder params) {
     this.boardSrv.createFolder(workspaceId, params);
+    return this.ok();
+  }
+
+  @DeleteMapping("/{boardId}")
+  public ResponseEntity<RestApiResponse<Void>> deleteBoard(@PathVariable("boardId") Long boardId, @RequestParam(value = "cascade", defaultValue = "false") boolean cascade) {
+    this.boardSrv.deleteBoard(boardId, cascade);
     return this.ok();
   }
 

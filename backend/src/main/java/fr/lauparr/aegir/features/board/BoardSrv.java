@@ -2,16 +2,21 @@ package fr.lauparr.aegir.features.board;
 
 import fr.lauparr.aegir.entities.Board;
 import fr.lauparr.aegir.entities.Folder;
+import fr.lauparr.aegir.entities.Task;
 import fr.lauparr.aegir.entities.Workspace;
 import fr.lauparr.aegir.exceptions.MessageException;
 import fr.lauparr.aegir.projections.BoardInfo_Detail;
 import fr.lauparr.aegir.repositories.BoardRepository;
 import fr.lauparr.aegir.repositories.FolderRepository;
+import fr.lauparr.aegir.repositories.TaskRepository;
 import fr.lauparr.aegir.repositories.WorkspaceRepository;
 import fr.lauparr.aegir.utils.MessageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BoardSrv {
@@ -22,6 +27,8 @@ public class BoardSrv {
   private WorkspaceRepository workspaceRepository;
   @Autowired
   private FolderRepository folderRepository;
+  @Autowired
+  private TaskRepository taskRepository;
 
   public BoardInfo_Detail getBoardById(Long id) {
     return boardRepository.findBoardDetailById(id, BoardInfo_Detail.class).orElseThrow(() -> new MessageException(MessageUtils.getMessage("message.error.not_found.board")));
@@ -52,5 +59,15 @@ public class BoardSrv {
     workspace.getFolders().add(folder);
 
     folderRepository.save(folder);
+  }
+
+  public void deleteBoard(Long boardId, boolean cascade) {
+    Board board = boardRepository.findById(boardId).orElseThrow(() -> new MessageException(MessageUtils.getMessage("message.error.not_found.board")));
+
+    boardRepository.softDelete(board);
+    if (cascade) {
+      List<Long> ids = board.getTasks().stream().map(Task::getId).collect(Collectors.toList());
+      taskRepository.softDeleteByIds(ids);
+    }
   }
 }

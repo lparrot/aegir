@@ -57,8 +57,29 @@
         <hr class="border border-t-primary-400 my-4"/>
 
         <Tree v-model="storageSidebar.board_selected" :items="workspaceItems" :show-root="false">
-          <template #icon(board)>
-            <mdi-application-outline class="h-5 w-5"/>
+          <template #type(board)="{item, hover, select}">
+            <div class="flex w-full justify-between">
+              <div class="flex flex-grow items-center gap-2" @click="select">
+                <mdi-application-outline class="h-5 w-5"/>
+                <div class="truncate">{{ item.label }}</div>
+              </div>
+
+              <div v-if="hover">
+                <mdi-dots-horizontal class="w-5 h-5" @click="deleteBoard(item)"/>
+              </div>
+            </div>
+          </template>
+
+          <template #type(folder)="{item, hover}">
+            <div class="flex w-full justify-between">
+              <div class="flex flex-grow items-center gap-2" @click="select">
+                <div class="truncate">{{ item.label }}</div>
+              </div>
+
+              <div v-if="hover">
+                <mdi-dots-horizontal class="w-5 h-5"/>
+              </div>
+            </div>
           </template>
         </Tree>
       </template>
@@ -171,6 +192,18 @@ const showDialogNewFolder = close => {
     });
     close();
   }
+};
+
+const deleteBoard = async (item) => {
+  dialog.create({
+    message: "Etes vous sûr de vouloir supprimer ce tableau ?",
+    async onOk() {
+      const { success } = await api.deleteBoard(item.value);
+      if (success) {
+        await fetchWorkspaceDetail();
+      }
+    },
+  });
 };
 
 watch(() => storageSidebar.value.workspace_selected,

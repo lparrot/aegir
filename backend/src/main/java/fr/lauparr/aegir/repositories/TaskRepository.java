@@ -1,8 +1,7 @@
 package fr.lauparr.aegir.repositories;
 
 import fr.lauparr.aegir.entities.Task;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import fr.lauparr.aegir.repositories.abstracts.SoftDeletableRepository;
 
-public interface TaskRepository extends PagingAndSortingRepository<Task, Long>, JpaSpecificationExecutor<Task> {
+public interface TaskRepository extends SoftDeletableRepository<Task, Long> {
 }

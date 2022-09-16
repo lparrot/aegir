@@ -2,6 +2,7 @@ package fr.lauparr.aegir.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import fr.lauparr.aegir.entities.abstracts.SoftDeletableEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -22,7 +23,7 @@ import java.util.Set;
 @Entity
 @Accessors(chain = true)
 @EntityListeners(AuditingEntityListener.class)
-public class Task {
+public class Task extends SoftDeletableEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
