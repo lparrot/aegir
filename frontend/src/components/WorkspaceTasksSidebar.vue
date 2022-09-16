@@ -19,31 +19,27 @@
 
       <template v-if="storageSidebar.workspace_selected != null">
         <div class="grid grid-cols-1 text-primary-600 mt-4 gap-3">
-          <Popover #default="{open}" class="inline-block">
-            <Float :offset="6" :placement="isMobile ? 'bottom-start' : 'right-start'" enter="transition ease-out duration-100" enter-from="transform opacity-0 scale-95" enter-to="transform opacity-100 scale-100" flip leave="transition ease-in duration-75" leave-from="transform opacity-100 scale-100" leave-to="transform opacity-0 scale-95" portal>
-              <PopoverButton as="template">
-                <div class="flex w-full items-center gap-2 cursor-pointer -m-1 p-1 rounded hover:bg-primary-300">
-                  <mdi-plus class="h-5 w-5"/>
-                  Ajouter
-                </div>
-              </PopoverButton>
 
-              <PopoverPanel #default="{close}">
-                <div class="rounded bg-white text-primary-500 border border-primary-200 shadow-3xl">
-                  <div class="grid grid-cols-1 gap-3 p-4 min-w-[250px] max-h-[450px] overflow-y-auto scrollbar scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300">
-                    <div class="flex gap-3 text-primary-600 cursor-pointer px-2 py-1 -mx-2 -my-1 rounded hover:bg-primary-200" @click="showDialogNewBoard(close)">
-                      <mdi-application-outline class="h-5 w-5"></mdi-application-outline>
-                      <div>Nouveau tableau</div>
-                    </div>
-                    <div class="flex gap-3 text-primary-600 cursor-pointer px-2 py-1 -mx-2 -my-1 rounded hover:bg-primary-200" @click="showDialogNewFolder(close)">
-                      <mdi-folder-outline class="h-5 w-5"></mdi-folder-outline>
-                      <div>Nouveau dossier</div>
-                    </div>
-                  </div>
-                </div>
-              </PopoverPanel>
-            </Float>
-          </Popover>
+          <Overlay :float-options="{placement: 'right-start'}">
+            <template #activator>
+              <div class="flex items-center gap-2 cursor-pointer -m-1 p-1 rounded hover:bg-primary-300">
+                <mdi-plus class="h-5 w-5"/>
+                Ajouter
+              </div>
+            </template>
+
+            <template #default="{close}">
+              <div class="overlay-item" @click="showDialogNewBoard(close)">
+                <mdi-application-outline class="h-5 w-5"></mdi-application-outline>
+                <div>Nouveau tableau</div>
+              </div>
+              <div class="overlay-item" @click="showDialogNewFolder(close)">
+                <mdi-folder-outline class="h-5 w-5"></mdi-folder-outline>
+                <div>Nouveau dossier</div>
+              </div>
+            </template>
+          </Overlay>
+
           <div class="flex items-center gap-2 cursor-pointer -m-1 p-1 rounded hover:bg-primary-300">
             <mdi-filter-outline class="h-5 w-5"/>
             Filtre
@@ -64,15 +60,24 @@
                 <div class="truncate">{{ item.label }}</div>
               </div>
 
-              <div v-if="hover">
-                <mdi-dots-horizontal class="w-5 h-5" @click="deleteBoard(item)"/>
-              </div>
+              <Overlay :float-options="{placement: 'right-start'}">
+                <template #activator="{open}">
+                  <div>
+                    <mdi-dots-horizontal v-if="hover || open" class="w-5 h-5"/>
+                  </div>
+                </template>
+
+                <div class="overlay-item" @click="deleteBoard(item)">
+                  <mdi-delete-outline class="h-5 w-5"/>
+                  Supprimer
+                </div>
+              </Overlay>
             </div>
           </template>
 
-          <template #type(folder)="{item, hover}">
+          <template #type(folder)="{item, hover, select, toggle}">
             <div class="flex w-full justify-between">
-              <div class="flex flex-grow items-center gap-2" @click="select">
+              <div class="flex flex-grow items-center gap-2" @click="toggle">
                 <div class="truncate">{{ item.label }}</div>
               </div>
 
@@ -92,8 +97,7 @@ import DialogNewBoard from "@/components/dialogs/DialogNewBoard.vue";
 import DialogNewFolder from "@/components/dialogs/DialogNewFolder.vue";
 import Select from "@/components/shared/menu/Select.vue";
 import SelectItem from "@/components/shared/menu/SelectItem.vue";
-import { Float } from "@headlessui-float/vue";
-import { Popover, PopoverButton, PopoverPanel } from "@headlessui/vue";
+import Overlay from "@/components/shared/overlay/Overlay.vue";
 
 import useAppLocalStorage from "@use/useAppLocalStorage";
 import { breakpointsTailwind } from "@vueuse/core";

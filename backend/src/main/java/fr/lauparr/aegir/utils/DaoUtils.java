@@ -2,6 +2,8 @@ package fr.lauparr.aegir.utils;
 
 import fr.lauparr.aegir.config.AutowireHelper;
 import lombok.experimental.UtilityClass;
+import org.hibernate.Cache;
+import org.hibernate.SessionFactory;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -62,6 +64,14 @@ public class DaoUtils {
       return Page.empty();
     }
     return page.map(x -> DaoUtils.mapToDto(x, entityClass));
+  }
+
+  public Cache getCache() {
+    return AutowireHelper.getBean(SessionFactory.class).getCache();
+  }
+
+  public <T> void evictRelationCache(Class<T> clazz, String field) {
+    getCache().evictRegion(String.format("%s.%s", clazz.getName(), field));
   }
 
   public <T> T findRandom(final PagingAndSortingRepository<T, ?> repository) {

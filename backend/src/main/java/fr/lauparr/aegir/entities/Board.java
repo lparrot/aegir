@@ -11,7 +11,17 @@ import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -47,6 +57,7 @@ public class Board extends SoftDeletableEntity {
   private Folder folder;
 
   @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+  @Where(clause = SoftDeletableEntity.SOFT_DELETED_CLAUSE)
   @OneToMany(mappedBy = "board", orphanRemoval = true, cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
   private Set<Task> tasks = new HashSet<>();
 

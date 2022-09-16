@@ -10,6 +10,7 @@ import fr.lauparr.aegir.repositories.BoardRepository;
 import fr.lauparr.aegir.repositories.FolderRepository;
 import fr.lauparr.aegir.repositories.TaskRepository;
 import fr.lauparr.aegir.repositories.WorkspaceRepository;
+import fr.lauparr.aegir.utils.DaoUtils;
 import fr.lauparr.aegir.utils.MessageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,10 +39,7 @@ public class BoardSrv {
   public void createBoard(Long workspaceId, ParamsCreateBoard params) {
     Workspace workspace = workspaceRepository.findById(workspaceId).orElseThrow(() -> new MessageException(MessageUtils.getMessage("message.error.not_found.workspace")));
 
-    Board board = new Board()
-      .setWorkspace(workspace)
-      .setName(params.getName())
-      .setDescription(params.getDescription());
+    Board board = new Board().setWorkspace(workspace).setName(params.getName()).setDescription(params.getDescription());
 
     workspace.getBoards().add(board);
 
@@ -52,19 +50,23 @@ public class BoardSrv {
   public void createFolder(Long workspaceId, ParamsCreateFolder params) {
     Workspace workspace = workspaceRepository.findById(workspaceId).orElseThrow(() -> new MessageException(MessageUtils.getMessage("message.error.not_found.workspace")));
 
-    Folder folder = new Folder()
-      .setWorkspace(workspace)
-      .setName(params.getName());
+    Folder folder = new Folder().setWorkspace(workspace).setName(params.getName());
 
     workspace.getFolders().add(folder);
 
     folderRepository.save(folder);
   }
 
+  @Transactional
   public void deleteBoard(Long boardId, boolean cascade) {
     Board board = boardRepository.findById(boardId).orElseThrow(() -> new MessageException(MessageUtils.getMessage("message.error.not_found.board")));
 
     boardRepository.softDelete(board);
+
+    if (board.getFolder() != null) {
+      DaoUtils.evictRelationCache(Folder.class, "boards");
+    }
+
     if (cascade) {
       List<Long> ids = board.getTasks().stream().map(Task::getId).collect(Collectors.toList());
       taskRepository.softDeleteByIds(ids);

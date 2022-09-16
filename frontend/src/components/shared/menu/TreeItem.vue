@@ -2,8 +2,8 @@
   <div v-show="show">
     <div :class="{'bg-primary-300': selected}" class="flex items-center gap-2 -m-1 p-1 cursor-pointer rounded hover:bg-primary-300" @click="onItemClick" @mouseleave="hover = false" @mouseover="hover = true">
       <template v-if="item.children?.length">
-        <mdi-menu-down v-if="modelOpened" class="h-5 w-5"/>
-        <mdi-menu-right v-else class="h-5 w-5"/>
+        <mdi-menu-down v-if="modelOpened" class="h-5 w-5" @click="toggle"/>
+        <mdi-menu-right v-else class="h-5 w-5" @click="toggle"/>
       </template>
       <template v-else-if="item.children != null && !item.children.length">
         <mdi-menu-right class="text-primary-400 h-5 w-5"/>
@@ -92,7 +92,7 @@ const select = () => {
 };
 
 const onItemClick = () => {
-  if (currentInstance.slots[`type(${props.item?.type})`] == null) {
+  if (currentInstance.slots[`type(${ props.item?.type })`] == null) {
     if (props.item.children != null) {
       toggle();
     } else {

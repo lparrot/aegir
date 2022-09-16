@@ -1,8 +1,7 @@
 package fr.lauparr.aegir.repositories;
 
 import fr.lauparr.aegir.entities.Folder;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import fr.lauparr.aegir.repositories.abstracts.SoftDeletableRepository;
 
-public interface FolderRepository extends PagingAndSortingRepository<Folder, Long>, JpaSpecificationExecutor<Folder> {
+public interface FolderRepository extends SoftDeletableRepository<Folder, Long> {
 }
