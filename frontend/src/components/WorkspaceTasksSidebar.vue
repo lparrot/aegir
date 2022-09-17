@@ -149,7 +149,7 @@ const workspaceItems = computed(() => {
     });
 
     selectedWorkspace.value.folders.forEach(folder => {
-      const item: AppTreeItem = { label: folder.name, value: null, type: "folder", children: [] };
+      const item: AppTreeItem = { label: folder.name, value: folder.id, type: "folder", children: [] };
       if (folder.boards?.length) {
         folder.boards.forEach(board => {
           item.children.push({ label: board.name, value: board.id, type: "board" });
@@ -158,7 +158,6 @@ const workspaceItems = computed(() => {
       items.children.push(item);
     });
   }
-
   return items;
 });
 
@@ -202,7 +201,7 @@ const deleteBoard = async (item) => {
   dialog.create({
     message: "Etes vous sûr de vouloir supprimer ce tableau ?",
     async onOk() {
-      const { success } = await api.deleteBoard(item.value);
+      const { success } = await api.deleteBoard(item.value, { cascade: true });
       if (success) {
         await fetchWorkspaceDetail();
       }

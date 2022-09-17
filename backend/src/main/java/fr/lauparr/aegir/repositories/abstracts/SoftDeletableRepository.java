@@ -18,7 +18,7 @@ public interface SoftDeletableRepository<T extends SoftDeletableEntity, ID> exte
   default void softDelete(T entity) {
     Assert.notNull(entity, "The entity must not be null!");
     Assert.isInstanceOf(SoftDeletableEntity.class, entity, "The entity must be soft deletable!");
-    ((SoftDeletableEntity) entity).setDeletedAt(LocalDateTime.now());
+    entity.setDeletedAt(LocalDateTime.now());
     save(entity);
   }
 
@@ -27,7 +27,7 @@ public interface SoftDeletableRepository<T extends SoftDeletableEntity, ID> exte
     this.softDelete(findById(id).orElseThrow(() -> new MessageException(String.format("No %s entity with id %s exists!", "", id))));
   }
 
-  @Query("delete from #{#entityName} e where e.id in :ids")
+  @Query("update #{#entityName} e set e.deletedAt = current_date  where e.id in :ids")
   void softDeleteByIds(@Param("ids") List<ID> ids);
 
 }

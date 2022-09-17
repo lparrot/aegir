@@ -73,7 +73,7 @@ const props = withDefaults(defineProps<Props>(), {
   backdropDismiss: true,
   labelOk: "Ok",
   labelCancel: "Annuler",
-  panelClasses: "w-1/2",
+  panelClasses: "w-full lg:!w-1/2",
   showButtons: true,
   showCancel: true,
 });

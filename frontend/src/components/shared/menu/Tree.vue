@@ -24,6 +24,7 @@ const emit = defineEmits<{
 }>();
 
 const model = useVModel(props, "modelValue", emit);
+const selectedItem = ref();
 
 const tree_items = ref([]);
 const openedItems = ref([]);
@@ -31,5 +32,6 @@ const openedItems = ref([]);
 provide("tree", {
   items: tree_items,
   model,
+  selectedItem,
 });
 </script>

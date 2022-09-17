@@ -65,6 +65,8 @@ public class BoardSrv {
 
     if (board.getFolder() != null) {
       DaoUtils.evictRelationCache(Folder.class, "boards");
+    } else {
+      DaoUtils.evictRelationCache(Workspace.class, "boards");
     }
 
     if (cascade) {

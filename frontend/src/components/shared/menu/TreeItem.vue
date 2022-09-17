@@ -1,24 +1,30 @@
 <template>
   <div v-show="show">
     <div :class="{'bg-primary-300': selected}" class="flex items-center gap-2 -m-1 p-1 cursor-pointer rounded hover:bg-primary-300" @click="onItemClick" @mouseleave="hover = false" @mouseover="hover = true">
-      <template v-if="item.children?.length">
-        <mdi-menu-down v-if="modelOpened" class="h-5 w-5" @click="toggle"/>
-        <mdi-menu-right v-else class="h-5 w-5" @click="toggle"/>
-      </template>
-      <template v-else-if="item.children != null && !item.children.length">
-        <mdi-menu-right class="text-primary-400 h-5 w-5"/>
+      <template v-if="item.children != null">
+        <template v-if="item.children.length < 1">
+          <mdi-menu-right class="text-primary-400 h-5 w-5"/>
+        </template>
+
+        <template v-else>
+          <mdi-menu-down v-if="modelOpened" class="h-5 w-5" @click="toggle"/>
+          <mdi-menu-right v-else class="h-5 w-5" @click="toggle"/>
+        </template>
       </template>
 
-      <slot v-if="item.type && $slots[`type(${item.type})`] != null" :hover="hover" :item="item" :name="`type(${item.type})`" :select="select" :toggle="toggle"></slot>
+      <div class="w-full">
+        <slot v-if="item.type && $slots[`type(${item.type})`] != null" :hover="hover" :item="item" :name="`type(${item.type})`" :select="select" :toggle="toggle"></slot>
 
-      <template v-else>
-        <div class="flex items-center gap-2">
-          <slot :name="`icon(${item.type})`">
-            <component :is="item.icon" class="h-5 w-5"/>
-          </slot>
-          <div class="truncate">{{ item.label }}</div>
-        </div>
-      </template>
+        <template v-else>
+          <div class="flex items-center gap-2">
+            <slot :name="`icon(${item.type})`">
+              <component :is="item.icon" class="h-5 w-5"/>
+            </slot>
+            <div class="truncate">{{ item.label }}</div>
+          </div>
+        </template>
+      </div>
+
     </div>
   </div>
 
@@ -70,16 +76,23 @@ tree.items.value.push(currentInstance);
 
 const hover = ref(false);
 
+const uid = computed(() => {
+  return getCurrentInstance().uid;
+});
+
 const selected = computed(() => {
   if (tree.model.value == null) {
     return false;
   }
-  const equal = isEqual(props.item.value, tree.model.value);
+
+  const equal = props.item.type === tree.selectedItem?.type && isEqual(props.item.value, tree.model.value);
+
   if (equal) {
     if (parent != null) {
       parent.openAscendant();
     }
   }
+
   return equal;
 });
 
@@ -89,6 +102,7 @@ const toggle = () => {
 
 const select = () => {
   tree.model.value = props.item.value;
+  tree.selectedItem = props.item;
 };
 
 const onItemClick = () => {
