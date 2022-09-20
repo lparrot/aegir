@@ -53,6 +53,17 @@ declare global {
     title?: string;
   }
 
+  interface AppPagination {
+    size?: number;
+    page?: number;
+    order?: AppPaginationOrder;
+  }
+
+  interface AppPaginationOrder {
+    asc?: boolean;
+    field?: string;
+  }
+
   interface AppTreeItem {
     children?: AppTreeItem[];
     icon?: any;

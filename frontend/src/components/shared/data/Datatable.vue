@@ -25,7 +25,7 @@
         </tr>
       </template>
       <tr v-else>
-        <td class="flex justify-center">No content ...</td>
+        <td class="flex justify-center p-3">No content ...</td>
       </tr>
       </tbody>
     </table>
