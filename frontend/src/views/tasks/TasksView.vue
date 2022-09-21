@@ -5,7 +5,7 @@
       <div class="text-lg text-primary-400">{{ boardDetail.description }}</div>
     </div>
 
-    <TaskGroup class="mt-4">
+    <TaskGroup v-model:pagination="pagination" class="mt-4">
       <template v-for="task in boardDetail.tasks" :key="task.id">
         <Task :task="task"></Task>
       </template>
@@ -24,11 +24,14 @@ import { Ref } from "vue";
 
 const { storageSidebar } = useAppLocalStorage();
 const boardDetail: Ref<BoardInfo_Detail> = ref(null);
+const pagination: Ref<AppPagination> = ref({});
 
 const fetchBoardById = async (id) => {
   if (id != null) {
     const { result } = await api.getBoardById(id);
     boardDetail.value = result;
+    pagination.value.count = result.tasks.length;
+    pagination.value.totalPage = result.tasks.length;
   }
 };
 

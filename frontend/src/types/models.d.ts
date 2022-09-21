@@ -54,9 +54,11 @@ declare global {
   }
 
   interface AppPagination {
-    size?: number;
-    page?: number;
+    count?: number;
     order?: AppPaginationOrder;
+    page?: number;
+    size?: number;
+    totalPage?: number;
   }
 
   interface AppPaginationOrder {
