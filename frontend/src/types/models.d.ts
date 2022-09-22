@@ -30,6 +30,7 @@ declare global {
     key: string;
     label?: string;
     field?: string;
+    sortable?: boolean;
     transform?: (value: any, item: any) => any;
     preventClick?: boolean;
   }
@@ -77,6 +78,7 @@ declare global {
   }
 
   type AppNotificationType = "success" | "info" | "warn" | "danger"
+  type AppFetchMethodType = "get" | "put" | "post" | "delete"
 
   interface AppNotification {
     id: string;

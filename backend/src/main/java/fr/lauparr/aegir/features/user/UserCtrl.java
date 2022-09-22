@@ -5,10 +5,10 @@ import fr.lauparr.aegir.dto.api.RestApiResponse;
 import fr.lauparr.aegir.projections.UserInfo_Datatable;
 import fr.lauparr.aegir.utils.DaoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -18,8 +18,8 @@ public class UserCtrl extends BaseController {
   private UserSrv userSrv;
 
   @GetMapping
-  public ResponseEntity<RestApiResponse<List<UserInfo_Datatable>>> getUsers() {
-    return this.ok(DaoUtils.convertToListDto(userSrv.getUsers(), UserInfo_Datatable.class));
+  public ResponseEntity<RestApiResponse<Page<UserInfo_Datatable>>> getUsers(Pageable pagination) {
+    return this.ok(DaoUtils.convertToPageDto(userSrv.getUsers(pagination), UserInfo_Datatable.class));
   }
 
   @GetMapping("/{userId}")

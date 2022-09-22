@@ -1,5 +1,5 @@
 <template>
-  <div v-if="modelValue" class="flex items-center gap-8">
+  <div class="flex items-center gap-8">
     <div class="flex items-center gap-2">
       <mdi-chevron-double-left :class="{'text-primary-400': isFirstPage}" class="h-6 w-6 cursor-pointer p-1 rounded-full hover:bg-primary-100" @click="updatePage(-10)"/>
       <mdi-chevron-left :class="{'text-primary-400': isFirstPage}" class="h-6 w-6 cursor-pointer p-1 rounded-full hover:bg-primary-100" @click="updatePage(-1)"/>
@@ -25,13 +25,13 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {});
 
 const emit = defineEmits<{
-  (e: "update:modelValue"): any
+  (e: "update:modelValue", payload: any): any
   (e: "change"): any
 }>();
 
-const { modelValue } = useVModels(props, emit);
+const modelValue = useVModel(props, "modelValue", emit);
 
-modelValue.value = resolveRef(Object.assign({}, { size: 15, page: 1, count: 0, totalPage: 0, order: { asc: true } }, props.modelValue)).value;
+modelValue.value = Object.assign({}, { size: 15, page: 1, count: 0, totalPage: 0, order: { asc: true } }, props.modelValue);
 
 const isFirstPage = computed(() => {
   return modelValue.value.page === 1;
@@ -48,8 +48,9 @@ const updatePage = (count) => {
     modelValue.value.page = modelValue.value.totalPage;
   } else {
     modelValue.value.page = modelValue.value.page + count;
-    console.log(modelValue.value);
   }
+
+  emit("change");
 };
 
 </script>

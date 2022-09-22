@@ -31,7 +31,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {});
 
 const emit = defineEmits<{
-  (e: "update:pagination"): any
+  (e: "update:pagination", payload: any): any
 }>();
 
 const { pagination } = useVModels(props, emit);

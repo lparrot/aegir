@@ -1,5 +1,5 @@
 <template>
-  <Datatable :fields="fields" :items="items" class="max-h-full" selectable striped @row-click="onRowClick">
+  <Datatable :fields="fields" class="max-h-full" fetch-url="/api/users" selectable striped @row-click="onRowClick">
     <template #cell(avatar)="{value}">
       <div class="h-10 w-10">
         <img :src="value" alt="avatar" class="rounded-full">
@@ -20,7 +20,6 @@
 </template>
 
 <script lang="ts" setup>
-import { api } from "@/api";
 import Datatable from "@/components/shared/data/Datatable.vue";
 import Badge from "@/components/shared/panel/Badge.vue";
 import { CheckBadgeIcon, EnvelopeIcon } from "@heroicons/vue/24/outline";
@@ -31,21 +30,12 @@ import DialogEditUser from "../../components/dialogs/DialogEditUser.vue";
 
 const { dialog } = useAegir();
 
-const items = ref();
-
-const fetchUsers = async () => {
-  const { result } = await api.getUsers();
-  items.value = result;
-};
-
-await fetchUsers();
-
 const fields = ref<DatatableField[]>([
-  { key: "avatar", transform: (_value, item) => `https://picsum.photos/60/60?random=${item.id}` },
+  { key: "avatar", transform: (_value, item) => `https://picsum.photos/60/60?random=${item.id}`, sortable: false },
   { key: "username", label: "Nom d'utilisateur" },
   { key: "userDataEmail", label: "Email", preventClick: true },
   { key: "profileLabel", label: "Profil" },
-  { key: "workspaces", label: "Workspaces", field: "workspaces", transform: value => map(value, o => o.name).join(", "), preventClick: true },
+  { key: "workspaces", label: "Workspaces", field: "workspaces", transform: value => map(value, o => o.name).join(", "), preventClick: true, sortable: false },
 ]);
 
 const onRowClick = (user) => {
