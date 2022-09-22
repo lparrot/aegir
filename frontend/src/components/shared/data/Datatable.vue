@@ -136,4 +136,8 @@ const onSort = async (field: DatatableField) => {
 };
 
 const getValue = (field, item) => field.transform != null ? field.transform(get(item, field.field ?? field.key), item) : get(item, field.field ?? field.key);
+
+defineExpose({
+  refresh: onFetch,
+});
 </script>

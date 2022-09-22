@@ -1,5 +1,5 @@
 <template>
-  <Datatable :fields="fields" class="max-h-full" fetch-url="/api/users" selectable striped @row-click="onRowClick">
+  <Datatable ref="datatable" :fields="fields" class="max-h-full" fetch-url="/api/users" selectable striped @row-click="onRowClick">
     <template #cell(avatar)="{value}">
       <div class="h-10 w-10">
         <img :src="value" alt="avatar" class="rounded-full">
@@ -38,6 +38,8 @@ const fields = ref<DatatableField[]>([
   { key: "workspaces", label: "Workspaces", field: "workspaces", transform: value => map(value, o => o.name).join(", "), preventClick: true, sortable: false },
 ]);
 
+const datatable = ref();
+
 const onRowClick = (user) => {
   dialog.create({
     component: DialogEditUser,
@@ -45,7 +47,7 @@ const onRowClick = (user) => {
       user,
     },
     async onOk() {
-      await fetchUsers();
+      await datatable.value.refresh();
     },
   });
 };
