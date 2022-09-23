@@ -10,10 +10,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 import java.security.SecureRandom;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -106,6 +109,33 @@ public class DaoUtils {
       p = root.get(principal);
     }
     return p;
+  }
+
+  public Object convertValueByFieldType(Expression<?> path, Object value) {
+    final Class<?> type = path.getJavaType();
+
+    if (value == null) {
+      return null;
+    }
+
+    if (value.getClass().equals(String.class)) {
+
+      // Modification de la valeur à rechercher par rapport à la classe du champ
+      if (type.equals(LocalDate.class)) {
+        return DateTimeUtils.convertToLocalDate((String) value);
+      }
+
+      if (type.equals(LocalDateTime.class)) {
+        return DateTimeUtils.convertToLocalDateTime((String) value);
+      }
+
+      if (type.equals(Boolean.class) || type.equals(boolean.class)) {
+        return Boolean.valueOf((String) value);
+      }
+
+    }
+
+    return value;
   }
 
   /**

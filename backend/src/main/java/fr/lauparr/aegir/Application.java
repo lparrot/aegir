@@ -1,6 +1,7 @@
 package fr.lauparr.aegir;
 
 import fr.lauparr.aegir.features.shared.services.DbInitializerSrv;
+import fr.lauparr.aegir.features.shared.services.db_request.DBRequestSrv;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,8 @@ public class Application implements CommandLineRunner {
 
   @Autowired
   private DbInitializerSrv dbInitializerSrv;
+  @Autowired
+  private DBRequestSrv dbRequestSrv;
 
   public static void main(String[] args) {
     context = new SpringApplicationBuilder(Application.class)
@@ -50,5 +53,13 @@ public class Application implements CommandLineRunner {
   @Override
   public void run(String... args) {
     this.dbInitializerSrv.initialize();
+//    dbRequestSrv.tuple(User.class)
+//      .select("username", "userData.address")
+//      .where("username", "like", "julie%")
+//      .where("userData.postalCode", "=", "68085")
+//      .list()
+//      .forEach(
+//        tuple -> System.out.println(tuple.get("userData.address"))
+//      );
   }
 }

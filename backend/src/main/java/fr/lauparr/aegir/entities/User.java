@@ -2,7 +2,6 @@ package fr.lauparr.aegir.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import fr.lauparr.aegir.entities.abstracts.JpaModel;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.Getter;
@@ -18,6 +17,9 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
@@ -33,7 +35,11 @@ import java.util.Set;
 @Setter
 @Entity
 @Accessors(chain = true)
-public class User extends JpaModel<Long> implements UserDetails {
+public class User implements UserDetails {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
   @NotEmpty
   private String username;
