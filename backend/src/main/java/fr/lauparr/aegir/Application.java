@@ -1,5 +1,6 @@
 package fr.lauparr.aegir;
 
+import fr.lauparr.aegir.entities.Task;
 import fr.lauparr.aegir.features.shared.services.DbInitializerSrv;
 import fr.lauparr.aegir.features.shared.services.db_request.DBRequestSrv;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
@@ -53,13 +54,13 @@ public class Application implements CommandLineRunner {
   @Override
   public void run(String... args) {
     this.dbInitializerSrv.initialize();
-//    dbRequestSrv.tuple(User.class)
-//      .select("username", "userData.address")
-//      .where("username", "like", "julie%")
-//      .where("userData.postalCode", "=", "68085")
-//      .list()
-//      .forEach(
-//        tuple -> System.out.println(tuple.get("userData.address"))
-//      );
+    dbRequestSrv.tuple(Task.class)
+      .select("name")
+      .whereNotNull("assignedAt")
+      .orderBy("name", "asc")
+      .list()
+      .forEach(
+        tuple -> System.out.println(tuple.get("name"))
+      );
   }
 }

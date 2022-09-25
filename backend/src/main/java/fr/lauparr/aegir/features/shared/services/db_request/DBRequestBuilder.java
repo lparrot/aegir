@@ -49,6 +49,18 @@ public class DBRequestBuilder<T> {
         predicates.add(builder.greaterThan(path, (U) DaoUtils.convertValueByFieldType(path, value)));
         break;
       }
+      case ">=": {
+        predicates.add(builder.greaterThanOrEqualTo(path, (U) DaoUtils.convertValueByFieldType(path, value)));
+        break;
+      }
+      case "<": {
+        predicates.add(builder.lessThan(path, (U) DaoUtils.convertValueByFieldType(path, value)));
+        break;
+      }
+      case "<=": {
+        predicates.add(builder.lessThanOrEqualTo(path, (U) DaoUtils.convertValueByFieldType(path, value)));
+        break;
+      }
       case "like": {
         predicates.add(builder.like((Expression<String>) path, value.toString()));
         break;
@@ -64,8 +76,44 @@ public class DBRequestBuilder<T> {
     return this;
   }
 
+  public DBRequestBuilder<T> where(Object[]... predicates) {
+    for (Object[] predicate : predicates) {
+      if (predicate.length == 2) {
+        where(predicate[0].toString(), predicate[1]);
+      }
+
+      if (predicate.length == 3) {
+        where(predicate[0].toString(), predicate[1].toString(), predicate[2]);
+      }
+    }
+    return this;
+  }
+
+  public DBRequestBuilder<T> whereNull(String field) {
+    predicates.add(builder.isNull(DaoUtils.getPathFromRoot(root, field)));
+    return this;
+  }
+
+  public DBRequestBuilder<T> whereNotNull(String field) {
+    predicates.add(builder.isNotNull(DaoUtils.getPathFromRoot(root, field)));
+    return this;
+  }
+
   public DBRequestBuilder<T> select(String... fields) {
     query.multiselect(Arrays.stream(fields).map(field -> DaoUtils.getPathFromRoot(root, field).alias(field)).toArray(Path[]::new));
+    return this;
+  }
+
+  public DBRequestBuilder<T> orderBy(String field, String order) {
+    switch (order) {
+      case "desc":
+        query.orderBy(builder.desc(DaoUtils.getPathFromRoot(root, field)));
+        break;
+      case "asc":
+      default:
+        query.orderBy(builder.asc(DaoUtils.getPathFromRoot(root, field)));
+        break;
+    }
     return this;
   }
 
