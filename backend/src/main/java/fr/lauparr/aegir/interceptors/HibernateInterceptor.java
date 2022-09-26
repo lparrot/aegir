@@ -14,12 +14,6 @@ import java.util.Arrays;
 public class HibernateInterceptor extends EmptyInterceptor {
 
   @Override
-  public String onPrepareStatement(String sql) {
-    log.debug("SQL: " + sql);
-    return super.onPrepareStatement(sql);
-  }
-
-  @Override
   public boolean onFlushDirty(Object entity, Serializable id, Object[] currentState, Object[] previousState, String[] propertyNames, Type[] types) {
     log.debug(MessageFormat.format("Entity {0}#{1} changed from {2} to {3}",
       entity.getClass().getSimpleName(),
