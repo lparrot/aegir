@@ -111,11 +111,15 @@ public class DaoUtils {
     return p;
   }
 
-  public Object convertValueByFieldType(Expression<?> path, Object value) {
+  public <T> Object convertValueByFieldType(Expression<T> path, Object value) {
     final Class<?> type = path.getJavaType();
 
     if (value == null) {
       return null;
+    }
+
+    if (value instanceof Expression) {
+      return value;
     }
 
     if (value.getClass().equals(String.class)) {

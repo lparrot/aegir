@@ -3,6 +3,7 @@ package fr.lauparr.aegir;
 import fr.lauparr.aegir.entities.Task;
 import fr.lauparr.aegir.features.shared.services.DbInitializerSrv;
 import fr.lauparr.aegir.features.shared.services.db_request.DBRequestSrv;
+import fr.lauparr.aegir.projections.TaskInfo_Simple;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import lombok.extern.slf4j.Slf4j;
@@ -54,13 +55,12 @@ public class Application implements CommandLineRunner {
   @Override
   public void run(String... args) {
     this.dbInitializerSrv.initialize();
-    dbRequestSrv.tuple(Task.class)
-      .select("name")
-      .whereNotNull("assignedAt")
+    dbRequestSrv.request(Task.class)
+      .whereColumn("board.id", ">", "status.id")
       .orderBy("name", "asc")
-      .list()
+      .toProjection(TaskInfo_Simple.class)
       .forEach(
-        tuple -> System.out.println(tuple.get("name"))
+        task -> System.out.println(task.getName())
       );
   }
 }
