@@ -3,10 +3,12 @@ package fr.lauparr.aegir.repositories.abstracts;
 import fr.lauparr.aegir.entities.abstracts.SoftDeletableEntity;
 import fr.lauparr.aegir.exceptions.MessageException;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
@@ -27,7 +29,9 @@ public interface SoftDeletableRepository<T extends SoftDeletableEntity, ID> exte
     this.softDelete(findById(id).orElseThrow(() -> new MessageException(String.format("No %s entity with id %s exists!", "", id))));
   }
 
-  @Query("update #{#entityName} e set e.deletedAt = current_date  where e.id in :ids")
+  @Modifying
+  @Transactional
+  @Query("update #{#entityName} e set e.deletedAt = current_date where (coalesce(:ids, null) is null or e.id not in :ids)")
   void softDeleteByIds(@Param("ids") List<ID> ids);
 
 }

@@ -14,6 +14,12 @@ import java.util.Arrays;
 public class HibernateInterceptor extends EmptyInterceptor {
 
   @Override
+  public String onPrepareStatement(String sql) {
+    log.debug("SQL: " + sql);
+    return super.onPrepareStatement(sql);
+  }
+
+  @Override
   public boolean onFlushDirty(Object entity, Serializable id, Object[] currentState, Object[] previousState, String[] propertyNames, Type[] types) {
     log.debug(MessageFormat.format("Entity {0}#{1} changed from {2} to {3}",
       entity.getClass().getSimpleName(),
@@ -22,15 +28,5 @@ public class HibernateInterceptor extends EmptyInterceptor {
       Arrays.toString(currentState))
     );
     return super.onFlushDirty(entity, id, currentState, previousState, propertyNames, types);
-  }
-
-  @Override
-  public boolean onLoad(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
-    log.debug(MessageFormat.format("Entity {0}#{1} loaded with {2}",
-      entity.getClass().getSimpleName(),
-      id,
-      Arrays.toString(state))
-    );
-    return super.onLoad(entity, id, state, propertyNames, types);
   }
 }
