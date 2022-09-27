@@ -1,5 +1,6 @@
 package fr.lauparr.aegir.features.shared.db_request;
 
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.query.Query;
 
@@ -8,6 +9,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 import static fr.lauparr.aegir.utils.DaoUtils.*;
@@ -19,6 +21,7 @@ public class DBRequestBuilder<T> {
   private final CriteriaQuery<T> query;
   private final Root<?> root;
 
+  @Getter
   private Predicate predicates = null;
 
   public DBRequestBuilder(EntityManager em, CriteriaBuilder builder, CriteriaQuery<T> query, Class<?> rootClass) {
@@ -38,6 +41,11 @@ public class DBRequestBuilder<T> {
 
   private DBRequestBuilder<T> where(Expression path, String operator, Object value) {
     predicates = andCondition(predicates, makePredicate(path, operator, value));
+    return this;
+  }
+
+  public DBRequestBuilder<T> where(UnaryOperator<DBRequestBuilder<T>> function) {
+    predicates = builder.and(function.apply(this).getPredicates());
     return this;
   }
 
