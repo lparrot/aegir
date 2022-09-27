@@ -66,12 +66,12 @@ public class Application implements CommandLineRunner {
     List<Object[]> table_values = new ArrayList<>();
     dbRequestSrv.tuple(User.class)
       .select("username", "userData.postalCode")
+      .where("username", "<>", "root")
       .where(query ->
         query
-          .where("username", "<>", "root")
           .where("userData.postalCode", "like", "2%")
+          .orWhere("userData.postalCode", "like", "4%")
       )
-      .orWhere("userData.postalCode", "like", "4%")
       .orderBy("username", "asc")
       .list()
       .forEach(
