@@ -1,17 +1,7 @@
-package fr.lauparr.aegir.features.shared.services;
+package fr.lauparr.aegir.features.shared;
 
 import com.github.javafaker.Faker;
-import fr.lauparr.aegir.entities.Board;
-import fr.lauparr.aegir.entities.Folder;
-import fr.lauparr.aegir.entities.Member;
-import fr.lauparr.aegir.entities.Profile;
-import fr.lauparr.aegir.entities.Role;
-import fr.lauparr.aegir.entities.Task;
-import fr.lauparr.aegir.entities.TaskComment;
-import fr.lauparr.aegir.entities.TaskStatus;
-import fr.lauparr.aegir.entities.User;
-import fr.lauparr.aegir.entities.UserData;
-import fr.lauparr.aegir.entities.Workspace;
+import fr.lauparr.aegir.entities.*;
 import fr.lauparr.aegir.features.security.AuthSrv;
 import fr.lauparr.aegir.features.security.ParamsSecurityCreateAccount;
 import fr.lauparr.aegir.features.websockets.WebsocketSrv;

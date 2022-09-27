@@ -1,4 +1,6 @@
-package fr.lauparr.aegir.features.shared.services.db_request;
+package fr.lauparr.aegir.features.shared.db_request;
+
+import org.hibernate.query.Query;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.*;
@@ -30,8 +32,10 @@ public class DBRequestBuilder<T> {
   }
 
   public DBRequestBuilder<T> where(String field, String operator, Object value) {
-    final Expression path = getPathFromRoot(root, field);
+    return where(getPathFromRoot(root, field), operator, value);
+  }
 
+  public DBRequestBuilder<T> where(Expression path, String operator, Object value) {
     switch (operator) {
       case "=": {
         predicates.add(builder.equal(path, convertValueByFieldType(path, value)));
@@ -101,6 +105,30 @@ public class DBRequestBuilder<T> {
     return this;
   }
 
+  public DBRequestBuilder<T> whereDay(String path, int day) {
+    return whereDay(path, "=", day);
+  }
+
+  public DBRequestBuilder<T> whereDay(String path, String operator, int year) {
+    return where(builder.function("DAY", Integer.class, getPathFromRoot(root, path)), operator, year);
+  }
+
+  public DBRequestBuilder<T> whereMonth(String path, int day) {
+    return whereMonth(path, "=", day);
+  }
+
+  public DBRequestBuilder<T> whereMonth(String path, String operator, int year) {
+    return where(builder.function("MONTH", Integer.class, getPathFromRoot(root, path)), operator, year);
+  }
+
+  public DBRequestBuilder<T> whereYear(String path, int year) {
+    return whereYear(path, "=", year);
+  }
+
+  public DBRequestBuilder<T> whereYear(String path, String operator, int year) {
+    return where(builder.function("YEAR", Integer.class, getPathFromRoot(root, path)), operator, year);
+  }
+
   public DBRequestBuilder<T> whereNotNull(String field) {
     predicates.add(builder.isNotNull(getPathFromRoot(root, field)));
     return this;
@@ -122,6 +150,10 @@ public class DBRequestBuilder<T> {
         break;
     }
     return this;
+  }
+
+  public String sql() {
+    return em.createQuery(query.where(predicates.toArray(new Predicate[0]))).unwrap(Query.class).getQueryString();
   }
 
   public List<T> list() {

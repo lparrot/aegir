@@ -1,4 +1,4 @@
-package fr.lauparr.aegir.features.shared.services.db_request;
+package fr.lauparr.aegir.features.shared.db_request;
 
 import org.springframework.stereotype.Service;
 

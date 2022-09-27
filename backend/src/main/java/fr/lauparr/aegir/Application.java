@@ -1,8 +1,8 @@
 package fr.lauparr.aegir;
 
 import fr.lauparr.aegir.entities.Task;
-import fr.lauparr.aegir.features.shared.services.DbInitializerSrv;
-import fr.lauparr.aegir.features.shared.services.db_request.DBRequestSrv;
+import fr.lauparr.aegir.features.shared.DbInitializerSrv;
+import fr.lauparr.aegir.features.shared.db_request.DBRequestSrv;
 import fr.lauparr.aegir.projections.TaskInfo_Simple;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
@@ -56,7 +56,6 @@ public class Application implements CommandLineRunner {
   public void run(String... args) {
     this.dbInitializerSrv.initialize();
     dbRequestSrv.request(Task.class)
-      .whereColumn("board.id", ">", "status.id")
       .orderBy("name", "asc")
       .toProjection(TaskInfo_Simple.class)
       .forEach(
