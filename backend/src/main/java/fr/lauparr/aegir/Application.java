@@ -62,8 +62,10 @@ public class Application implements CommandLineRunner {
   public void run(String... args) {
     this.dbInitializerSrv.initialize();
     AsciiTable table = new AsciiTable();
+
     List<String> table_headers = new ArrayList<>();
     List<Object[]> table_values = new ArrayList<>();
+
     dbRequestSrv.tuple(User.class)
       .select("username", "userData.postalCode")
       .where("username", "<>", "root")

@@ -203,11 +203,11 @@ public class DBRequestBuilder<T> {
     return createQuery().getResultList();
   }
 
-  public T findFirst() {
+  public T first() {
     return createQuery().setMaxResults(1).getResultList().stream().findFirst().orElse(null);
   }
 
-  public <U> List<U> toProjection(Class<U> projectionClass) {
+  public <U> List<U> projection(Class<U> projectionClass) {
     return list().stream().map(data -> convertToDto(data, projectionClass)).collect(Collectors.toList());
   }
 
