@@ -68,16 +68,7 @@ public class Application implements CommandLineRunner {
 
     dbRequestSrv.tuple(User.class)
       .select("username", "userData.postalCode")
-      .where("username", "<>", "root")
-      .where(query ->
-        query
-          .where("userData.postalCode", "like", "2%")
-          .orWhere("userData.postalCode", "like", "4%")
-      )
-      .whereNot(query ->
-        query
-          .where("userData.postalCode", "=", "20251")
-      )
+      .whereNotIn("userData.firstname", "Louis", "Marie")
       .orderBy("username", "asc")
       .list()
       .forEach(
@@ -93,7 +84,7 @@ public class Application implements CommandLineRunner {
         });
 
 
-    if (table_values.size() > 0) {
+    if (!table_values.isEmpty()) {
       table.setPadding(2);
       table.addRule();
       table.addRow(table_headers);

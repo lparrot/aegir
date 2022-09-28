@@ -7,10 +7,7 @@ import org.hibernate.query.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
@@ -94,6 +91,11 @@ public class DBRequestBuilder<T> {
     return this;
   }
 
+  public DBRequestBuilder<T> whereNotNull(String field) {
+    predicates = andCondition(predicates, builder.isNotNull(getPath(field)));
+    return this;
+  }
+
   public DBRequestBuilder<T> whereDay(String path, int day) {
     return whereDay(path, "=", day);
   }
@@ -118,8 +120,49 @@ public class DBRequestBuilder<T> {
     return where(builder.function("YEAR", Integer.class, getPath(path)), operator, year);
   }
 
-  public DBRequestBuilder<T> whereNotNull(String field) {
-    predicates = andCondition(predicates, builder.isNotNull(getPath(field)));
+  public DBRequestBuilder<T> whereBetween(String field, Object first, Object last) {
+    return whereBetween(field, builder.literal(first), builder.literal(last));
+  }
+
+  public DBRequestBuilder<T> whereBetweenColumns(String field, String firstColumn, String lastColumn) {
+    return whereBetween(field, getPath(firstColumn), getPath(lastColumn));
+  }
+
+  public DBRequestBuilder<T> whereBetween(String field, Expression first, Expression last) {
+    predicates = andCondition(predicates, builder.between(getPath(field), first, last));
+    return this;
+  }
+
+  public DBRequestBuilder<T> whereNotBetweenColumns(String field, String firstColumn, String lastColumn) {
+    return whereNotBetween(field, getPath(firstColumn), getPath(lastColumn));
+  }
+
+  public DBRequestBuilder<T> whereNotBetween(String field, Object first, Object last) {
+    return whereNotBetween(field, builder.literal(first), builder.literal(last));
+  }
+
+  public DBRequestBuilder<T> whereNotBetween(String field, Expression first, Expression last) {
+    predicates = andCondition(predicates, builder.not(builder.between(getPath(field), first, last)));
+    return this;
+  }
+
+  public DBRequestBuilder<T> whereIn(String field, List<?> list) {
+    predicates = andCondition(predicates, getPath(field).in(list));
+    return this;
+  }
+
+  public DBRequestBuilder<T> whereIn(String field, Object... list) {
+    predicates = andCondition(predicates, getPath(field).in(list));
+    return this;
+  }
+
+  public DBRequestBuilder<T> whereNotIn(String field, List<?> list) {
+    predicates = andCondition(predicates, builder.not(getPath(field).in(list)));
+    return this;
+  }
+
+  public DBRequestBuilder<T> whereNotIn(String field, Object... list) {
+    predicates = andCondition(predicates, builder.not(getPath(field).in(list)));
     return this;
   }
 
@@ -129,15 +172,19 @@ public class DBRequestBuilder<T> {
   }
 
   public DBRequestBuilder<T> orderBy(String field, String order) {
+    ArrayList<Order> orders = new ArrayList<>(query.getOrderList());
     switch (order) {
       case "desc":
-        query.orderBy(builder.desc(getPath(field)));
+        orders.add(builder.desc(getPath(field)));
         break;
       case "asc":
       default:
-        query.orderBy(builder.asc(getPath(field)));
+        orders.add(builder.asc(getPath(field)));
         break;
     }
+
+    query.orderBy(orders);
+
     return this;
   }
 
@@ -249,12 +296,12 @@ public class DBRequestBuilder<T> {
     return predicate;
   }
 
-  private <T> Path<T> getPath(String path) {
+  private <U> Expression<U> getPath(String path) {
     if (paths.containsKey(path)) {
       return paths.get(path);
     }
 
-    Path pathFromRoot = getPathFromRoot(root, path);
+    Path<U> pathFromRoot = (Path<U>) getPathFromRoot(root, path);
     paths.put(path, pathFromRoot);
 
     return pathFromRoot;
