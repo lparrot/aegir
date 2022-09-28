@@ -23,16 +23,21 @@ public class DBRequestBuilder<T> {
   private final CriteriaQuery<T> query;
   private final Root<?> root;
 
-  private Map<String, Path> paths = new HashMap<>();
+  private final Map<String, Path> paths;
 
   @Getter
   private Predicate predicates = null;
 
-  public DBRequestBuilder(EntityManager em, CriteriaBuilder builder, CriteriaQuery<T> query, Class<?> rootClass) {
+  public DBRequestBuilder(EntityManager em, CriteriaBuilder builder, CriteriaQuery<T> query, Root<?> root) {
+    this(em, builder, query, root, null);
+  }
+
+  public DBRequestBuilder(EntityManager em, CriteriaBuilder builder, CriteriaQuery<T> query, Root<?> root, Map<String, Path> paths) {
     this.em = em;
     this.builder = builder;
     this.query = query;
-    this.root = query.from(rootClass);
+    this.root = root;
+    this.paths = paths == null ? new HashMap<>() : paths;
   }
 
   public DBRequestBuilder<T> where(String field, Object value) {
@@ -49,7 +54,7 @@ public class DBRequestBuilder<T> {
   }
 
   public DBRequestBuilder<T> where(UnaryOperator<DBRequestBuilder<T>> function) {
-    predicates = andCondition(null, function.apply(this).getPredicates());
+    predicates = andCondition(predicates, andCondition(function.apply(new DBRequestBuilder<>(em, builder, query, root, paths)).getPredicates()));
     return this;
   }
 
@@ -66,66 +71,10 @@ public class DBRequestBuilder<T> {
     return this;
   }
 
-  private Predicate makePredicate(Expression path, String operator, Object value) {
-    Predicate predicate = null;
-
-    switch (StringUtils.lowerCase(operator)) {
-      case "=": {
-        predicate = andCondition(predicate, builder.equal(path, convertValueByFieldType(path, value)));
-        break;
-      }
-      case "<>": {
-        predicate = andCondition(predicate, builder.or(builder.notEqual(path, convertValueByFieldType(path, value)), builder.isNull(path)));
-        break;
-      }
-      case ">": {
-        if (value instanceof Expression) {
-          predicate = andCondition(predicate, builder.greaterThan(path, (Expression) value));
-        } else {
-          predicate = andCondition(predicate, builder.greaterThan(path, (Comparable) convertValueByFieldType(path, value)));
-        }
-        break;
-      }
-      case ">=": {
-        if (value instanceof Expression) {
-          predicate = andCondition(predicate, builder.greaterThanOrEqualTo(path, (Expression) value));
-        } else {
-          predicate = andCondition(predicate, builder.greaterThanOrEqualTo(path, (Comparable) convertValueByFieldType(path, value)));
-        }
-        break;
-      }
-      case "<": {
-        if (value instanceof Expression) {
-          predicate = andCondition(predicate, builder.lessThan(path, (Expression) value));
-        } else {
-          predicate = andCondition(predicate, builder.lessThan(path, (Comparable) convertValueByFieldType(path, value)));
-        }
-        break;
-      }
-      case "<=": {
-        if (value instanceof Expression) {
-          predicate = andCondition(predicate, builder.lessThanOrEqualTo(path, (Expression) value));
-        } else {
-          predicate = andCondition(predicate, builder.lessThanOrEqualTo(path, (Comparable) convertValueByFieldType(path, value)));
-        }
-        break;
-      }
-      case "like": {
-        predicate = andCondition(predicate, builder.like(path, convertValueByFieldType(path, value).toString()));
-        break;
-      }
-      case "unlike": {
-        predicate = andCondition(predicate, builder.notLike(path, convertValueByFieldType(path, value).toString()));
-        break;
-      }
-      default: {
-        predicate = andCondition(predicate, builder.equal(path, convertValueByFieldType(path, value)));
-      }
-    }
-
-    return predicate;
+  public DBRequestBuilder<T> orWhere(UnaryOperator<DBRequestBuilder<T>> function) {
+    predicates = orCondition(predicates, andCondition(function.apply(new DBRequestBuilder<>(em, builder, query, root, paths)).getPredicates()));
+    return this;
   }
-
 
   public DBRequestBuilder<T> whereColumn(String path, String secondPath) {
     return whereColumn(path, "=", secondPath);
@@ -211,6 +160,66 @@ public class DBRequestBuilder<T> {
     return list().stream().map(data -> convertToDto(data, projectionClass)).collect(Collectors.toList());
   }
 
+  private Predicate makePredicate(Expression path, String operator, Object value) {
+    Predicate predicate = null;
+
+    switch (StringUtils.lowerCase(operator)) {
+      case "=": {
+        predicate = andCondition(predicate, builder.equal(path, convertValueByFieldType(path, value)));
+        break;
+      }
+      case "<>": {
+        predicate = andCondition(predicate, builder.or(builder.notEqual(path, convertValueByFieldType(path, value)), builder.isNull(path)));
+        break;
+      }
+      case ">": {
+        if (value instanceof Expression) {
+          predicate = andCondition(predicate, builder.greaterThan(path, (Expression) value));
+        } else {
+          predicate = andCondition(predicate, builder.greaterThan(path, (Comparable) convertValueByFieldType(path, value)));
+        }
+        break;
+      }
+      case ">=": {
+        if (value instanceof Expression) {
+          predicate = andCondition(predicate, builder.greaterThanOrEqualTo(path, (Expression) value));
+        } else {
+          predicate = andCondition(predicate, builder.greaterThanOrEqualTo(path, (Comparable) convertValueByFieldType(path, value)));
+        }
+        break;
+      }
+      case "<": {
+        if (value instanceof Expression) {
+          predicate = andCondition(predicate, builder.lessThan(path, (Expression) value));
+        } else {
+          predicate = andCondition(predicate, builder.lessThan(path, (Comparable) convertValueByFieldType(path, value)));
+        }
+        break;
+      }
+      case "<=": {
+        if (value instanceof Expression) {
+          predicate = andCondition(predicate, builder.lessThanOrEqualTo(path, (Expression) value));
+        } else {
+          predicate = andCondition(predicate, builder.lessThanOrEqualTo(path, (Comparable) convertValueByFieldType(path, value)));
+        }
+        break;
+      }
+      case "like": {
+        predicate = andCondition(predicate, builder.like(path, convertValueByFieldType(path, value).toString()));
+        break;
+      }
+      case "unlike": {
+        predicate = andCondition(predicate, builder.notLike(path, convertValueByFieldType(path, value).toString()));
+        break;
+      }
+      default: {
+        predicate = andCondition(predicate, builder.equal(path, convertValueByFieldType(path, value)));
+      }
+    }
+
+    return predicate;
+  }
+
   private TypedQuery<T> createQuery() {
     TypedQuery<T> jpaQuery;
     if (predicates == null) {
@@ -222,16 +231,17 @@ public class DBRequestBuilder<T> {
   }
 
   private Predicate addCondition(Predicate rootPredicate, boolean and, Predicate... conditions) {
+    Predicate predicate;
     if (rootPredicate == null) {
-      rootPredicate = builder.and(conditions);
+      predicate = builder.and(conditions);
     } else {
       if (and) {
-        rootPredicate = builder.and(rootPredicate, builder.and(conditions));
+        predicate = builder.and(rootPredicate, builder.and(conditions));
       } else {
-        rootPredicate = builder.or(rootPredicate, builder.and(conditions));
+        predicate = builder.or(rootPredicate, builder.and(conditions));
       }
     }
-    return rootPredicate;
+    return predicate;
   }
 
   private <T> Path<T> getPath(String path) {

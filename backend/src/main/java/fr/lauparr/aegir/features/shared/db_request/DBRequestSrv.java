@@ -15,11 +15,13 @@ public class DBRequestSrv {
   private EntityManager em;
 
   public <T> DBRequestBuilder<T> request(Class<T> clazz) {
-    return new DBRequestBuilder<>(em, builder(), query(clazz), clazz);
+    CriteriaQuery<T> query = query(clazz);
+    return new DBRequestBuilder<>(em, builder(), query, query.from(clazz));
   }
 
   public <T> DBRequestBuilder<Tuple> tuple(Class<T> clazz) {
-    return new DBRequestBuilder<>(em, builder(), query(Tuple.class), clazz);
+    CriteriaQuery<Tuple> query = query(Tuple.class);
+    return new DBRequestBuilder<>(em, builder(), query, query.from(clazz));
   }
 
   private CriteriaBuilder builder() {
