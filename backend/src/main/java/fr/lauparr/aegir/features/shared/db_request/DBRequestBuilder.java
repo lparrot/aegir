@@ -1,5 +1,6 @@
 package fr.lauparr.aegir.features.shared.db_request;
 
+import fr.lauparr.aegir.utils.DaoUtils;
 import org.hibernate.query.Query;
 
 import javax.persistence.EntityManager;
@@ -9,8 +10,6 @@ import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
-
-import static fr.lauparr.aegir.utils.DaoUtils.convertToDto;
 
 public class DBRequestBuilder<T> extends AbstractDBRequest<T, DBRequestBuilder<T>> {
 
@@ -29,70 +28,70 @@ public class DBRequestBuilder<T> extends AbstractDBRequest<T, DBRequestBuilder<T
   }
 
   public DBRequestBuilder<T> where(UnaryOperator<DBRequestBuilder<T>> function) {
-    predicates = andCondition(predicates, andCondition(function.apply(new DBRequestBuilder<>(em, builder, query, root, paths)).getPredicates()));
+    this.predicates = this.andCondition(this.predicates, this.andCondition(function.apply(new DBRequestBuilder<>(this.em, this.builder, this.query, this.root, this.paths)).getPredicates()));
     return this;
   }
 
   public DBRequestBuilder<T> orWhere(UnaryOperator<DBRequestBuilder<T>> function) {
-    predicates = orCondition(predicates, andCondition(function.apply(new DBRequestBuilder<>(em, builder, query, root, paths)).getPredicates()));
+    this.predicates = this.orCondition(this.predicates, this.andCondition(function.apply(new DBRequestBuilder<>(this.em, this.builder, this.query, this.root, this.paths)).getPredicates()));
     return this;
   }
 
   public DBRequestBuilder<T> whereNot(UnaryOperator<DBRequestBuilder<T>> function) {
-    predicates = andCondition(predicates, builder.not(function.apply(new DBRequestBuilder<>(em, builder, query, root, paths)).getPredicates()));
+    this.predicates = this.andCondition(this.predicates, this.builder.not(function.apply(new DBRequestBuilder<>(this.em, this.builder, this.query, this.root, this.paths)).getPredicates()));
     return this;
   }
 
   public DBRequestBuilder<T> whereExists(Class<?> rootClass, BiFunction<DBSubrequestBuilder<T>, Root<?>, DBSubrequestBuilder<T>> function) {
-    DBSubrequestBuilder<T> subrequestBuilder = function.apply(new DBSubrequestBuilder<>(em, builder, query, rootClass), root);
-    predicates = andCondition(predicates, builder.exists(subrequestBuilder.build()));
+    DBSubrequestBuilder<T> subrequestBuilder = function.apply(new DBSubrequestBuilder<>(this.em, this.builder, this.query, rootClass), this.root);
+    this.predicates = this.andCondition(this.predicates, this.builder.exists(subrequestBuilder.build()));
     return this;
   }
 
   public DBRequestBuilder<T> select(String... fields) {
-    query.multiselect(Arrays.stream(fields).map(field -> path(field).alias(field)).toArray(Selection[]::new));
+    this.query.multiselect(Arrays.stream(fields).map(field -> this.path(field).alias(field)).toArray(Selection[]::new));
     return this;
   }
 
   public DBRequestBuilder<T> orderBy(String field, String order) {
-    ArrayList<Order> orders = new ArrayList<>(query.getOrderList());
+    ArrayList<Order> orders = new ArrayList<>(this.query.getOrderList());
     switch (order) {
       case "desc":
-        orders.add(builder.desc(path(field)));
+        orders.add(this.builder.desc(this.path(field)));
         break;
       case "asc":
       default:
-        orders.add(builder.asc(path(field)));
+        orders.add(this.builder.asc(this.path(field)));
         break;
     }
 
-    query.orderBy(orders);
+    this.query.orderBy(orders);
 
     return this;
   }
 
   public String sql() {
-    return createQuery().unwrap(Query.class).getQueryString();
+    return this.createQuery().unwrap(Query.class).getQueryString();
   }
 
   public List<T> list() {
-    return createQuery().getResultList();
+    return this.createQuery().getResultList();
   }
 
   public T first() {
-    return createQuery().setMaxResults(1).getResultList().stream().findFirst().orElse(null);
+    return this.createQuery().setMaxResults(1).getResultList().stream().findFirst().orElse(null);
   }
 
   public <U> List<U> projection(Class<U> projectionClass) {
-    return list().stream().map(data -> convertToDto(data, projectionClass)).collect(Collectors.toList());
+    return this.list().stream().map(data -> DaoUtils.convertToDto(data, projectionClass)).collect(Collectors.toList());
   }
 
   private TypedQuery<T> createQuery() {
     TypedQuery<T> jpaQuery;
-    if (predicates == null) {
-      jpaQuery = em.createQuery(query);
+    if (this.predicates == null) {
+      jpaQuery = this.em.createQuery(this.query);
     } else {
-      jpaQuery = em.createQuery(query.where(predicates));
+      jpaQuery = this.em.createQuery(this.query.where(this.predicates));
     }
     return jpaQuery;
   }
