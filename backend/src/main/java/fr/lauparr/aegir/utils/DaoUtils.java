@@ -93,6 +93,7 @@ public class DaoUtils {
   public <T> Path<T> getPathFromRoot(final Root<T> root, final String field) {
     final String principal;
     String[] fields = null;
+
     if (field != null) {
       final String[] checks = field.split(DaoUtils.SPLIT_CHAR);
       principal = checks[0];
@@ -102,12 +103,15 @@ public class DaoUtils {
     } else {
       principal = null;
     }
+
     final Path<T> p;
+
     if (DaoUtils.isSubPath(fields)) {
       p = DaoUtils.crossPathToPath(root.join(principal, JoinType.LEFT), fields);
     } else {
       p = root.get(principal);
     }
+
     return p;
   }
 

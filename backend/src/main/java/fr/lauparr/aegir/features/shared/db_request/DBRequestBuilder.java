@@ -8,7 +8,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
@@ -20,6 +22,8 @@ public class DBRequestBuilder<T> {
   private final CriteriaBuilder builder;
   private final CriteriaQuery<T> query;
   private final Root<?> root;
+
+  private Map<String, Path> paths = new HashMap<>();
 
   @Getter
   private Predicate predicates = null;
@@ -36,7 +40,7 @@ public class DBRequestBuilder<T> {
   }
 
   public DBRequestBuilder<T> where(String field, String operator, Object value) {
-    return where(getPathFromRoot(root, field), operator, value);
+    return where(getPath(field), operator, value);
   }
 
   private DBRequestBuilder<T> where(Expression path, String operator, Object value) {
@@ -45,7 +49,7 @@ public class DBRequestBuilder<T> {
   }
 
   public DBRequestBuilder<T> where(UnaryOperator<DBRequestBuilder<T>> function) {
-    predicates = builder.and(function.apply(this).getPredicates());
+    predicates = andCondition(null, function.apply(this).getPredicates());
     return this;
   }
 
@@ -54,7 +58,7 @@ public class DBRequestBuilder<T> {
   }
 
   public DBRequestBuilder<T> orWhere(String field, String operator, Object value) {
-    return orWhere(getPathFromRoot(root, field), operator, value);
+    return orWhere(getPath(field), operator, value);
   }
 
   public DBRequestBuilder<T> orWhere(Expression path, String operator, Object value) {
@@ -64,6 +68,7 @@ public class DBRequestBuilder<T> {
 
   private Predicate makePredicate(Expression path, String operator, Object value) {
     Predicate predicate = null;
+
     switch (StringUtils.lowerCase(operator)) {
       case "=": {
         predicate = andCondition(predicate, builder.equal(path, convertValueByFieldType(path, value)));
@@ -127,11 +132,11 @@ public class DBRequestBuilder<T> {
   }
 
   public DBRequestBuilder<T> whereColumn(String path, String operator, String secondPath) {
-    return where(path, operator, getPathFromRoot(root, secondPath));
+    return where(path, operator, getPath(secondPath));
   }
 
   public DBRequestBuilder<T> whereNull(String field) {
-    predicates = andCondition(predicates, builder.isNull(getPathFromRoot(root, field)));
+    predicates = andCondition(predicates, builder.isNull(getPath(field)));
     return this;
   }
 
@@ -140,7 +145,7 @@ public class DBRequestBuilder<T> {
   }
 
   public DBRequestBuilder<T> whereDay(String path, String operator, int year) {
-    return where(builder.function("DAY", Integer.class, getPathFromRoot(root, path)), operator, year);
+    return where(builder.function("DAY", Integer.class, getPath(path)), operator, year);
   }
 
   public DBRequestBuilder<T> whereMonth(String path, int day) {
@@ -148,7 +153,7 @@ public class DBRequestBuilder<T> {
   }
 
   public DBRequestBuilder<T> whereMonth(String path, String operator, int year) {
-    return where(builder.function("MONTH", Integer.class, getPathFromRoot(root, path)), operator, year);
+    return where(builder.function("MONTH", Integer.class, getPath(path)), operator, year);
   }
 
   public DBRequestBuilder<T> whereYear(String path, int year) {
@@ -156,27 +161,27 @@ public class DBRequestBuilder<T> {
   }
 
   public DBRequestBuilder<T> whereYear(String path, String operator, int year) {
-    return where(builder.function("YEAR", Integer.class, getPathFromRoot(root, path)), operator, year);
+    return where(builder.function("YEAR", Integer.class, getPath(path)), operator, year);
   }
 
   public DBRequestBuilder<T> whereNotNull(String field) {
-    predicates = andCondition(predicates, builder.isNotNull(getPathFromRoot(root, field)));
+    predicates = andCondition(predicates, builder.isNotNull(getPath(field)));
     return this;
   }
 
   public DBRequestBuilder<T> select(String... fields) {
-    query.multiselect(Arrays.stream(fields).map(field -> getPathFromRoot(root, field).alias(field)).toArray(Selection[]::new));
+    query.multiselect(Arrays.stream(fields).map(field -> getPath(field).alias(field)).toArray(Selection[]::new));
     return this;
   }
 
   public DBRequestBuilder<T> orderBy(String field, String order) {
     switch (order) {
       case "desc":
-        query.orderBy(builder.desc(getPathFromRoot(root, field)));
+        query.orderBy(builder.desc(getPath(field)));
         break;
       case "asc":
       default:
-        query.orderBy(builder.asc(getPathFromRoot(root, field)));
+        query.orderBy(builder.asc(getPath(field)));
         break;
     }
     return this;
@@ -217,26 +222,26 @@ public class DBRequestBuilder<T> {
   }
 
   private Predicate addCondition(Predicate rootPredicate, boolean and, Predicate... conditions) {
-    Predicate secondPredicate = null;
-
-    for (Predicate condition : conditions) {
-      if (secondPredicate == null) {
-        secondPredicate = condition;
-      } else {
-        secondPredicate = builder.and(condition);
-      }
-    }
-
     if (rootPredicate == null) {
-      rootPredicate = secondPredicate;
+      rootPredicate = builder.and(conditions);
     } else {
       if (and) {
-        rootPredicate = builder.and(rootPredicate, secondPredicate);
+        rootPredicate = builder.and(rootPredicate, builder.and(conditions));
       } else {
-        rootPredicate = builder.or(rootPredicate, secondPredicate);
+        rootPredicate = builder.or(rootPredicate, builder.and(conditions));
       }
     }
-
     return rootPredicate;
+  }
+
+  private <T> Path<T> getPath(String path) {
+    if (paths.containsKey(path)) {
+      return paths.get(path);
+    }
+
+    Path pathFromRoot = getPathFromRoot(root, path);
+    paths.put(path, pathFromRoot);
+
+    return pathFromRoot;
   }
 }
