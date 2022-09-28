@@ -68,7 +68,6 @@ public class Application implements CommandLineRunner {
 
     dbRequestSrv.tuple(User.class)
       .select("username", "userData.postalCode")
-      .whereNotIn("userData.firstname", "Louis", "Marie")
       .orderBy("username", "asc")
       .list()
       .forEach(

@@ -116,8 +116,6 @@ public class DaoUtils {
   }
 
   public <T> Object convertValueByFieldType(Expression<T> path, Object value) {
-    final Class<?> type = path.getJavaType();
-
     if (value == null) {
       return null;
     }
@@ -127,6 +125,7 @@ public class DaoUtils {
     }
 
     if (value.getClass().equals(String.class)) {
+      final Class<?> type = path.getJavaType();
 
       // Modification de la valeur à rechercher par rapport à la classe du champ
       if (type.equals(LocalDate.class)) {
