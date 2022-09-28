@@ -74,6 +74,10 @@ public class Application implements CommandLineRunner {
           .where("userData.postalCode", "like", "2%")
           .orWhere("userData.postalCode", "like", "4%")
       )
+      .whereNot(query ->
+        query
+          .where("userData.postalCode", "=", "20251")
+      )
       .orderBy("username", "asc")
       .list()
       .forEach(
@@ -88,15 +92,20 @@ public class Application implements CommandLineRunner {
           table_values.add(data);
         });
 
-    table.setPadding(2);
-    table.addRule();
-    table.addRow(table_headers);
-    table.addRule();
-    table_values.forEach(data -> {
-      table.addRow(data);
-      table.addRule();
-    });
 
-    System.out.println(table.render());
+    if (table_values.size() > 0) {
+      table.setPadding(2);
+      table.addRule();
+      table.addRow(table_headers);
+      table.addRule();
+
+      table_values.forEach(data -> {
+        table.addRow(data);
+        table.addRule();
+      });
+
+      System.out.println(table.render());
+    }
+
   }
 }

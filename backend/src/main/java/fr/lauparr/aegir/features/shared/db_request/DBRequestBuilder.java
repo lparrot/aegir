@@ -76,6 +76,11 @@ public class DBRequestBuilder<T> {
     return this;
   }
 
+  public DBRequestBuilder<T> whereNot(UnaryOperator<DBRequestBuilder<T>> function) {
+    predicates = andCondition(predicates, builder.not(function.apply(new DBRequestBuilder<>(em, builder, query, root, paths)).getPredicates()));
+    return this;
+  }
+
   public DBRequestBuilder<T> whereColumn(String path, String secondPath) {
     return whereColumn(path, "=", secondPath);
   }
