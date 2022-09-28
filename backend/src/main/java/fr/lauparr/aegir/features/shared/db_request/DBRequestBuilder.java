@@ -96,14 +96,4 @@ public class DBRequestBuilder<T> extends AbstractDBRequest<T, DBRequestBuilder<T
     }
     return jpaQuery;
   }
-
-  @Override
-  public DBRequestBuilder<T> where(String field, Object value) {
-    return super.where(field, value);
-  }
-
-  @Override
-  public DBRequestBuilder<T> where(String field, String operator, Object value) {
-    return super.where(field, operator, value);
-  }
 }
