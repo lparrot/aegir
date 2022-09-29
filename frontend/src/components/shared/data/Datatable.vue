@@ -1,43 +1,45 @@
 <template>
-  <div class="shadow border-b border-primary-200 sm:rounded-lg min-w-full overflow-auto">
-    <table class="table-auto min-w-full divide-y divide-gray-200">
-      <caption v-if="caption">{{ caption }}</caption>
-      <thead class="bg-primary-200">
-      <tr>
-        <th v-for="field in fields" :key="`header-${field.key}`" :class="{'cursor-pointer hover:bg-primary-300': field.sortable == null || field.sortable}" class="py-3 px-3 text-left" scope="col" @click="onSort(field)">
-          <div class="flex justify-between items-center">
-            <slot :name="`header(${field.key})`">
-              <span v-if="field.label">{{ field.label }}</span>
-            </slot>
-
-            <template v-if="sortField.field === field.key">
-              <div>
-                <mdi-chevron-up v-if="sortField.asc" class="h-5 w-5"/>
-                <mdi-chevron-down v-else class="h-5 w-5"/>
-              </div>
-            </template>
-          </div>
-        </th>
-      </tr>
-      </thead>
-
-      <tbody class="bg-white">
-      <template v-if="items != null && items.length">
-        <tr v-for="(item, itemIndex) in items" :key="`item-${get(item, idField)}`" :class="[{'hover:bg-primary-100 cursor-pointer': selectable, 'odd:bg-white even:bg-slate-50': striped}]" class="border-b border-b-primary-200" @click="onRowClick($event, item)">
-          <td v-for="field in fields" :key="'field-' + field.key + '-'+itemIndex" class="py-2 px-3 whitespace-nowrap">
-            <div :data-prevent-click="field.preventClick" class="item inline">
-              <slot :field="field" :item="item" :name="`cell(${field.key})`" :value="getValue(field, item)">
-                <span>{{ getValue(field, item) }}</span>
+  <div class="datatable">
+    <div class="shadow border-b border-primary-200 sm:rounded-lg min-w-full overflow-auto">
+      <table class="table-auto min-w-full divide-y divide-gray-200">
+        <caption v-if="caption">{{ caption }}</caption>
+        <thead class="bg-primary-200">
+        <tr>
+          <th v-for="field in fields" :key="`header-${field.key}`" :class="{'cursor-pointer hover:bg-primary-300': field.sortable == null || field.sortable}" class="py-3 px-3 text-left" scope="col" @click="onSort(field)">
+            <div class="flex justify-between items-center">
+              <slot :name="`header(${field.key})`">
+                <span v-if="field.label">{{ field.label }}</span>
               </slot>
+
+              <template v-if="sortField.field === field.key">
+                <div>
+                  <mdi-chevron-up v-if="sortField.asc" class="h-5 w-5"/>
+                  <mdi-chevron-down v-else class="h-5 w-5"/>
+                </div>
+              </template>
             </div>
-          </td>
+          </th>
         </tr>
-      </template>
-      <tr v-else>
-        <td class="flex justify-center p-3">No content ...</td>
-      </tr>
-      </tbody>
-    </table>
+        </thead>
+
+        <tbody class="bg-white">
+        <template v-if="items != null && items.length">
+          <tr v-for="(item, itemIndex) in items" :key="`item-${get(item, idField)}`" :class="[{'hover:bg-primary-100 cursor-pointer': selectable, 'odd:bg-white even:bg-slate-50': striped}]" class="border-b border-b-primary-200" @click="onRowClick($event, item)">
+            <td v-for="field in fields" :key="'field-' + field.key + '-'+itemIndex" class="py-2 px-3 whitespace-nowrap">
+              <div :data-prevent-click="field.preventClick" class="item inline">
+                <slot :field="field" :item="item" :name="`cell(${field.key})`" :value="getValue(field, item)">
+                  <span>{{ getValue(field, item) }}</span>
+                </slot>
+              </div>
+            </td>
+          </tr>
+        </template>
+        <tr v-else>
+          <td class="flex justify-center p-3">No content ...</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
 
     <div class="flex justify-end p-4">
       <Paginator v-model="pagination" @change="onFetch"/>
