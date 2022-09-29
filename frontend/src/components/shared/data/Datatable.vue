@@ -24,7 +24,7 @@
 
         <tbody class="bg-white">
         <template v-if="items != null && items.length">
-          <tr v-for="(item, itemIndex) in items" :key="`item-${get(item, idField)}`" :class="[{'hover:bg-primary-100 cursor-pointer': selectable, 'odd:bg-white even:bg-slate-50': striped}]" class="border-b border-b-primary-200" @click="onRowClick($event, item)">
+          <tr v-for="(item, itemIndex) in itemsShown" :key="`item-${get(item, idField)}`" :class="[{'hover:bg-primary-100 cursor-pointer': selectable, 'odd:bg-white even:bg-slate-50': striped}]" class="border-b border-b-primary-200" @click="onRowClick($event, item)">
             <td v-for="field in fields" :key="'field-' + field.key + '-'+itemIndex" class="py-2 px-3 whitespace-nowrap">
               <div :data-prevent-click="field.preventClick" class="item inline">
                 <slot :field="field" :item="item" :name="`cell(${field.key})`" :value="getValue(field, item)">
@@ -75,7 +75,15 @@ const emit = defineEmits<{
 const { items } = useVModels(props, emit, { passive: true });
 
 const sortField = ref({ asc: false, field: null });
-const pagination: Ref<AppPagination> = ref({});
+const pagination: Ref<AppPagination> = ref({ page: 1 });
+
+const itemsShown = computed(() => {
+  if (props.fetchUrl != null) {
+    return items.value;
+  }
+
+  return items.value.slice((pagination.value.page - 1) * pagination.value.size, pagination.value.size);
+});
 
 const onFetch = async () => {
   if (props.fetchUrl != null) {
@@ -95,6 +103,9 @@ const onFetch = async () => {
         items.value = response.result;
       }
     }
+  } else {
+    pagination.value.totalPage = Math.ceil(items.value.length / pagination.value.size);
+    pagination.value.count = items.value.length;
   }
 };
 

@@ -10,7 +10,7 @@
     <div class="flex items-baseline gap-2">
       <input v-model="modelValue.page" class="p-0 text-right border-0 border-b border-b-primary w-20 text-sm" min="1" step="1" type="number">
       <div>/</div>
-      <div>21</div>
+      <div>{{ modelValue.totalPage }}</div>
     </div>
   </div>
 </template>

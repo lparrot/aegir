@@ -24,7 +24,7 @@ import { Ref } from "vue";
 
 const { storageSidebar } = useAppLocalStorage();
 const boardDetail: Ref<BoardInfo_Detail> = ref(null);
-const pagination: Ref<AppPagination> = ref({});
+const pagination: Ref<AppPagination> = ref({ page: 1 });
 
 const fetchBoardById = async (id) => {
   if (id != null) {
