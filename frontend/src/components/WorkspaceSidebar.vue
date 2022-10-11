@@ -11,7 +11,7 @@
       <SelectItem v-for="workspace in workspaces" :key="workspace.id" :label="workspace.name" :value="workspace.id"/>
     </Select>
 
-    <template v-if="storageSidebar.workspace_selected != null">
+    <template v-if="selectedWorkspace != null">
       <slot></slot>
     </template>
   </SidebarContent>
@@ -23,7 +23,7 @@ import useWorkspaceSidebar from "@use/useWorkspaceSidebar";
 
 const { storageSidebar } = useAppLocalStorage();
 
-const { workspaces, selectedWorkspaceName, fetchWorkspaces } = useWorkspaceSidebar({ with_watch: true });
+const { workspaces, selectedWorkspaceName, selectedWorkspace, fetchWorkspaces } = useWorkspaceSidebar({ with_watch: true });
 
 await fetchWorkspaces();
 </script>
