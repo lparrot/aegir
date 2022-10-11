@@ -3,6 +3,7 @@ package fr.lauparr.aegir.config;
 import fr.lauparr.aegir.controllers.base.BaseApiController;
 import fr.lauparr.aegir.dto.api.RestApiError;
 import fr.lauparr.aegir.dto.api.RestApiResponse;
+import fr.lauparr.aegir.features.generated_api.GeneratedApiSrv;
 import io.swagger.v3.core.converter.ModelConverters;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
@@ -30,34 +31,49 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import org.springframework.web.util.pattern.PathPatternParser;
 
 import javax.servlet.ServletContext;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 @Component
 public class RestConfig implements ApplicationContextAware {
 
-  List<String> list = Arrays.asList("generated_users", "generated_profiles");
+  Map<String, List<String>> list = new HashMap<>();
 
   @Autowired
   private RequestMappingHandlerMapping handlerMapping;
 
   @Autowired
-  private BaseApiController baseApiController;
+  private HttpServletRequest request;
+
+  @Autowired
+  private GeneratedApiSrv generatedApiSrv;
+
+  public RestConfig() {
+    list.put("ccs", Arrays.asList("users", "profiles"));
+    list.put("soleil", Collections.singletonList("users"));
+  }
 
   @SneakyThrows
   public void registerApiPaths() {
-    for (String item : list) {
-      String path = String.format("/api/%s", item);
+    for (Map.Entry<String, List<String>> item : list.entrySet()) {
+      for (String path : item.getValue()) {
+        String apiPath = String.format("/api/%s/%s", item.getKey(), path);
 
-      RequestMappingInfo.BuilderConfiguration options = new RequestMappingInfo.BuilderConfiguration();
-      options.setPatternParser(new PathPatternParser());
+        RequestMappingInfo.BuilderConfiguration options = new RequestMappingInfo.BuilderConfiguration();
+        options.setPatternParser(new PathPatternParser());
 
-      this.handlerMapping.registerMapping(RequestMappingInfo.paths(path).produces(MediaType.APPLICATION_JSON_VALUE).methods(RequestMethod.GET).options(options).build(),
+        BaseApiController baseApiController = new BaseApiController()
+          .setItem(item.getKey())
+          .setPath(path)
+          .setRequest(request)
+          .setService(generatedApiSrv);
 
-        baseApiController,
+        this.handlerMapping.registerMapping(RequestMappingInfo.paths(apiPath).produces(MediaType.APPLICATION_JSON_VALUE).methods(RequestMethod.GET).options(options).build(),
 
-        BaseApiController.class.getDeclaredMethod("get"));
+          baseApiController,
+
+          BaseApiController.class.getDeclaredMethod("get"));
+      }
     }
   }
 
@@ -74,23 +90,25 @@ public class RestConfig implements ApplicationContextAware {
       openApi.getComponents().getSchemas().putAll(ModelConverters.getInstance().read(RestApiResponse.class));
       openApi.getComponents().getSchemas().putAll(ModelConverters.getInstance().read(RestApiError.class));
 
-      for (String item : list) {
-        String path = String.format("/api/%s", item);
+      for (Map.Entry<String, List<String>> item : list.entrySet()) {
+        for (String path : item.getValue()) {
+          String apiPath = String.format("/api/%s/%s", item.getKey(), path);
 
-        // Path findAll
-        addPathItem(openApi, RequestMethod.GET, path, "Get all");
+          // Path findAll
+          addPathItem(openApi, RequestMethod.GET, apiPath, "Get all");
 
-        // Path findOne
-        addPathItem(openApi, RequestMethod.GET, path + "/{id}", "Get one");
+          // Path findOne
+          addPathItem(openApi, RequestMethod.GET, apiPath + "/{id}", "Get one");
 
-        // Path update
-        addPathItem(openApi, RequestMethod.PUT, path + "/{id}", "Update");
+          // Path update
+          addPathItem(openApi, RequestMethod.PUT, apiPath + "/{id}", "Update");
 
-        // Path create
-        addPathItem(openApi, RequestMethod.POST, path, "Create");
+          // Path create
+          addPathItem(openApi, RequestMethod.POST, apiPath, "Create");
 
-        // Path delete
-        addPathItem(openApi, RequestMethod.DELETE, path, "Delete");
+          // Path delete
+          addPathItem(openApi, RequestMethod.DELETE, apiPath, "Delete");
+        }
       }
     };
   }

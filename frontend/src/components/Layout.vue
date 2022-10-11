@@ -95,6 +95,10 @@
           <mdi-view-grid-outline class="h-10 w-10 p-2 -m-2 rounded cursor-pointer hover:bg-primary-500"/>
         </RouterLink>
 
+        <RouterLink :to="{name: 'generate_api'}">
+          <mdi-api class="h-10 w-10 p-2 -m-2 rounded cursor-pointer hover:bg-primary-500"/>
+        </RouterLink>
+
         <RouterLink :to="{name: ''}">
           <mdi-bell-outline class="h-10 w-10 p-2 -m-2 rounded cursor-pointer hover:bg-primary-500"/>
         </RouterLink>
@@ -109,7 +113,7 @@
       </div>
     </aside>
 
-    <WorkspaceTasksSidebar/>
+    <RouterView name="sidebar"/>
 
     <div class="flex flex-col text-white h-screen w-full scrollbar scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300">
       <header v-if="!hideTitle && title != null" class="flex px-8 py-4 text-3xl tracking-tight font-bold text-gray-900">

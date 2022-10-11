@@ -44,7 +44,6 @@ declare module "vue-router" {
     no_match?: boolean;
     title?: string;
     hideTitle?: boolean;
-    with_workspaces?: boolean;
   }
 }
 
