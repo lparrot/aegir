@@ -103,6 +103,17 @@ public class DatabaseSrv {
           column.setReference(fkReference);
         });
       }
+
+      ResultSet RSIndexInfo = connection.getMetaData().getIndexInfo(connection.getCatalog(), connection.getSchema(), tableName, true, false);
+      while (RSIndexInfo.next()) {
+        String name = RSIndexInfo.getString("COLUMN_NAME");
+        boolean unique = !RSIndexInfo.getBoolean("NON_UNIQUE");
+
+        list.stream().filter(column -> column.getName().equals(name)).forEach(column -> {
+          column.setUniqueKey(unique);
+        });
+
+      }
     }
 
     return list;

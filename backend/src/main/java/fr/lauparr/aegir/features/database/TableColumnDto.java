@@ -25,6 +25,7 @@ public class TableColumnDto {
   private String defaultValue;
 
   private boolean primaryKey;
+  private boolean uniqueKey;
   private boolean foreignKey;
   private String foreignKeyTableName;
   private String reference;
