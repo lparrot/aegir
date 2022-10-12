@@ -11,8 +11,9 @@ const columns = ref([]);
 watch(
   () => route.params?.table,
   async (value) => {
-    if (value != null && (<string> value).trim()?.length > 0) {
-      const { success, result } = await api.getColumns(<string> value);
+    const val: string = value as string;
+    if (value != null && val.trim()?.length > 0) {
+      const { success, result } = await api.getColumns(val);
       if (success) {
         columns.value = result;
       }
