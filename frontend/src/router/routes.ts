@@ -14,7 +14,7 @@ const routes: RouteRecordRaw[] = [
     path: "/", component: Layout, children: [
       { path: "/profile", name: "profile", component: () => import("@/views/ProfileView.vue"), meta: { title: "Profil utilisateur", access: [] } },
       { path: "/tasks", name: "tasks", components: { default: () => import("@/views/tasks/TasksView.vue"), sidebar: () => import("@/components/WorkspaceSidebarTasks.vue") }, props: { sidebar: true }, meta: { title: "Tâches", access: [ "USER" ], hideTitle: true } },
-      { path: "/generate_api", name: "generate_api", components: { default: () => import("@/views/ApiView.vue"), sidebar: () => import("@/components/WorkspaceSidebarApi.vue") }, props: { sidebar: true }, meta: { title: "Generation d'API", access: [ "USER" ] } },
+      { path: "/generate_api/:table?", name: "generate_api", components: { default: () => import("@/views/ApiView.vue"), sidebar: () => import("@/components/WorkspaceSidebarApi.vue") }, props: { sidebar: true }, meta: { title: "Generation d'API", access: [ "USER" ] } },
       {
         path: "/admin", component: BlankView, children: [
           { path: "/connected_users", name: "admin-connected-users", component: () => import("@/views/admin/ConnectedUsersView.vue"), meta: { title: "Utilisateurs connectés", access: [ "ADMIN" ] } },

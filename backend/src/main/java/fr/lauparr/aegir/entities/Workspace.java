@@ -7,6 +7,7 @@ import fr.lauparr.aegir.entities.abstracts.SoftDeletableEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedBy;
@@ -23,11 +24,15 @@ import java.util.stream.Collectors;
 @EntityListeners(AuditingEntityListener.class)
 public class Workspace {
 
+  public static final Slugify SLUGIFY = new Slugify().withLowerCase(true).withUnderscoreSeparator(true);
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   private String name;
+
+  @Column(length = 10)
+  private String abbreviation;
 
   @CreatedBy
   @JsonIgnore
@@ -60,8 +65,15 @@ public class Workspace {
   }
 
   public String getSlug() {
-    Slugify slugify = new Slugify().withLowerCase(true).withUnderscoreSeparator(true);
-    return slugify.slugify(this.getName());
+    return SLUGIFY.slugify(this.getName());
+  }
+
+  public String getWorkspaceTableName(String tableName) {
+    return String.format(
+      "wk_%s_%s",
+      StringUtils.substring(getSlug(), 0, 10),
+      StringUtils.substring(SLUGIFY.slugify(tableName), 0, 40)
+    );
   }
 
   public Workspace addMember(Member member) {

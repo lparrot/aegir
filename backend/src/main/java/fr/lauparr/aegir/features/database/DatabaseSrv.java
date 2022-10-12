@@ -5,7 +5,11 @@ import fr.lauparr.aegir.exceptions.MessageException;
 import fr.lauparr.aegir.repositories.WorkspaceRepository;
 import fr.lauparr.aegir.utils.MessageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +25,7 @@ public class DatabaseSrv {
   private WorkspaceRepository workspaceRepository;
 
   @Autowired
-  private JdbcTemplate jdbcTemplate;
+  private NamedParameterJdbcTemplate jdbcTemplate;
 
   @Autowired
   private DataSource dataSource;
@@ -80,7 +84,6 @@ public class DatabaseSrv {
           .setAutoincrement(RSColumns.getBoolean("IS_AUTOINCREMENT"));
 
         list.add(column);
-        System.out.println(column);
       }
 
       ResultSet RSPrimaryKeys = connection.getMetaData().getPrimaryKeys(connection.getCatalog(), connection.getSchema(), tableName);
@@ -103,6 +106,19 @@ public class DatabaseSrv {
     }
 
     return list;
+  }
+
+  public void editTable(String tableName, Long workspaceId, ParamsEditTable params) {
+    if (tableName == null) {
+      Workspace workspace = getWorkspaceById(workspaceId);
+
+      KeyHolder holder = new GeneratedKeyHolder();
+
+      SqlParameterSource parameters = new MapSqlParameterSource()
+        .addValue("table_comment", params.getRemarks());
+
+      jdbcTemplate.update("create table if not exists " + workspace.getWorkspaceTableName(params.getName()) + " (id int auto_increment, created_at datetime not null default now(), primary key (id)) comment :table_comment", parameters, holder);
+    }
   }
 
   private Workspace getWorkspaceById(Long workspaceId) {

@@ -1,11 +1,23 @@
 <template>
   <div>
-    <pre>{{ selectedWorkspace }}</pre>
+    <pre>{{ columns }}</pre>
   </div>
 </template>
 
 <script lang="ts" setup>
-import useWorkspaceSidebar from "@use/useWorkspaceSidebar";
+const route = useRoute();
+const columns = ref([]);
 
-const { selectedWorkspace } = useWorkspaceSidebar();
+watch(
+  () => route.params?.table,
+  async (value) => {
+    if (value != null && (<string> value).trim()?.length > 0) {
+      const { success, result } = await api.getColumns(<string> value);
+      if (success) {
+        columns.value = result;
+      }
+    }
+  },
+  { immediate: true },
+);
 </script>

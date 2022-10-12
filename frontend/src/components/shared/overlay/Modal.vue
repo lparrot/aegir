@@ -104,8 +104,8 @@ const hide = (event?) => {
   }
 };
 
-const ok = () => {
-  emit("ok");
+const ok = (event?) => {
+  emit("ok", event);
   hide();
 };
 
