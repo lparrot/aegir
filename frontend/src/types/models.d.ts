@@ -4,6 +4,7 @@ declare global {
   type TailwindColor = "slate" | "gray" | "zinc" | "neutral" | "stone" | "red" | "orange" | "amber" | "yellow" | "lime" | "green" | "emerald" | "teal" | "cyan" | "sky" | "blue" | "indigo" | "violet" | "purple" | "fuchsia" | "pink" | "rose"
   type TailwindVariant = "primary" | "secondary" | "success" | "info" | "warn" | "danger"
   type TailwindColorAndVariant = TailwindColor | TailwindVariant
+  type DatatableFieldAlign = "left" | "center" | "right"
 
   interface AppEventBus<T = any> {
     type: string,
@@ -27,12 +28,15 @@ declare global {
   }
 
   interface DatatableField {
+    align?: DatatableFieldAlign;
+    field?: string;
     key: string;
     label?: string;
-    field?: string;
-    sortable?: boolean;
-    transform?: (value: any, item: any) => any;
     preventClick?: boolean;
+    sortable?: boolean;
+    tdClass?: string | string[] | any;
+    thClass?: string | string[] | any;
+    transform?: (value: any, item: any) => any;
   }
 
   interface DialogCreateOptions {

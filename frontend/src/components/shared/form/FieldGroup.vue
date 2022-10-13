@@ -1,7 +1,7 @@
 <template>
   <div class="field-group">
     <label v-if="label != null" :for="idLabel" class="block text-sm font-medium text-gray-700">{{ label }}</label>
-    <div ref="slot_container" class="mt-1 flex rounded-md shadow-sm">
+    <div ref="slot_container" class="mt-1 rounded-md">
       <slot :error="error"></slot>
     </div>
     <p v-if="hint" class="mt-2 text-sm text-primary-500">{{ hint }}</p>

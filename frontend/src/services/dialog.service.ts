@@ -1,6 +1,6 @@
 import Modal from "@/components/shared/overlay/Modal.vue";
 import { app } from "@use/useAegir";
-import { h, render } from "vue";
+import { h, render, Suspense } from "vue";
 
 export default class DialogService {
   create(options: DialogCreateOptions) {
@@ -36,7 +36,7 @@ export default class DialogService {
       instance.appContext = app._context;
     }
 
-    render(instance, container);
+    render(h(Suspense, instance), container);
 
     return {
       hide: instance.component?.proxy?.hide,

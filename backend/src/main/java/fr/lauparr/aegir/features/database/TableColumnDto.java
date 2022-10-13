@@ -1,11 +1,10 @@
 package fr.lauparr.aegir.features.database;
 
+import com.mysql.cj.MysqlType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-
-import java.sql.JDBCType;
 
 @Getter
 @Setter
@@ -16,10 +15,10 @@ public class TableColumnDto {
   private String table;
   private String name;
   private String typeName;
-  private String size;
+  private int size;
   private boolean nullable;
   private String remarks;
-  private JDBCType type;
+  private MysqlType type;
   private boolean autoincrement;
   private int position;
   private String defaultValue;

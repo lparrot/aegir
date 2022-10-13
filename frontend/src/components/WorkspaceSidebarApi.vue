@@ -1,8 +1,8 @@
 <template>
   <WorkspaceSidebar>
-    <base-button class="flex gap-2 w-full my-2" color="secondary" @click="openDialogNewTable(null)">
+    <base-button class="flex gap-1 w-full justify-center my-2" color="secondary" @click="openDialogNewTable(null)">
       <mdi-plus class="h-5 w-5"></mdi-plus>
-      <span>Ajouter</span>
+      <span>Ajouter une table</span>
     </base-button>
     <template v-for="table in tables" :key="table.name">
       <div :class="{'text-secondary': table.name === route.params?.table }" class="flex gap-2 my-3 font-bold cursor-pointer hover:text-secondary" @click="selectTable(table)">
@@ -48,5 +48,14 @@ const selectTable = (table: TableDto) => {
   router.push({ name: router.currentRoute.value.name, params: { table: table.name } });
 };
 
-await fetchTables();
+watch(
+  () => storageSidebar.value.workspace_selected,
+  async (value, oldValue) => {
+    if (oldValue === null) {
+      await router.push({ name: router.currentRoute.value.name });
+    }
+    await fetchTables();
+  },
+  { immediate: true },
+);
 </script>

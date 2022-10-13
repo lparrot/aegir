@@ -1,56 +1,79 @@
 <template>
-  <div>
-    <!--    <pre>{{ columns }}</pre>-->
-    <table class="w-full">
-      <thead>
-      <tr class="text-left">
-        <th scope="col">#</th>
-        <th scope="col">Nom</th>
-        <th scope="col">Type</th>
-        <th class="text-center" scope="col">Taille</th>
-        <th class="text-center" scope="col">Nullable ?</th>
-      </tr>
-      </thead>
+  <div v-if="selectedTable != null">
+    <div class="flex gap-2 mb-3">
+      <base-button class="flex" color="primary" @click="newColumn">
+        <mdi-plus class="h-5 w-5"/>
+        <span>Ajouter une colonne</span>
+      </base-button>
+    </div>
 
-      <tbody>
-      <tr v-for="column in columns" :key="column.name" class="odd:bg-white even:bg-secondary-50 h-12">
-        <td>
-          <div class="flex gap-1 items-center mx-1">
-            <mdi-key-variant v-if="column.primaryKey" class="text-orange-400"/>
-            <mdi-key-variant v-if="column.foreignKey" class="text-green-800"/>
-            <mdi-key-variant v-if="!column.primaryKey && column.uniqueKey" class="text-red-700"/>
-          </div>
-        </td>
-        <td class="text-secondary-500">{{ column.name }}</td>
-        <td>{{ column.type }}</td>
-        <td class="text-center">
-          <span>{{ column.size }}</span>
-        </td>
-        <td class="text-center">
-          <mdi-check v-if="column.nullable" class="text-green-800 inline"/>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+    <Datatable :fields="fields" :items="columns" :paginate="false">
+      <template #cell(info)="{item}">
+        <div class="flex gap-1 items-center mx-1">
+          <mdi-key-variant v-if="item.primaryKey" class="text-orange-400"/>
+          <mdi-key-variant v-if="item.foreignKey" class="text-green-800"/>
+          <mdi-key-variant v-if="!item.primaryKey && item.uniqueKey" class="text-red-700"/>
+        </div>
+      </template>
+    </Datatable>
+  </div>
+
+  <div v-else>
+    <p>Selectionnez une table dans la liste</p>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { TableColumnDto } from "back_types";
+import { MysqlType, TableColumnDto } from "back_types";
 import { Ref } from "vue";
+import DialogApiEditColumn from "../components/dialogs/DialogApiEditColumn.vue";
 
 const route = useRoute();
+const { dialog } = useAegir();
 const columns: Ref<TableColumnDto[]> = ref<TableColumnDto[]>([]);
+const types: Ref<MysqlType[]> = ref<MysqlType[]>();
+
+const selectedTable = computed(() => {
+  const val: string = route.params?.table as string;
+  if (route.params?.table != null && val.trim()?.length > 0) {
+    return val;
+  }
+  return null;
+});
+
+const fields: DatatableField[] = [
+  { key: "info", field: "info", label: "#", sortable: false },
+  { key: "name", field: "name", label: "Nom" },
+  { key: "type", field: "type", label: "Type" },
+  { key: "size", field: "size", label: "Taille", align: "center" },
+  { key: "nullable", field: "nullable", label: "Nullable ?", align: "center" },
+];
+
+const fetchColumns = async () => {
+  const { success, result } = await api.getColumns(selectedTable.value);
+  if (success) {
+    columns.value = result;
+  }
+};
+
+const newColumn = async () => {
+  dialog.create({
+    component: DialogApiEditColumn,
+    props: {
+      tableName: selectedTable?.value,
+      types: types.value,
+    },
+    async onOk() {
+      await fetchColumns();
+    },
+  });
+};
 
 watch(
   () => route.params?.table,
-  async (value) => {
-    const val: string = value as string;
-    if (value != null && val.trim()?.length > 0) {
-      const { success, result } = await api.getColumns(val);
-      if (success) {
-        columns.value = result;
-      }
+  async () => {
+    if (selectedTable.value != null) {
+      await fetchColumns();
     }
   },
   { immediate: true },

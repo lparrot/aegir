@@ -1,5 +1,6 @@
 package fr.lauparr.aegir.features.database;
 
+import com.mysql.cj.MysqlType;
 import fr.lauparr.aegir.controllers.base.BaseController;
 import fr.lauparr.aegir.dto.api.RestApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +28,20 @@ public class DatabaseCtrl extends BaseController {
     return ok(databaseSrv.getColumns(tableName));
   }
 
-  @PostMapping("/{workspaceId}")
+  @GetMapping("/types")
+  public ResponseEntity<RestApiResponse<List<MysqlType>>> getMysqlTypes() {
+    return ok(databaseSrv.getMysqlTypes());
+  }
+
+  @PostMapping("/{workspaceId}/tables")
   public ResponseEntity<RestApiResponse<Void>> createTable(@PathVariable("workspaceId") Long workspaceId, @RequestBody @Valid ParamsEditTable params) {
     databaseSrv.editTable(null, workspaceId, params);
+    return ok();
+  }
+
+  @PostMapping("/columns")
+  public ResponseEntity<RestApiResponse<Void>> createColumn(@RequestBody @Valid ParamsEditColumn params) {
+    databaseSrv.editColumn(params);
     return ok();
   }
 

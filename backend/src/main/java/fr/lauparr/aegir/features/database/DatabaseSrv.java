@@ -1,9 +1,11 @@
 package fr.lauparr.aegir.features.database;
 
+import com.mysql.cj.MysqlType;
 import fr.lauparr.aegir.entities.Workspace;
 import fr.lauparr.aegir.exceptions.MessageException;
 import fr.lauparr.aegir.repositories.WorkspaceRepository;
 import fr.lauparr.aegir.utils.MessageUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -14,8 +16,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -75,11 +81,11 @@ public class DatabaseSrv {
           .setTable(RSColumns.getString("TABLE_NAME"))
           .setName(RSColumns.getString("COLUMN_NAME"))
           .setTypeName(RSColumns.getString("TYPE_NAME"))
-          .setSize(RSColumns.getString("COLUMN_SIZE"))
+          .setSize(RSColumns.getInt("COLUMN_SIZE"))
           .setPosition(RSColumns.getInt("ORDINAL_POSITION"))
           .setRemarks(RSColumns.getString("REMARKS"))
           .setDefaultValue(RSColumns.getString("COLUMN_DEF"))
-          .setType(JDBCType.valueOf(RSColumns.getInt("DATA_TYPE")))
+          .setType(MysqlType.getByJdbcType(RSColumns.getInt("DATA_TYPE")))
           .setNullable(RSColumns.getBoolean("IS_NULLABLE"))
           .setAutoincrement(RSColumns.getBoolean("IS_AUTOINCREMENT"));
 
@@ -119,6 +125,13 @@ public class DatabaseSrv {
     return list;
   }
 
+  /**
+   *
+   */
+  public List<MysqlType> getMysqlTypes() {
+    return Arrays.asList(MysqlType.values());
+  }
+
   public void editTable(String tableName, Long workspaceId, ParamsEditTable params) {
     if (tableName == null) {
       Workspace workspace = getWorkspaceById(workspaceId);
@@ -128,8 +141,20 @@ public class DatabaseSrv {
       SqlParameterSource parameters = new MapSqlParameterSource()
         .addValue("table_comment", params.getRemarks());
 
-      jdbcTemplate.update("create table if not exists " + workspace.getWorkspaceTableName(params.getName()) + " (id int auto_increment, created_at datetime not null default now(), primary key (id)) comment :table_comment", parameters, holder);
+      jdbcTemplate.update(String.format("create table if not exists %s (id int auto_increment, created_at datetime not null default now(), primary key (id)) comment :table_comment", workspace.getWorkspaceTableName(params.getName())), parameters, holder);
     }
+  }
+
+  public void editColumn(ParamsEditColumn params) {
+    SqlParameterSource parameters = new MapSqlParameterSource()
+      .addValue("table_comment", params.getRemarks());
+
+    String size = params.getSize() == null ? "" : String.format("(%d)", params.getSize());
+    String nullValue = params.isNullable() ? "null" : "not null";
+    String type = params.getType().getName();
+    String comment = StringUtils.isBlank(params.getRemarks()) ? "" : "comment :table_comment";
+
+    jdbcTemplate.update(String.format("alter table %s add column if not exists %s %s %s %s %s", params.getTableName(), Workspace.SLUGIFY.slugify(params.getName()), type, size, nullValue, comment), parameters);
   }
 
   private Workspace getWorkspaceById(Long workspaceId) {
