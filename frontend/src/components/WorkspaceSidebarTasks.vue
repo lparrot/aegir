@@ -84,7 +84,7 @@ import { computed } from "vue";
 
 const { dialog } = useAegir();
 const { storageSidebar } = useAppLocalStorage();
-const { selectedWorkspace, fetchWorkspaceDetail } = useWorkspaceSidebar();
+const { selectedWorkspace, fetchWorkspaceDetail } = useWorkspaceSidebar({ with_watch: true });
 
 const workspaceItems = computed(() => {
   const items: AppTreeItem = { label: "root", value: null, children: [] };
@@ -103,6 +103,8 @@ const workspaceItems = computed(() => {
       }
       items.children.push(item);
     });
+
+    console.log(selectedWorkspace);
   }
   return items;
 });

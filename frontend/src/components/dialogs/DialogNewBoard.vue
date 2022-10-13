@@ -1,11 +1,11 @@
 <template>
   <Modal ref="dialogRef" label-ok="Créer" panel-classes="w-full md:!w-6/12" title="Tableau" @ok="onOk">
     <div class="grid grid-cols-1 gap-4">
-      <FieldGroup label="Nom du tableau" required>
-        <BaseInput v-model="form.name" placeholder="Nouveau tableau"></BaseInput>
+      <FieldGroup #default="{error}" :validation-field="v$.name" label="Nom du tableau" required>
+        <BaseInput v-model="form.name" :error="error" placeholder="Nouveau tableau"></BaseInput>
       </FieldGroup>
-      <FieldGroup label="Description du tableau" required>
-        <BaseTextarea v-model="form.description" placeholder="Ce tableau permet ..." rows="6"></BaseTextarea>
+      <FieldGroup #default="{error}" :validation-field="v$.description" label="Description du tableau" required>
+        <BaseTextarea v-model="form.description" :error="error" placeholder="Ce tableau permet ..." rows="6"></BaseTextarea>
       </FieldGroup>
     </div>
   </Modal>
@@ -13,6 +13,10 @@
 
 <script lang="ts" setup>
 import useDialog from "@use/useDialog";
+import useVuelidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
+import { ParamsCreateBoard } from "back_types";
+import { Ref } from "vue";
 
 interface Props {
   workspaceId: number;
@@ -24,18 +28,29 @@ const emit = defineEmits([
   ...useDialog.emits,
 ]);
 
-const { dialogRef, onDialogOk, onDialogCancel, onDialogHide, onDialogClose } = useDialog();
+const { dialogRef, onDialogOk } = useDialog();
 
-const form = reactive({
+const form: Ref<ParamsCreateBoard> = ref<ParamsCreateBoard>({
   name: null,
   description: null,
 });
 
-const onOk = async () => {
-  const { success } = await api.createBoard(props.workspaceId, { name: form.name, description: form.description });
+const rules = {
+  name: { required },
+  description: { required },
+};
 
-  if (success) {
-    onDialogOk();
+const v$ = useVuelidate<ParamsCreateBoard>(rules, form);
+
+const onOk = async () => {
+  const valid = await v$.value.$validate();
+
+  if (valid) {
+    const { success } = await api.createBoard(props.workspaceId, form.value);
+
+    if (success) {
+      onDialogOk();
+    }
   }
 };
 </script>
