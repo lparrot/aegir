@@ -1,5 +1,5 @@
 <template>
-  <Modal ref="dialogRef" panel-classes="w-full md:!w-6/12" title="Tableau" @ok="onOk">
+  <Modal ref="dialogRef" panel-classes="w-full md:!w-6/12" prevent-close title="Tableau" @ok="onOk">
     <div class="grid grid-cols-1 gap-4">
       <FieldGroup #default="{error}" :validation-field="v$.name" label="Nom du dossier" required>
         <BaseInput v-model="form.name" :error="error" placeholder="Nouveau dossier"></BaseInput>
@@ -25,7 +25,7 @@ const emit = defineEmits([
   ...useDialog.emits,
 ]);
 
-const { dialogRef, onDialogOk, onDialogCancel, onDialogHide, onDialogClose } = useDialog();
+const { dialogRef, onDialogOk, hide } = useDialog();
 
 const form: Ref<ParamsCreateFolder> = ref<ParamsCreateFolder>({
   name: null,
@@ -45,6 +45,7 @@ const onOk = async () => {
 
     if (success) {
       onDialogOk();
+      hide();
     }
   }
 };

@@ -1,5 +1,5 @@
 <template>
-  <Modal ref="dialogRef" :backdrop-dismiss="false" panel-classes="w-11/12 lg:!w-8/12" @ok="onOk">
+  <Modal ref="dialogRef" :backdrop-dismiss="false" panel-classes="w-11/12 lg:!w-8/12" prevent-close @ok="onOk">
     <template #title>
       <span>{{ table == null ? `Création d'une table` : `Modification de la table ${table.name}` }}</span>
     </template>
@@ -37,7 +37,7 @@ const emit = defineEmits([
   ...useDialog.emits,
 ]);
 
-const { dialogRef, onDialogOk } = useDialog();
+const { dialogRef, onDialogOk, hide } = useDialog();
 
 const { storageSidebar } = useAppLocalStorage();
 
@@ -61,6 +61,7 @@ const onOk = async () => {
 
     if (success) {
       onDialogOk();
+      hide();
     }
   }
 };

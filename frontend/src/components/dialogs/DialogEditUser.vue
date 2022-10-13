@@ -1,5 +1,5 @@
 <template>
-  <Modal ref="dialogRef" panel-classes="w-full lg:!w-10/12" @ok="onOk">
+  <Modal ref="dialogRef" panel-classes="w-full lg:!w-10/12" prevent-close @ok="onOk">
     <template #title>
       <div>Modification de {{ user.userDataFullname }}</div>
     </template>
@@ -92,7 +92,7 @@ const rules = {
 
 const v$ = useVuelidate<ParamsUserEdit>(rules, form);
 
-const { dialogRef, onDialogOk, onDialogCancel, onDialogHide, onDialogClose } = useDialog();
+const { dialogRef, onDialogOk, hide } = useDialog();
 
 const onOk = async () => {
   if (props.user != null) {
@@ -104,6 +104,7 @@ const onOk = async () => {
 
     if (success) {
       onDialogOk();
+      hide();
     }
   }
 };

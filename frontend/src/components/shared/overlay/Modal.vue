@@ -64,6 +64,7 @@ interface Props {
   labelOk?: string;
   modelValue?: boolean;
   panelClasses?: string | string[];
+  preventClose?: boolean
   showButtons?: boolean,
   showCancel?: boolean;
   title?: string;
@@ -74,6 +75,7 @@ const props = withDefaults(defineProps<Props>(), {
   labelOk: "Ok",
   labelCancel: "Annuler",
   panelClasses: "w-full lg:!w-1/2",
+  preventClose: false,
   showButtons: true,
   showCancel: true,
 });
@@ -98,15 +100,19 @@ const show = () => {
 };
 
 const hide = (event?) => {
+  console.log(event, props.backdropDismiss);
   if (event !== false || props.backdropDismiss) {
     changeModelValue(false);
     emit("hide");
   }
 };
 
-const ok = (event?) => {
-  emit("ok", event);
-  hide();
+const ok = () => {
+  emit("ok", { hide });
+
+  if (props.preventClose !== true) {
+    hide();
+  }
 };
 
 const cancel = () => {

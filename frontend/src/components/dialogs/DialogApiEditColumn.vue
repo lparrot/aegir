@@ -1,5 +1,5 @@
 <template>
-  <Modal ref="dialogRef" :backdrop-dismiss="false" panel-classes="w-11/12 lg:!w-5/12" @ok="onOk">
+  <Modal ref="dialogRef" :backdrop-dismiss="false" panel-classes="w-11/12 lg:!w-5/12" prevent-close @ok="onOk">
     <template #title>
       <span>{{ column == null ? `Création d'une colonne` : `Modification de la colonne ${column.name}` }}</span>
     </template>
@@ -19,12 +19,12 @@
         <BaseInput v-model="form.size" :error="error" type="number"></BaseInput>
       </FieldGroup>
 
-      <FieldGroup label="Nullable ?:">
-        <BaseInput v-model="form.nullable" type="checkbox"></BaseInput>
-      </FieldGroup>
-
       <FieldGroup label="Commentaire:">
         <BaseInput v-model="form.remarks"></BaseInput>
+      </FieldGroup>
+
+      <FieldGroup class="flex gap-2" label="Nullable ?:">
+        <BaseInput v-model="form.nullable" type="checkbox"></BaseInput>
       </FieldGroup>
     </div>
   </Modal>
@@ -52,7 +52,7 @@ const emit = defineEmits([
   ...useDialog.emits,
 ]);
 
-const { dialogRef, onDialogOk } = useDialog();
+const { dialogRef, onDialogOk, hide } = useDialog();
 
 const dataStore = useDataStore();
 
@@ -85,6 +85,7 @@ const onOk = async () => {
 
     if (success) {
       onDialogOk();
+      hide();
     }
   }
 };

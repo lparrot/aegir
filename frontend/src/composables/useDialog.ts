@@ -40,6 +40,9 @@ function useDialog() {
   Object.assign(proxy, { show, hide, close });
 
   return {
+    hide,
+    show,
+    close,
     dialogRef,
     onDialogHide,
     onDialogOk,

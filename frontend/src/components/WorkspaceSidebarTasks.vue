@@ -104,7 +104,6 @@ const workspaceItems = computed(() => {
       items.children.push(item);
     });
 
-    console.log(selectedWorkspace);
   }
   return items;
 });
