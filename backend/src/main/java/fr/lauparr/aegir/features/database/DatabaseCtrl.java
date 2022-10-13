@@ -45,4 +45,10 @@ public class DatabaseCtrl extends BaseController {
     return ok();
   }
 
+  @DeleteMapping("{tableName}/columns/{columnName}")
+  public ResponseEntity<RestApiResponse<Void>> removeColumn(@PathVariable("tableName") String tableName, @PathVariable("columnName") String columnName) {
+    databaseSrv.removeColumn(tableName, columnName);
+    return ok();
+  }
+
 }

@@ -8,6 +8,19 @@
     </div>
 
     <Datatable :fields="fields" :items="columns" :paginate="false">
+      <template #cell(actions)="{item}">
+        <Dropdown>
+          <template #button>
+            <mdi-dots-vertical class="h-5 w-5"/>
+          </template>
+
+          <DropdownItem @click="removeColumn(item)">
+            <mdi-delete class="h-5 w-5 text-danger"/>
+            <span>Supprimer</span>
+          </DropdownItem>
+        </Dropdown>
+      </template>
+
       <template #cell(info)="{item}">
         <div class="flex gap-1 items-center mx-1">
           <mdi-key-variant v-if="item.primaryKey" class="text-orange-400"/>
@@ -42,7 +55,8 @@ const selectedTable = computed(() => {
 });
 
 const fields: DatatableField[] = [
-  { key: "info", field: "info", label: "#", sortable: false },
+  { key: "actions", field: "actions", label: "", sortable: false },
+  { key: "info", field: "info", label: "", sortable: false },
   { key: "name", field: "name", label: "Nom" },
   { key: "type", field: "type", label: "Type" },
   { key: "size", field: "size", label: "Taille", align: "center" },
@@ -60,11 +74,24 @@ const newColumn = async () => {
   dialog.create({
     component: DialogApiEditColumn,
     props: {
-      tableName: selectedTable?.value,
+      tableName: selectedTable.value,
       types: types.value,
     },
     async onOk() {
       await fetchColumns();
+    },
+  });
+};
+
+const removeColumn = async (column: TableColumnDto) => {
+  dialog.create({
+    message: "Etes vous sûr de vouloir supprimer la colonne ?",
+    showCancel: true,
+    async onOk() {
+      const { success } = await api.removeColumn(selectedTable.value, column.name);
+      if (success) {
+        await fetchColumns();
+      }
     },
   });
 };

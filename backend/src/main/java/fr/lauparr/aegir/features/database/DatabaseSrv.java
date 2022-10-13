@@ -160,4 +160,8 @@ public class DatabaseSrv {
   private Workspace getWorkspaceById(Long workspaceId) {
     return workspaceRepository.findById(workspaceId).orElseThrow(() -> new MessageException(MessageUtils.getMessage("message.error.not_found.workspace")));
   }
+
+  public void removeColumn(String tableName, String columnName) {
+    jdbcTemplate.update(String.format("alter table %s drop column %s", tableName, columnName), new MapSqlParameterSource());
+  }
 }

@@ -100,7 +100,6 @@ const show = () => {
 };
 
 const hide = (event?) => {
-  console.log(event, props.backdropDismiss);
   if (event !== false || props.backdropDismiss) {
     changeModelValue(false);
     emit("hide");
