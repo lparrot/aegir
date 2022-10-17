@@ -55,8 +55,8 @@ const selectedTable = computed(() => {
 });
 
 const fields: DatatableField[] = [
-  { key: "actions", field: "actions", label: "", sortable: false },
-  { key: "info", field: "info", label: "", sortable: false },
+  { key: "actions", field: "actions", label: "", compact: true, sortable: false },
+  { key: "info", field: "info", label: "", compact: true, sortable: false },
   { key: "name", field: "name", label: "Nom" },
   { key: "type", field: "type", label: "Type" },
   { key: "size", field: "size", label: "Taille", align: "center" },

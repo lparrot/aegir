@@ -29,6 +29,7 @@ declare global {
 
   interface DatatableField {
     align?: DatatableFieldAlign;
+    compact?: boolean;
     field?: string;
     key: string;
     label?: string;

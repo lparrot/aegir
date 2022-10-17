@@ -20,7 +20,7 @@
         <tbody class="bg-white">
         <template v-if="items != null && items.length">
           <tr v-for="(item, itemIndex) in itemsShown" :key="`item-${get(item, idField)}`" :class="[{'hover:bg-primary-100 cursor-pointer': selectable, 'odd:bg-white even:bg-slate-50': striped}]" class="border-b border-b-primary-200" @click="onRowClick($event, item)">
-            <td v-for="field in fields" :key="'field-' + field.key + '-'+itemIndex" :class="[getAlignClass(field.align), field.tdClass]" class="py-2 px-3 whitespace-nowrap">
+            <td v-for="field in fields" :key="'field-' + field.key + '-'+itemIndex" :class="[getAlignClass(field.align), field.tdClass, {'datatable-column--compact': field.compact}]" class="py-2 px-3 whitespace-nowrap">
               <div :data-prevent-click="field.preventClick" class="item inline">
                 <slot :field="field" :item="item" :name="`cell(${field.key})`" :value="getValue(field, item)">
                   <span>{{ getValue(field, item) }}</span>
@@ -174,3 +174,9 @@ defineExpose({
   refresh: onFetch,
 });
 </script>
+
+<style lang="scss">
+.datatable-column--compact {
+  @apply w-1 whitespace-nowrap;
+}
+</style>
