@@ -50,6 +50,10 @@
                       <mdi-api/>
                       <span>API Swagger</span>
                     </RouterLink>
+                    <RouterLink :to="{name: 'admin-filemanager'}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-primary-100" @click="close">
+                      <mdi-file-tree/>
+                      <span>Gestionnaire de fichiers</span>
+                    </RouterLink>
                     <RouterLink :to="{name: ''}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-primary-100" @click="close">
                       <mdi-plus/>
                       <span>Inviter des membres</span>

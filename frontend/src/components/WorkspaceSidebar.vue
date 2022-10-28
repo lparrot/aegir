@@ -1,6 +1,6 @@
 <template>
   <SidebarContent>
-    <div class="flex justify-between ">
+    <div class="flex justify-between">
       <div>Espace de travail</div>
       <div>
         <mdi-dots-horizontal class="h-5 w-5 cursor-pointer"/>
