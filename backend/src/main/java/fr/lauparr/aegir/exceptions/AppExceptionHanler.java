@@ -2,7 +2,6 @@ package fr.lauparr.aegir.exceptions;
 
 import fr.lauparr.aegir.dto.api.RestApiError;
 import fr.lauparr.aegir.utils.ControllerUtils;
-import org.omg.CORBA.portable.ApplicationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,13 +20,6 @@ import javax.validation.ConstraintViolationException;
 
 @RestControllerAdvice
 public class AppExceptionHanler extends ResponseEntityExceptionHandler {
-
-  @ExceptionHandler(ApplicationException.class)
-  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  public final ResponseEntity<RestApiError> handleApplicationException(ApplicationException e, WebRequest request) {
-    RestApiError exceptionResponse = ControllerUtils.createExceptionResponse(e);
-    return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-  }
 
   @ExceptionHandler(TaggedApplicationException.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

@@ -16,8 +16,8 @@
   <packaging>jar</packaging>
 
   <properties>
-    <maven.compiler.source>8</maven.compiler.source>
-    <maven.compiler.target>8</maven.compiler.target>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
     <typescript-generator.version>2.36.1070</typescript-generator.version>
   </properties>
 
@@ -78,13 +78,13 @@
     <dependency>
       <groupId>org.springdoc</groupId>
       <artifactId>springdoc-openapi-ui</artifactId>
-      <version>1.6.9</version>
+      <version>1.6.11</version>
     </dependency>
 
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
-      <version>8.0.29</version>
+      <version>8.0.30</version>
     </dependency>
 
     <dependency>
@@ -154,7 +154,7 @@
     <dependency>
       <groupId>com.github.slugify</groupId>
       <artifactId>slugify</artifactId>
-      <version>2.5</version>
+      <version>3.0.2</version>
     </dependency>
   </dependencies>
 

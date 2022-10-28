@@ -1,7 +1,7 @@
 <template>
   <div v-if="selectedTable != null">
     <div class="flex gap-2 mb-3">
-      <base-button class="flex" color="primary" @click="newColumn">
+      <base-button class="flex" color="primary" @click="editColumn()">
         <mdi-plus class="h-5 w-5"/>
         <span>Ajouter une colonne</span>
       </base-button>
@@ -17,6 +17,11 @@
           <DropdownItem @click="removeColumn(item)">
             <mdi-delete class="h-5 w-5 text-danger"/>
             <span>Supprimer</span>
+          </DropdownItem>
+
+          <DropdownItem @click="editColumn(item)">
+            <mdi-pencil class="h-5 w-5 text-warn"/>
+            <span>Modifier</span>
           </DropdownItem>
         </Dropdown>
       </template>
@@ -70,12 +75,12 @@ const fetchColumns = async () => {
   }
 };
 
-const newColumn = async () => {
+const editColumn = async (column?: TableColumnDto) => {
   dialog.create({
     component: DialogApiEditColumn,
     props: {
       tableName: selectedTable.value,
-      types: types.value,
+      column,
     },
     async onOk() {
       await fetchColumns();

@@ -24,7 +24,8 @@ import java.util.stream.Collectors;
 @EntityListeners(AuditingEntityListener.class)
 public class Workspace {
 
-  public static final Slugify SLUGIFY = new Slugify().withLowerCase(true).withUnderscoreSeparator(true);
+  public static final Slugify SLUGIFY = Slugify.builder().lowerCase(true).underscoreSeparator(true).build();
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;

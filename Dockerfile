@@ -1,4 +1,4 @@
-FROM maven:3.8.6-openjdk-8 AS BUILD_IMAGE
+FROM maven:3.8.6-openjdk-11 AS BUILD_IMAGE
 
 LABEL stage=aegir-builder
 
@@ -11,7 +11,7 @@ COPY . /app
 RUN mvn -pl backend clean verify -P typescript
 RUN mvn clean package
 
-FROM adoptopenjdk/openjdk8:alpine
+FROM adoptopenjdk/openjdk11:alpine
 
 ENV NODE_ENV production
 
